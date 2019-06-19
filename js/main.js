@@ -362,15 +362,20 @@
         //console.log(e.alpha);
         var currAlpha = Math.floor(e.alpha);
         var total = loadedImages.length - 1;
+        var prevFrame = _s.currentFrame;
         if(currAlpha!==_s.lastAlpha) {
             if (_s.lastAlpha < currAlpha) {
                 _s.direction = 'moveright';
             } else {
                 _s.direction = 'moveleft';
             }
-            _s.currentFrame = getFrame(total, _s.direction, _s.currentFrame);
+            do {
+                _s.currentFrame = getFrame(total, _s.direction, _s.currentFrame);
+            }while (!loadedImages[_s.currentFrame].complete);
             console.log(_s.currentFrame);
-            draw(_s.currentFrame, ctx, _s.playerWidth, _s.playerHeight);
+            if(prevFrame !== _s.currentFrame) {
+                draw(_s.currentFrame, ctx, _s.playerWidth, _s.playerHeight);
+            }
             _s.lastAlpha = currAlpha;
         }
     }
