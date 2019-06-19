@@ -359,17 +359,20 @@
         }
     }
     function drawPlayer(e){
-        console.log(e.alpha);
+        //console.log(e.alpha);
         var currAlpha = Math.floor(e.alpha);
         var total = loadedImages.length - 1;
-        if (_s.lastAlpha < currAlpha) {
-            _s.direction = 'moveright';
-        } else {
-            _s.direction = 'moveleft';
+        if(currAlpha!==_s.lastAlpha) {
+            if (_s.lastAlpha < currAlpha) {
+                _s.direction = 'moveright';
+            } else {
+                _s.direction = 'moveleft';
+            }
+            _s.currentFrame = getFrame(total, _s.direction, _s.currentFrame);
+            console.log(_s.currentFrame);
+            draw(_s.currentFrame, ctx, _s.playerWidth, _s.playerHeight);
+            _s.lastAlpha = currAlpha;
         }
-        _s.currentFrame = getFrame(total, _s.direction, _s.currentFrame);
-        draw(_s.currentFrame, ctx, _s.playerWidth, _s.playerHeight);
-        _s.lastAlpha = currAlpha;
     }
     if(window.DeviceMotionEvent){
         _s.lastAlpha = 0;
@@ -465,8 +468,7 @@
             $("#temp-div").hide();
             $("#user-info-box").fadeOut();
             $("#loading-div").fadeOut();
-            window.ondeviceorientation = drawPlayer;
-            var wrapper = document.getElementById('wrapper');
+            window.ondeviceorientation = drawPlayer;var wrapper = document.getElementById('wrapper');
             wrapper.style.backgroundImage =  "none";
         }
 
