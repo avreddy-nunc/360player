@@ -361,6 +361,7 @@
     function drawPlayer(e){
         console.log(e.alpha);
         var currAlpha = Math.floor(e.alpha);
+        var total = loadedImages.length - 1;
         if (_s.lastAlpha < currAlpha) {
             _s.direction = 'moveright';
         } else {
