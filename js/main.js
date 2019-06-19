@@ -358,7 +358,18 @@
             changeSpinIndicator();
         }
     }
-    
+    function drawPlayer(e){
+        console.log(e.alpha);
+        var currAlpha = Math.floor(alpha);
+        if (_s.lastAlpha < currAlpha) {
+            _s.direction = 'moveright';
+        } else {
+            _s.direction = 'moveleft';
+        }
+        _s.currentFrame = getFrame(total, _s.direction, _s.currentFrame);
+        draw(_s.currentFrame, ctx, _s.playerWidth, _s.playerHeight);
+        _s.lastAlpha = currAlpha;
+    }
     if(window.DeviceMotionEvent){
         _s.lastAlpha = 0;
         _s.runAnim = true;
@@ -541,18 +552,7 @@
             }
             return Math.abs(currentFrame);
         }
-        function drawPlayer(e){
-            console.log(e.alpha);
-            var currAlpha = Math.floor(alpha);
-            if (_s.lastAlpha < currAlpha) {
-                _s.direction = 'moveright';
-            } else {
-                _s.direction = 'moveleft';
-            }
-            _s.currentFrame = getFrame(total, _s.direction, _s.currentFrame);
-            draw(_s.currentFrame, ctx, _s.playerWidth, _s.playerHeight);
-            _s.lastAlpha = currAlpha;
-        }
+
         function registerEvents(ctx) {
 
             $('#features-list').on('click touch', function (e) {
