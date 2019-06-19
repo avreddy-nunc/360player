@@ -360,7 +360,7 @@
     }
     function drawPlayer(e){
         console.log(e.alpha);
-        var currAlpha = Math.floor(alpha);
+        var currAlpha = Math.floor(e.alpha);
         if (_s.lastAlpha < currAlpha) {
             _s.direction = 'moveright';
         } else {
