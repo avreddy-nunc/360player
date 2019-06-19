@@ -1,4 +1,4 @@
-$(function () {
+(function (window) {
     var _s = {}; //settings or initial values global object;
     _s.carImgs = [];
     _s.carsData = [];
@@ -8,11 +8,11 @@ $(function () {
     _s.currentFrame = 0;
     _s.runAnim = false;
     _s.imgCount = 0;
-    _s.totalImages = globalVar.totalImages;
+    _s.totalImages = window.globalVar.totalImages;
     _s.aspectRatio = getAspectRatio(1200, 675);
     _s.playerWidth = parseFloat($('#wrapper').width());
     _s.playerHeight = _s.playerWidth * _s.aspectRatio;
-    _s.maxImageWidth = globalVar.maxWidth;
+    _s.maxImageWidth = window.globalVar.maxWidth;
     _s.maxImageHeight = _s.maxImageWidth * _s.aspectRatio;
     _s.maxZoomLevel = 40;
     _s.redrawImgCount =  3;
@@ -21,7 +21,7 @@ $(function () {
     _s.zoomIn = false;
     _s.spinCompleted = 0;
     _s.stats = {};
-    _s.stats.trackID = globalVar.trackID || "abc123456";
+    _s.stats.trackID = window.globalVar.trackID || "abc123456";
     _s.stats.spins = 0;
     _s.stats.highlights = [];
     _s.stats.prevImgStartTime = getCurDateTime();
@@ -29,22 +29,22 @@ $(function () {
     _s.stats.count = 0;
     _s.stats.prevImg;
     _s.showHighlights = true;
-    _s.swipeThreshold = (globalVar.swipeThreshold && !isNaN(Number(globalVar.swipeThreshold)) && Number(globalVar.swipeThreshold))? Number(globalVar.swipeThreshold): 0.6;
-    _s.swipeTotalImages =  (globalVar.totalImages && !isNaN(Number(globalVar.totalImages)) && Number(globalVar.totalImages))? Number(globalVar.totalImages): 0;
-    _s.baseImgWidth = globalVar.baseImgWidth;
-    _s.baseImgHeight = globalVar.baseImgHeight;
+    _s.swipeThreshold = (window.globalVar.swipeThreshold && !isNaN(Number(window.globalVar.swipeThreshold)) && Number(window.globalVar.swipeThreshold))? Number(window.globalVar.swipeThreshold): 0.6;
+    _s.swipeTotalImages =  (window.globalVar.totalImages && !isNaN(Number(window.globalVar.totalImages)) && Number(window.globalVar.totalImages))? Number(window.globalVar.totalImages): 0;
+    _s.baseImgWidth = window.globalVar.baseImgWidth;
+    _s.baseImgHeight = window.globalVar.baseImgHeight;
 
     $('#wrapper').height(_s.playerHeight);
     /*var imgDim = new Image();
     imgDim.onload = function(){
         setPlayerSize(this.width, this.height);
     };
-    imgDim.src = firstLoadImg;
+    imgDim.src = window.firstLoadImg;
 */
     $('#ext-player-icon').on('click', function () {
         closeFullscreen();
         var carsJson = 'exterior';
-        var url = '?video_fk=' + videoFK;
+        var url = '?video_fk=' + window.videoFK;
         getUrl = url + "&playerType=" + carsJson;
         location.replace(getUrl);
     });
@@ -52,14 +52,14 @@ $(function () {
     $('#int-player-icon').on('click', function () {
         closeFullscreen();
         var carsJson = 'interior';
-        var url = '?video_fk=' + videoFK;
+        var url = '?video_fk=' + window.videoFK;
         getUrl = url + "&playerType=" + carsJson;
         location.replace(getUrl);
     });
     $('#pano-player-icon').on('click', function () {
         closeFullscreen();
         var carsJson = 'interior-pano';
-        var url = '?video_fk=' + videoFK;
+        var url = '?video_fk=' + window.videoFK;
         getUrl = url + "&playerType=" + carsJson;
         location.replace(getUrl);
     });
@@ -150,12 +150,12 @@ $(function () {
         $('#circle-indicator').addClass('mobile');
         $('.ctrls').addClass('mobile');
     }
-    if(globalVar.nextPlayerType === 'interior'){
+    if(window.globalVar.nextPlayerType === 'interior'){
         $("#int-player-icon").show();
-    }else if(globalVar.nextPlayerType === 'interior-pano'){
+    }else if(window.globalVar.nextPlayerType === 'interior-pano'){
         $("#pano-player-icon").show();
     }
-    if (globalVar.playerType === "exterior" || typeof globalVar.playerType === "undefined") {
+    if (window.globalVar.playerType === "exterior" || typeof window.globalVar.playerType === "undefined") {
         $("#ext-player-icon").addClass('icon-active');
         $("#ext-player-icon").hide();
         $("#int-player-icon").removeClass('icon-active');
@@ -163,14 +163,14 @@ $(function () {
         $('#ext-player-icon').off('click');
         $('#ext-player-icon').off('touch');
 
-    } else if (globalVar.playerType === "interior") {
+    } else if (window.globalVar.playerType === "interior") {
         $("#int-player-icon").addClass('icon-active');
         $("#int-player-icon").hide();
         $("#ext-player-icon").removeClass('icon-active');
         $("#pano-player-icon").removeClass('icon-active');
         $('#int-player-icon').off('click');
         $('#int-player-icon').off('touch');
-    } else if (globalVar.playerType === "interior-pano") {
+    } else if (window.globalVar.playerType === "interior-pano") {
         $("#pano-player-icon").addClass('icon-active');
         $("#pano-player-icon").hide();
         $("#ext-player-icon").removeClass('icon-active');
@@ -183,7 +183,7 @@ $(function () {
         callback(this[start],start);
         callback(this[end],end);
         var self = this;
-        sendMid([start,end]);
+        sendMid.call(null,[start,end]);
         function sendMid() {
             var args = [];
             for(var i=0;i<sendMid.arguments.length;i++){
@@ -214,14 +214,14 @@ $(function () {
     var ctx = canvas.getContext('2d');
     var loadedImagesCount = 0;
     var wrapper = document.getElementById('wrapper');
-    wrapper.style.backgroundImage =  "url('"+firstLoadImg+"')";
-    wrapper.style.backgroundImage =  "url('"+firstLoadImg+"')";
+    wrapper.style.backgroundImage =  "url('"+window.firstLoadImg+"')";
+    wrapper.style.backgroundImage =  "url('"+window.firstLoadImg+"')";
     wrapper.style.backgroundSize = "cover";
     var fi = new Image();
     fi.onload = function(){
         setPlayerSize(this.width, this.height);
     };
-    fi.src = firstLoadImg;
+    fi.src = window.firstLoadImg;
 
     var _dataLength = 0;
     var _loadedImages = [];
@@ -248,7 +248,7 @@ $(function () {
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', getDataUrl, true);
+    xhr.open('GET', window.getDataUrl, true);
     xhr.onload = function(e) {
         if (this.status == 200) {
             _rawData = JSON.parse(this.response);
@@ -295,7 +295,7 @@ $(function () {
         setSpinIndicator(loadedCount);
     }
 
-    var speed = query.speed;
+    var speed = window.query.speed;
 
     if ($.isNumeric(speed)) {
         _s.redrawImgCount = parseInt(speed);
@@ -352,17 +352,21 @@ $(function () {
             $("#wrapper").width(_s.playerWidth);
         }
         $wrapper.height(_s.playerHeight);
-        if(globalVar.playerType==='exterior' || globalVar.playerType==='interior') {
+        if(window.globalVar.playerType==='exterior' || window.globalVar.playerType==='interior') {
             _s.redrawImgCount = getSpeed(_s.totalImages);
             setSpinIndicator();
             changeSpinIndicator();
         }
     }
+    
+    if(window.DeviceMotionEvent){
+        window.ondeviceorientation = function (e) {
+            console.log(e.alpha, e.beta, e.gamma)
+        }
+    }
+    if(window.globalVar.playerType==='exterior' || window.globalVar.playerType==='interior') {
 
-
-    if(globalVar.playerType==='exterior' || globalVar.playerType==='interior') {
-
-        var allfeatures = $.getJSON("?RUN_TYPE=GET_HOT_SPOTS&videoId=" + videoId + "&type=" + globalVar.playerType + "&all=true&player=true&dataType=json&time=" + Date.now(), function (data) {
+        var allfeatures = $.getJSON("?RUN_TYPE=GET_HOT_SPOTS&videoId=" + window.videoId + "&type=" + window.globalVar.playerType + "&all=true&player=true&dataType=json&time=" + Date.now(), function (data) {
 
         }).done(function (allfeatures) {
             if (allfeatures.allFeatures.length) {
@@ -398,13 +402,13 @@ $(function () {
             //_s.totalImages = loadedData.allCars.length;
             ctx.canvas.width = _s.playerWidth;
             ctx.canvas.height = _s.playerHeight;
-            if (globalVar.rotationReverse == "1") {
-                //alert(globalVar.rotationReverse);
+            if (window.globalVar.rotationReverse == "1") {
+                //alert(window.globalVar.rotationReverse);
                 loadedData.allCars.reverse();
                 loadedImages.reverse();
             }
             registerEvents(ctx);
-            if (globalVar.initLoad) {
+                    if (window.globalVar.initLoad) {
                 $("#temp-div").show();
                 firstLoad();
             } else {
@@ -639,14 +643,16 @@ $(function () {
                     _s.direction = 'moveleft';
                 }
                 var total = loadedImages.length - 1;
+                var prevFrame = _s.currentFrame;
                 do {
                     for (var i = 0; i < Math.abs(_s.lastX - pageX); i++) {
                         _s.currentFrame = getFrame(total, _s.direction, _s.currentFrame);
                         changeSpinIndicator();
                     }
                 }while (!loadedImages[_s.currentFrame].complete);
-                console.log(_s.currentFrame);
+                if(prevFrame!==_s.currentFrame) {
                 draw(_s.currentFrame, ctx, _s.playerWidth, _s.playerHeight);
+                }
                 _s.lastX = pageX;
 
             });
@@ -788,7 +794,10 @@ $(function () {
         }
 
         /*=========== functions for 360 spin indicators =======*/
-        function setSpinIndicator(totalImages = _s.totalImages) {
+        function setSpinIndicator(totalImages) {
+            if(!totalImages){
+                totalImages =  _s.totalImages;
+            }
             var indicator = document.getElementById('progress-indicator');
             var circumference = 2 * Math.PI * indicator.r.baseVal.value;
             indicator.style.strokeDashoffset = (circumference - circumference / totalImages) + 'px';
@@ -1395,7 +1404,7 @@ $(function () {
             changeSpinIndicator();
             draw(_s.currentFrame, ctx, _s.playerWidth, _s.playerHeight, true);
         };
-        if (globalVar.playerType === 'exterior' || globalVar.playerType === 'interior') {
+        if (window.globalVar.playerType === 'exterior' || window.globalVar.playerType === 'interior') {
             window.addEventListener('resize', reloadPlayer);
         }
         function hideNavbar(){
@@ -1491,13 +1500,13 @@ $(function () {
         return yyyy + "-" + mn + "-" + dd + " " + hh + ":" + mm + ":" + ss;
     }
     function getAspectRatio(imgwidth, imgheight) {
-        var width = imgwidth || globalVar.maxWidth;
-        var height = imgheight || globalVar.maxHeight;
+        var width = imgwidth || window.globalVar.maxWidth;
+        var height = imgheight || window.globalVar.maxHeight;
         var aspectRatio = height / width;
         // console.log("aspectRatio", aspectRatio);
         return aspectRatio;
     }
-});
+}(window));
 var Player360 = function(options) {
     // return instance if called as a function
     if (!(this instanceof Player360)) {
