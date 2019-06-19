@@ -105,8 +105,8 @@
     </div>
 </div>
 <script>
-var getDataUrl = './cars.json';
-var firstLoadImg = "https://gcsimages.storage.googleapis.com/clients/10140/images/DA5A3D94-E66E-4C67-9EE2-D65B790825F1/960/DA5A3D94-E66E-4C67-9EE2-D65B790825F1_f00234.jpg";
+window.getDataUrl = './cars.json';
+window.firstLoadImg = "https://gcsimages.storage.googleapis.com/clients/10140/images/DA5A3D94-E66E-4C67-9EE2-D65B790825F1/960/DA5A3D94-E66E-4C67-9EE2-D65B790825F1_f00234.jpg";
 </script>
 <!--<script src="./js/loaddata.js"></script>-->
 <script src="./js/jquery-3.2.1.min.js"></script>
@@ -121,8 +121,8 @@ var firstLoadImg = "https://gcsimages.storage.googleapis.com/clients/10140/image
 <!--  photosphere files   -->
 <!--<script src="./js/360pano/photo-sphere-viewer.min.js"></script>-->
 <script>
-    var panoVideoId = '<!--VIDEO_ID-->';
-    var panotrackID = '<!--TRACK_ID-->';
+    window.panoVideoId = '<!--VIDEO_ID-->';
+    window.panotrackID = '<!--TRACK_ID-->';
 </script>
 
 <script>
@@ -140,46 +140,42 @@ var firstLoadImg = "https://gcsimages.storage.googleapis.com/clients/10140/image
         return params;
     }
 
-    var query = getQueryParams(document.location.search);
-    var globalVar = {};
-    var videoId = '<!--VIDEO_ID-->';
-    var trackID = '<!--TRACK_ID-->';
-    var videoFK = '<!--VIDEO_FK-->';
-    $(document).ready(function () {
-        var player = query.playerType;
-        globalVar.trackID = trackID;
-        globalVar.playerType = "exterior";
-        globalVar.nextPlayerType = "interior";
+    window.query = getQueryParams(document.location.search);
+    window.globalVar = {};
+    window.videoId = '<!--VIDEO_ID-->';
+    window.trackID = '<!--TRACK_ID-->';
+    window.videoFK = '<!--VIDEO_FK-->';
+    (function () {
+        var player = window.query.playerType;
+        window.globalVar.trackID = window.trackID;
+        window.globalVar.playerType = "exterior";
+        window.globalVar.nextPlayerType = "interior";
 
-        globalVar.runType = "ADD_HOT_SPOT_EXTERIOR";
-        globalVar.baseImgWidth = "0";
-        globalVar.baseImgHeight = "0";
-        globalVar.swipeThreshold = '0.6';
-        globalVar.totalImages = '236';
-        globalVar.rotationReverse = query.rotation ? query.rotation : "<!--PLAYER_ROTATION-->";
-        globalVar.initLoad = false;
-        globalVar.maxWidth = 1200;
-        globalVar.maxHeight = 675;
+        window.globalVar.runType = "ADD_HOT_SPOT_EXTERIOR";
+        window.globalVar.baseImgWidth = "0";
+        window.globalVar.baseImgHeight = "0";
+        window.globalVar.swipeThreshold = '0.6';
+        window.globalVar.totalImages = '236';
+        window.globalVar.rotationReverse = query.rotation ? query.rotation : "<!--PLAYER_ROTATION-->";
+        window.globalVar.initLoad = false;
+        window.globalVar.maxWidth = 1200;
+        window.globalVar.maxHeight = 675;
 
         if(query.initLoad!="" && (query.initLoad=='true' || query.initLoad=='1'))
-            globalVar.initLoad = true;
+            window.globalVar.initLoad = true;
 
         if (player === "interior") {
-            globalVar.playerType = "interior";
-            globalVar.runType = "ADD_HOT_SPOT_INTERIOR";
+            window.globalVar.playerType = "interior";
+            window.globalVar.runType = "ADD_HOT_SPOT_INTERIOR";
         }
         if (player === "interior-pano") {
             $('#viewer').show();
             $('#ctrls').removeClass('z-index-100');
-            globalVar.playerType = "interior-pano";
-            globalVar.runType = "ADD_PANO_INTERIOR";
+            window.globalVar.playerType = "interior-pano";
+            window.globalVar.runType = "ADD_PANO_INTERIOR";
             $('.exterior-components').hide();
-            renderMarker();
-            window.addEventListener("resize", function() {
-                setPlayerDimensions();
-            });
         }
-    });
+    }());
 
 </script>
 <script type="text/javascript">
