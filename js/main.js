@@ -360,8 +360,10 @@
     }
     
     if(window.DeviceMotionEvent){
+        _s.lastAlpha = 0;
         window.ondeviceorientation = function (e) {
-            console.log(e.alpha, e.beta, e.gamma)
+            _s.runAnim = true;
+            drawPlayer(e.alpha);
         }
     }
     if(window.globalVar.playerType==='exterior' || window.globalVar.playerType==='interior') {
@@ -606,7 +608,18 @@
                     e.stopImmediatePropagation();
                 }
             });
-
+            function drawPlayer(alpha){
+                console.log(alpha);
+                var currAlpha = Math.floor(alpha);
+                if (_s.lastAlpha < currAlpha) {
+                    _s.direction = 'moveright';
+                } else {
+                    _s.direction = 'moveleft';
+                }
+                _s.currentFrame = getFrame(total, _s.direction, _s.currentFrame);
+                draw(_s.currentFrame, ctx, _s.playerWidth, _s.playerHeight);
+                _s.lastAlpha = currAlpha;
+            }
             $("body").on("mousemove touchmove", "#hotspots-div", function (e) {
                 var touch = false;
                 if (typeof e.pageX !== "undefined" && e.pageX > 0) {
