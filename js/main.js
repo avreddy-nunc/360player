@@ -374,7 +374,6 @@
     if(window.DeviceMotionEvent){
         _s.lastAlpha = 0;
         _s.runAnim = true;
-        window.ondeviceorientation = drawPlayer;
     }
     if(window.globalVar.playerType==='exterior' || window.globalVar.playerType==='interior') {
 
@@ -466,6 +465,7 @@
             $("#temp-div").hide();
             $("#user-info-box").fadeOut();
             $("#loading-div").fadeOut();
+            window.ondeviceorientation = drawPlayer;
             var wrapper = document.getElementById('wrapper');
             wrapper.style.backgroundImage =  "none";
         }
