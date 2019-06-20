@@ -368,23 +368,26 @@
     }
     function drawPlayer(e){
         //console.log(e.alpha);
-        var currAlpha = Math.floor(e.alpha);
-        var total = loadedImages.length - 1;
-        var prevFrame = _s.currentFrame;
-        if(currAlpha!==_s.lastAlpha) {
-            if (_s.lastAlpha < currAlpha) {
-                _s.direction = 'moveright';
-            } else {
-                _s.direction = 'moveleft';
+        if(e.alpha) {
+            _s.runAnim = true;
+            var currAlpha = Math.floor(e.alpha);
+            var total = loadedImages.length - 1;
+            var prevFrame = _s.currentFrame;
+            if (currAlpha !== _s.lastAlpha) {
+                if (_s.lastAlpha < currAlpha) {
+                    _s.direction = 'moveright';
+                } else {
+                    _s.direction = 'moveleft';
+                }
+                do {
+                    _s.currentFrame = getFrame(total, _s.direction, _s.currentFrame, true);
+                } while (!loadedImages[_s.currentFrame].complete);
+                if (prevFrame !== _s.currentFrame) {
+                    console.log(_s.currentFrame);
+                    draw(_s.currentFrame, ctx, _s.playerWidth, _s.playerHeight);
+                }
+                _s.lastAlpha = currAlpha;
             }
-            do {
-                _s.currentFrame = getFrame(total, _s.direction, _s.currentFrame,true);
-            }while (!loadedImages[_s.currentFrame].complete);
-            console.log(_s.currentFrame);
-            if(prevFrame !== _s.currentFrame) {
-                draw(_s.currentFrame, ctx, _s.playerWidth, _s.playerHeight);
-            }
-            _s.lastAlpha = currAlpha;
         }
     }
 
@@ -480,7 +483,6 @@
             $("#loading-div").fadeOut();
             if(window.DeviceMotionEvent){
                 _s.lastAlpha = 0;
-                _s.runAnim = true;
                 window.ondeviceorientation = drawPlayer;
             }
             var wrapper = document.getElementById('wrapper');
@@ -693,9 +695,6 @@
                 if (_s.runAnim) {
                     _s.runAnim = false;
                     unhideNavbar();
-                }
-                if(window.DeviceMotionEvent){
-                    _s.runAnim = true;
                 }
             });
 
