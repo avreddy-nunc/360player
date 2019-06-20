@@ -316,10 +316,10 @@
         return speed;
     }
     function getGyroSpeed(totalCount) {
-        var speed = 3;
+        var speed;
         var touchDistance = 360;
         speed = Math.floor(touchDistance/totalCount);
-        speed =  speed>45?45:speed;
+        speed =  speed>45?45:(speed<3?3:speed);
         return speed;
     }
 
