@@ -319,7 +319,7 @@
         var speed;
         var touchDistance = 360;
         speed = Math.floor(touchDistance/totalCount);
-        speed =  speed>45?45:speed;
+        speed =  speed>2?2:(speed<=1?1:speed);
         return speed;
     }
 
@@ -546,7 +546,7 @@
         }
 
         function getFrame(total, direction, currentFrame, isGyro) {
-            var redrawCount = isGyro?1:_s.redrawImgCount;
+            var redrawCount = isGyro?_s.redrawGyroImgCount:_s.redrawImgCount;
             if (redrawCount > _s.resetRedrawCount) {
                 _s.resetRedrawCount++;
                 return currentFrame;
@@ -654,6 +654,7 @@
                     unhideNavbar();
                     return;
                 }
+                window.ondeviceorientation = null;
                 hideNavbar();
                 closeShareList();
                 var pageX = 0;
@@ -695,6 +696,7 @@
                 if (_s.runAnim) {
                     _s.runAnim = false;
                     unhideNavbar();
+                    window.ondeviceorientation = drawPlayer;
                 }
             });
 
