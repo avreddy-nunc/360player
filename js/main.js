@@ -292,6 +292,7 @@
     }
     function imageLoaded(loadedCount) {
         _s.redrawImgCount = getSpeed(loadedCount);
+        _s.redrawGyroImgCount = getGyroSpeed(loadedCount);
         setSpinIndicator(loadedCount);
     }
 
@@ -312,6 +313,13 @@
             speed = Math.floor(touchDistance/totalCount);
             speed =  speed>75?75:speed;
         }
+        return speed;
+    }
+    function getGyroSpeed(totalCount) {
+        var speed = 3;
+        var touchDistance = 360;
+        speed = Math.floor(touchDistance/totalCount);
+        speed =  speed>45?45:speed;
         return speed;
     }
 
@@ -370,7 +378,7 @@
                 _s.direction = 'moveleft';
             }
             do {
-                _s.currentFrame = getFrame(total, _s.direction, _s.currentFrame);
+                _s.currentFrame = getFrame(total, _s.direction, _s.currentFrame,true);
             }while (!loadedImages[_s.currentFrame].complete);
             console.log(_s.currentFrame);
             if(prevFrame !== _s.currentFrame) {
@@ -379,10 +387,7 @@
             _s.lastAlpha = currAlpha;
         }
     }
-    if(window.DeviceMotionEvent){
-        _s.lastAlpha = 0;
-        _s.runAnim = true;
-    }
+
     if(window.globalVar.playerType==='exterior' || window.globalVar.playerType==='interior') {
 
         var allfeatures = $.getJSON("?RUN_TYPE=GET_HOT_SPOTS&videoId=" + window.videoId + "&type=" + window.globalVar.playerType + "&all=true&player=true&dataType=json&time=" + Date.now(), function (data) {
@@ -473,7 +478,12 @@
             $("#temp-div").hide();
             $("#user-info-box").fadeOut();
             $("#loading-div").fadeOut();
-            window.ondeviceorientation = drawPlayer;var wrapper = document.getElementById('wrapper');
+            if(window.DeviceMotionEvent){
+                _s.lastAlpha = 0;
+                _s.runAnim = true;
+                window.ondeviceorientation = drawPlayer;
+            }
+            var wrapper = document.getElementById('wrapper');
             wrapper.style.backgroundImage =  "none";
         }
 
@@ -533,9 +543,9 @@
             }
         }
 
-        function getFrame(total, direction, currentFrame) {
-
-            if (_s.redrawImgCount > _s.resetRedrawCount) {
+        function getFrame(total, direction, currentFrame, isGyro) {
+            var redrawCount = isGyro?_s.redrawGyroImgCount:_s.redrawImgCount;
+            if (redrawCount > _s.resetRedrawCount) {
                 _s.resetRedrawCount++;
                 return currentFrame;
             } else {
@@ -683,7 +693,9 @@
                 if (_s.runAnim) {
                     _s.runAnim = false;
                     unhideNavbar();
-
+                }
+                if(window.DeviceMotionEvent){
+                    _s.runAnim = true;
                 }
             });
 
