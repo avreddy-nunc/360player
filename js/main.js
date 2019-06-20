@@ -546,7 +546,7 @@
         }
 
         function getFrame(total, direction, currentFrame, isGyro) {
-            var redrawCount = isGyro?_s.redrawGyroImgCount:_s.redrawImgCount;
+            var redrawCount = isGyro?1:_s.redrawImgCount;
             if (redrawCount > _s.resetRedrawCount) {
                 _s.resetRedrawCount++;
                 return currentFrame;
