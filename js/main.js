@@ -360,6 +360,7 @@
             $("#wrapper").width(_s.playerWidth);
         }
         $wrapper.height(_s.playerHeight);
+        $('#hotspots-div').css("max-width",_s.maxImageWidth);
         if(window.globalVar.playerType==='exterior' || window.globalVar.playerType==='interior') {
             _s.redrawImgCount = getSpeed(_s.totalImages);
             setSpinIndicator();
