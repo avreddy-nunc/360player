@@ -9,10 +9,10 @@
     _s.runAnim = false;
     _s.imgCount = 0;
     _s.totalImages = window.globalVar.totalImages;
-    _s.aspectRatio = getAspectRatio(1200, 675);
+    _s.aspectRatio = getAspectRatio();
     _s.playerWidth = parseFloat($('#wrapper').width());
     _s.playerHeight = _s.playerWidth * _s.aspectRatio;
-    _s.maxImageWidth = window.globalVar.maxWidth;
+    _s.maxImageWidth = Number(window.globalVar.maxWidth);
     _s.maxImageHeight = _s.maxImageWidth * _s.aspectRatio;
     _s.maxZoomLevel = 40;
     _s.redrawImgCount =  3;
@@ -98,7 +98,7 @@
             $('#hotspots-div, #wrapper').css('max-width', _s.maxImageWidth + "px");
             $('#hotspots-div, #wrapper').css('max-height',_s.maxImageHeight + "px");
             $('#fullscreen-icon').removeClass('active');
-            $('#fullscreen-icon img').attr({"src":"./360PlayerV4/img/fullscreen.svg"});
+            $('#fullscreen-icon img').attr({"src":"./../img/fullscreen.svg"});
         }
     }
     //alert(window.orientation)
@@ -112,14 +112,14 @@
             $('#hotspots-div, #wrapper').css('max-width',"100%");
             $('#hotspots-div, #wrapper').css('max-height',"100%");
             $('#fullscreen-icon').addClass('active');
-            $('#fullscreen-icon img').attr({"src":"./360PlayerV4/img/fullscreen-close.svg"});
+            $('#fullscreen-icon img').attr({"src":"./../img/fullscreen-close.svg"});
         } else {
             if (document.exitFullscreen) {
                 document.exitFullscreen();
                 $('#hotspots-div, #wrapper').css('max-width', _s.maxImageWidth + "px");
                 $('#hotspots-div, #wrapper').css('max-height',_s.maxImageHeight + "px");
                 $('#fullscreen-icon').removeClass('active');
-                $('#fullscreen-icon img').attr({"src":"./360PlayerV4/img/fullscreen.svg"});
+                $('#fullscreen-icon img').attr({"src":"./../img/fullscreen.svg"});
             }
         }
     });
@@ -128,12 +128,12 @@
             $('#fullscreen-icon').addClass('active');
             $('#hotspots-div, #wrapper').css('max-width',"100%");
             $('#hotspots-div, #wrapper').css('max-height',"100%");
-            $('#fullscreen-icon img').attr({"src": "./360PlayerV4/img/fullscreen-close.svg"});
+            $('#fullscreen-icon img').attr({"src": "./../img/fullscreen-close.svg"});
         } else {
             $('#fullscreen-icon').removeClass('active');
             $('#hotspots-div, #wrapper').css('max-width', _s.maxImageWidth + "px");
             $('#hotspots-div, #wrapper').css('max-height',_s.maxImageHeight + "px");
-            $('#fullscreen-icon img').attr({"src": "./360PlayerV4/img/fullscreen.svg"});
+            $('#fullscreen-icon img').attr({"src": "./../img/fullscreen.svg"});
         }
     }
     document.addEventListener("fullscreenchange", fullscreenChanged,false);
@@ -233,9 +233,9 @@
             onload = function () {
                 count++;
                 imageLoaded(count);
-                if(count===cars.length){
+                /*if(count===cars.length){
                     loadHighResImages();
-                }
+                }*/
                 delete this.onload;
             };
         cars.tweenLoad(function (img, index) {
@@ -332,13 +332,6 @@
         _s.aspectRatio = getAspectRatio(imgWidth, imgHeight);
         _s.maxImageHeight = _s.aspectRatio*_s.maxImageWidth;
         parent.postMessage(JSON.stringify({"aspectRation":_s.aspectRatio}),"*");
-        if(isMobile()) {
-            $wrapper.css('max-width', '100%');
-            $wrapper.css('max-height', '100%');
-        }else{
-            $wrapper.css('max-width', _s.maxImageWidth+'px');
-            $wrapper.css('max-height', _s.maxImageHeight+'px');
-        }
         if(_s.aspectRatio === 0.5625){
             $("#ar").addClass('ar-16-9');
         }else if(_s.aspectRatio === 0.75){
@@ -352,21 +345,42 @@
             $wrapper.css('max-width',otherWidth+'px');
             $("#ar").css('padding-bottom', _s.aspectRatio*100+'%');
         }
+        var iOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g);
+        //alert(screen.width);
+        /*explicit ipad condition is used because while orientation change ipad innerwidth is not updateding, this condition can be removed if ipad functionality changes*/
+        if (isMobile()) {
+            if(iOS && iOS[0]==="iPad"){
+                $wrapper.css('width', window.outerWidth);
+                _s.playerWidth = window.outerWidth;
+                _s.playerHeight = _s.playerWidth * _s.aspectRatio;
+            }else {
+                $wrapper.css('width', $(window).innerWidth());
+                _s.playerWidth = $(window).innerWidth();
+                _s.playerHeight = _s.playerWidth * _s.aspectRatio;
+            }
+
+        } else {
+            $wrapper.css('width', '100%');
         _s.playerWidth = $wrapper.width();
         _s.playerHeight = _s.playerWidth * _s.aspectRatio;
+        }
         if(window.innerHeight < _s.playerHeight){
             _s.playerWidth = window.innerHeight / _s.aspectRatio;
             _s.playerHeight = _s.playerWidth * _s.aspectRatio;
-            $("#wrapper").width(_s.playerWidth);
+            $wrapper.width(_s.playerWidth);
         }
         $wrapper.height(_s.playerHeight);
-        $('#hotspots-div').css("max-width",_s.maxImageWidth);
-        if(window.globalVar.playerType==='exterior' || window.globalVar.playerType==='interior') {
+        if(isMobile()) {
+            $wrapper.css('max-width', '100%');
+            $wrapper.css('max-height', '100%');
+        }else{
+            $wrapper.css('max-width', _s.maxImageWidth+'px');
+            $wrapper.css('max-height', _s.maxImageHeight+'px');
+        }
             _s.redrawImgCount = getSpeed(_s.totalImages);
             setSpinIndicator();
             changeSpinIndicator();
         }
-    }
     function drawPlayer(e){
         //console.log(e.alpha);
         if(e.alpha) {
@@ -382,6 +396,7 @@
                 }
                 do {
                     _s.currentFrame = getFrame(total, _s.direction, _s.currentFrame, true);
+                    changeSpinIndicator();
                 } while (!loadedImages[_s.currentFrame].complete);
                 if (prevFrame !== _s.currentFrame) {
                     console.log(_s.currentFrame);
@@ -438,7 +453,8 @@
             registerEvents(ctx);
                     if (window.globalVar.initLoad) {
                 $("#temp-div").show();
-                firstLoad();
+                //firstLoad();
+                normalLoad();
             } else {
                 normalLoad();
             }
@@ -466,6 +482,7 @@
         function normalLoad() {
             var newImg = new Image();
             newImg.onload = function () {
+                setPlayerSize(this.width, this.height);
             ctx.canvas.width = _s.playerWidth;
                 ctx.canvas.height = _s.playerHeight;
                 ctx.drawImage(newImg, 0, 0, _s.playerWidth, _s.playerHeight);
@@ -705,10 +722,8 @@
 
                 $(this).parent().fadeOut();
                 $(this).parent().removeClass('displayed');
-                if (_s.zoomIn) {
                     zoomImg(_s.currentFrame, ctx, "zoomout");
                     _s.zoomIn = false;
-                }
                 if (_s.stats.highlights.length) {
                     _s.stats.highlights[0].timeEnd = getCurDateTime();
                     logStats(_s.stats.highlights[0]);
@@ -788,7 +803,7 @@
             function MouseWheelHandler(e){
                 if(e.deltaY<0){
                     if(zoomLevel<_s.maxZoomLevel) {
-                e.preventDefault();
+                        e.preventDefault();
                         zoomLevel += 2;
                         zoomImg(_s.currentFrame, ctx, "zoomin");
                         _s.zoomIn = true;
@@ -798,17 +813,12 @@
                         e.preventDefault();
                         zoomLevel -= 2;
                         if (zoomLevel === 10) {
-                            $('#circle-indicator').fadeIn();
-                            if($('#features-list ul li').length){
-                                $('#features-list').fadeIn();
+                            zoomImg(_s.currentFrame, ctx, "zoomout");
+                            if (_s.stats.highlights.length) {
+                                _s.stats.highlights[0].timeEnd = getCurDateTime();
+                                logStats(_s.stats.highlights[0]);
                             }
-                            $("#zoom-div img").animate({width: '100%', left: '0', top: '0'}, function () {
-                                $(this).parent().hide();
-                            });
-                            _s.zoomIn = false;
-                            $('#zoom-out-icon').addClass('disable').removeClass('active');
-                            $('#zoom-in-icon').removeClass('active').removeClass('disable');
-                            zoomLevel = 10;
+
                         }else{
                             zoomImg(_s.currentFrame, ctx, "zoomstepout");
                         }
@@ -1138,10 +1148,25 @@
             closeShareList();
             //alert('done');
             var img = loadedZoomImages[frame];
+            if(!img){
+                img = loadedImages[frame];
+                if(!loadedZoomImages[frame] && loadedData.allCars[frame].highResSrc) {
+                    loadedZoomImages[frame] = new Image();
+                    loadedZoomImages[frame].onload = function () {
+                        /*var styles = $('#zoom-div img')[0].style;
+                        $('#zoom-div').empty().append(this).show();
+                        $('#zoom-div img')[0].style = styles;*/
+                        $('#zoom-div img').attr("src",this.src);
+                    };
+                    loadedZoomImages[frame].src = loadedData.allCars[frame].highResSrc;
+                }
+            }
             if (img) {
-                $('#zoom-div').empty();
-                $('#zoom-div').append(img).show();
-                $('#zoom-div img').addClass('item');
+                if(zoomLevel===12 && action==='zoomin'){
+                    $('#zoom-div').empty();
+                    $('#zoom-div').append(img).show();
+                    $('#zoom-div img').addClass('item');
+                }
                 switch (action) {
                     case 'zoomin':
                         $('#zoom-in-icon').addClass('active');
@@ -1156,6 +1181,7 @@
                         break;
                 }
                 if ((action === 'zoomin'||action === 'zoomstepout') && zoomLevel>=10 && zoomLevel<=_s.maxZoomLevel) {
+                    window.ondeviceorientation = null;
                     $('#circle-indicator').fadeOut();
                     var e = $('#zoom-div');
                     var eimg = $(".item");
@@ -1205,7 +1231,7 @@
                     var imgId = $("#zoom-div img").attr('id');
 
                 } else if (action === "zoomout") {
-
+                    window.ondeviceorientation = drawPlayer;
                     $('#circle-indicator').fadeIn();
                     if($('#features-list ul li').length){
                         $('#features-list').fadeIn();
@@ -1306,7 +1332,6 @@
                 .css('top', top + 'px');
             prevX = pageX;
             prevY = pageY;
-
         });
 
         $("#zoom-div .item").on("mouseout touchend touchleave", function (e) {
@@ -1315,58 +1340,6 @@
             isDragging = false;
             $this.removeClass('is-dragging');
         });
-        /*
-                $('#zoom-div').touch({
-                    trackDocument: true,
-                    dragThreshold: 0,
-                    dragDelay: 0,
-                    delegateSelector: '.item',
-                    tapAndHoldDelay: 150,
-                    preventDefault: {
-                        drag: true
-            }
-                })
-                    .on('dragStart tapAndHold', '.item', function (event) {
-                        event.stopPropagation();
-                        var $this = $(this);
-                        if (isDragging)
-                return ;
-                        isDragging = true;
-                        $this.addClass('is-dragging');
-                        $this.css('z-index', ++zIndexTop);
-                    })
-                    .on('drag', '.item', function (event, o) {
-                        var $this = $(this);
-                        var allowedHeight = $this.outerHeight() - _s.playerHeight;
-                        var allowedWidth = $this.outerWidth() - _s.playerWidth;
-                        var top =  o.y - o.eyStart;
-                        var left =   o.x - o.exStart;
-                        if (top > 0) {
-                            top = 0;
-                    }
-                        if (Math.abs(top) > allowedHeight) {
-                            top = -Math.abs(allowedHeight);
-                }
-                        if (left > 0) {
-                            left = 0;
-            }
-                        if (Math.abs(left) > allowedWidth) {
-                            left = -Math.abs(allowedWidth);
-        }
-                        // Stop propagation.
-                        event.stopPropagation();
-                        // Update position.
-                        $this
-                            .css('left', left + 'px')
-                            .css('top', top + 'px');
-                    })
-                    .on('dragEnd tapAndHoldEnd', '.item', function (event) {
-                        event.stopPropagation();
-                        var $this = $(this);
-                        isDragging = false;
-                        $this.removeClass('is-dragging');
-                    });*/
-
         function adjustPositionOnZoomLeft(imageSizeWidth, spotPositionLeft) {
             if (spotPositionLeft > 500) {
                 return true;
@@ -1533,8 +1506,8 @@
         return yyyy + "-" + mn + "-" + dd + " " + hh + ":" + mm + ":" + ss;
     }
     function getAspectRatio(imgwidth, imgheight) {
-        var width = imgwidth || window.globalVar.maxWidth;
-        var height = imgheight || window.globalVar.maxHeight;
+        var width = imgwidth || Number(window.globalVar.maxWidth);
+        var height = imgheight || Number(window.globalVar.maxHeight);
         var aspectRatio = height / width;
         // console.log("aspectRatio", aspectRatio);
         return aspectRatio;
