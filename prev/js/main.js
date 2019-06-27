@@ -1,4 +1,5 @@
 (function (window) {
+    var timeStart = new Date();
     var _s = {}; //settings or initial values global object;
     _s.carImgs = [];
     _s.carsData = [];
@@ -505,6 +506,7 @@
                 _s.lastAlpha = 0;
                 window.ondeviceorientation = drawPlayer;
             }
+            console.log(Math.abs((new Date()).getTime()-timeStart.getTime()));
             var wrapper = document.getElementById('wrapper');
             wrapper.style.backgroundImage =  "none";
         }
