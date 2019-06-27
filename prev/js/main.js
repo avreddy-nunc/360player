@@ -428,6 +428,8 @@
 
         }).fail(function () {
             console.log("error");
+            $("#features-list").hide();
+            $('#hotspots-icon').hide();
         });
 
         var loadedData = {};
