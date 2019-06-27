@@ -99,7 +99,7 @@
             $('#hotspots-div, #wrapper').css('max-width', _s.maxImageWidth + "px");
             $('#hotspots-div, #wrapper').css('max-height',_s.maxImageHeight + "px");
             $('#fullscreen-icon').removeClass('active');
-            $('#fullscreen-icon img').attr({"src":"./../img/fullscreen.svg"});
+            $('#fullscreen-icon img').attr({"src":"./img/fullscreen.svg"});
         }
     }
     //alert(window.orientation)
@@ -113,14 +113,14 @@
             $('#hotspots-div, #wrapper').css('max-width',"100%");
             $('#hotspots-div, #wrapper').css('max-height',"100%");
             $('#fullscreen-icon').addClass('active');
-            $('#fullscreen-icon img').attr({"src":"./../img/fullscreen-close.svg"});
+            $('#fullscreen-icon img').attr({"src":"./img/fullscreen-close.svg"});
         } else {
             if (document.exitFullscreen) {
                 document.exitFullscreen();
                 $('#hotspots-div, #wrapper').css('max-width', _s.maxImageWidth + "px");
                 $('#hotspots-div, #wrapper').css('max-height',_s.maxImageHeight + "px");
                 $('#fullscreen-icon').removeClass('active');
-                $('#fullscreen-icon img').attr({"src":"./../img/fullscreen.svg"});
+                $('#fullscreen-icon img').attr({"src":"./img/fullscreen.svg"});
             }
         }
     });
@@ -129,12 +129,12 @@
             $('#fullscreen-icon').addClass('active');
             $('#hotspots-div, #wrapper').css('max-width',"100%");
             $('#hotspots-div, #wrapper').css('max-height',"100%");
-            $('#fullscreen-icon img').attr({"src": "./../img/fullscreen-close.svg"});
+            $('#fullscreen-icon img').attr({"src": "./img/fullscreen-close.svg"});
         } else {
             $('#fullscreen-icon').removeClass('active');
             $('#hotspots-div, #wrapper').css('max-width', _s.maxImageWidth + "px");
             $('#hotspots-div, #wrapper').css('max-height',_s.maxImageHeight + "px");
-            $('#fullscreen-icon img').attr({"src": "./../img/fullscreen.svg"});
+            $('#fullscreen-icon img').attr({"src": "./img/fullscreen.svg"});
         }
     }
     document.addEventListener("fullscreenchange", fullscreenChanged,false);
