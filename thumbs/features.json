@@ -1,0 +1,64 @@
+{
+  "allFeatures": [
+    {
+      "spotName": "s1",
+      "featureName": "one",
+      "iconName": "fa-star",
+      "src": "https:\/\/gcsimages.storage.googleapis.com\/clients\/224\/images\/736931B4-9F6C-4460-2973-61CF6A410DCD\/736931B4-9F6C-4460-2973-61CF6A410DCD_f00009.jpg",
+      "description": "To test the description",
+      "id": "51617",
+      "frameImgId": 0,
+      "forder": 0
+    },
+    {
+      "spotName": "s2",
+      "featureName": "two",
+      "iconName": "fa-bullseye",
+      "src": "https:\/\/content.homenetiol.com\/distributed-images\/1e2c27c05d0244f98f75236b7b345be5.jpg",
+      "description": "",
+      "id": "51618",
+      "frameImgId": 1,
+      "forder": 1
+    },
+    {
+      "spotName": "s3",
+      "featureName": "three",
+      "iconName": "fa-exclamation-triangle",
+      "src": "https:\/\/content.homenetiol.com\/distributed-images\/6acf16066b2d422abda3332dafe99e4a.jpg",
+      "description": "nis!@#$%^&*(()_+?><",
+      "id": "51619",
+      "frameImgId": 2,
+      "forder": 2
+    },
+    {
+      "spotName": "s4",
+      "featureName": "four",
+      "iconName": "fa-exclamation-circle",
+      "src": "https:\/\/gcsimages.storage.googleapis.com\/clients\/224\/images\/736931B4-9F6C-4460-2973-61CF6A410DCD\/736931B4-9F6C-4460-2973-61CF6A410DCD_f00062.jpg",
+      "description": "nis!@#$%^&*(()_+?><",
+      "id": "79017",
+      "frameImgId": 3,
+      "forder": 3
+    },
+    {
+      "spotName": "s5",
+      "featureName": "test",
+      "iconName": "fa-exclamation-circle",
+      "src": "https:\/\/gcsimages.storage.googleapis.com\/clients\/224\/images\/736931B4-9F6C-4460-2973-61CF6A410DCD\/736931B4-9F6C-4460-2973-61CF6A410DCD_f00052.jpg",
+      "description": "nis!@#$%^&*(()_+?><",
+      "id": "79170",
+      "frameImgId": 4,
+      "forder": 4
+    },
+    {
+      "spotName": "s6",
+      "featureName": "TestExterior",
+      "iconName": "fa-bullseye",
+      "src": "https:\/\/gcsimages.storage.googleapis.com\/clients\/224\/images\/736931B4-9F6C-4460-2973-61CF6A410DCD\/736931B4-9F6C-4460-2973-61CF6A410DCD_f00002.jpg",
+      "description": "Testing team",
+      "id": "149085",
+      "frameImgId": 5,
+      "forder": 5
+    }
+  ]
+}
