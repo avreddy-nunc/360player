@@ -1394,13 +1394,13 @@
                 $('#features-list').fadeIn();
             }
             $('#circle-indicator').fadeIn();
-            /*if(_s.zoomIn){
+            if(_s.zoomIn){
                 zoomImg(_s.currentFrame, ctx, 'zoomout');
-            }*/
-            $("#zoom-div img").animate(
+            }
+            /*$("#zoom-div img").animate(
                 {width: '100%', left: '0', top: '0'}, function () {
                     $(this).parent().hide();
-                });
+                });*/
             $('#zoom-out-icon').removeClass('active').addClass('disable');
             $('#zoom-in-icon').removeClass('active').removeClass('disable');
             zoomLevel = 10;
