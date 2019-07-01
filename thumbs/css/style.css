@@ -706,6 +706,20 @@ canvas {
 .feature-thumbs-wrapper:hover #feature-thumbs{
     opacity: 1;
 }
+.feature-thumbs-wrapper #feature-thumbs .slide-item{
+    -webkit-transition: transform linear 0.2s;
+    -moz-transition: transform linear 0.2s;
+    -ms-transition: transform linear 0.2s;
+    -o-transition: transform linear 0.2s;
+    transition: transform linear 0.2s;
+}
+.feature-thumbs-wrapper #feature-thumbs .slide-item:hover{
+    -webkit-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    -o-transform: scale(1.05);
+    transform: scale(1.05);
+}
 #feature-thumbs{
     display: flex;
     width: 100%;

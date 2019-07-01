@@ -353,6 +353,7 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
     function initThumbsPlaye() {
         document.getElementById('wrapper').classList.add('thumbs-player');
         document.getElementById('features-list').style.display = "none";
+        document.getElementById('feature-thumbs-container').style.display = "block"
     }
 
     function setPlayerSize(imgWidth, imgHeight) {
@@ -1722,9 +1723,13 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
         if(this.config.sliderActive){
             this.container.style.height = "0";
             this.toggleButton.classList.remove('active');
+            this.nextNavElement.style.display = "none";
+            this.prevNavElement.style.display = "none";
         }else{
             this.container.style.height = "30%";
             this.toggleButton.classList.add('active');
+            this.nextNavElement.style.display = "block";
+            this.prevNavElement.style.display = "block";
         }
         this.config.sliderActive = !this.config.sliderActive;
     };
