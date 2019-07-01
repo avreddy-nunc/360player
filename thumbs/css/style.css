@@ -707,17 +707,8 @@ canvas {
     -o-transform: rotateZ(0deg);
     transform: rotateZ(0deg);
 }
-.feature-thumbs-wrapper:hover #feature-thumbs{
-    opacity: 1;
-}
-.feature-thumbs-wrapper #feature-thumbs .slide-item{
-    -webkit-transition: transform linear 0.2s;
-    -moz-transition: transform linear 0.2s;
-    -ms-transition: transform linear 0.2s;
-    -o-transition: transform linear 0.2s;
-    transition: transform linear 0.2s;
-}
 .feature-thumbs-wrapper #feature-thumbs .slide-item:hover{
+    opacity: 1;
     -webkit-transform: scale(1.05);
     -moz-transform: scale(1.05);
     -ms-transform: scale(1.05);
@@ -729,7 +720,6 @@ canvas {
     width: 100%;
     height: 100%;
     flex-direction: row;
-    opacity: 0.7;
     -webkit-transition: transform linear 0.2s,opacity linear 0.2s;
     -moz-transition: transform linear 0.2s,opacity linear 0.2s;
     -ms-transition: transform linear 0.2s,opacity linear 0.2s;
@@ -743,6 +733,12 @@ canvas {
     margin: calc(4%/6);
     border-radius: 4px;
     overflow: hidden;
+    opacity: 0.7;
+    -webkit-transition: transform linear 0.2s, opacity linear 0.2s;
+    -moz-transition: transform linear 0.2s, opacity linear 0.2s;
+    -ms-transition: transform linear 0.2s, opacity linear 0.2s;
+    -o-transition: transform linear 0.2s, opacity linear 0.2s;
+    transition: transform linear 0.2s, opacity linear 0.2s;
 }
 #feature-thumbs .slide-item img{
     width: 100%;
@@ -761,6 +757,7 @@ canvas {
 .feature-thumbs-wrapper #prev-button,
 .feature-thumbs-wrapper #next-button{
     position: absolute;
+    border: none;
     top: calc(50% - 12.5px);
     width: 25px;
     height: 25px;
@@ -771,6 +768,11 @@ canvas {
     -moz-border-radius: 25px;
     border-radius: 25px;
     cursor: pointer;
+}
+.feature-thumbs-wrapper #prev-button:disabled,
+.feature-thumbs-wrapper #next-button:disabled{
+    cursor: not-allowed;
+    opacity: 0.7;
 }
 .feature-thumbs-wrapper #prev-button{
     left: 10px;

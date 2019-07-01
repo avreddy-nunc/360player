@@ -849,6 +849,9 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                     zoomLevel += 2;
                     zoomImg(_s.currentFrame, ctx, "zoomin");
                     _s.zoomIn = true;
+                    if(thumbsSlider && thumbsSlider.config.sliderActive){
+                        thumbsSlider.toggleSlider();
+                    }
                 }
             });
 
@@ -875,6 +878,9 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                         zoomLevel += 2;
                         zoomImg(_s.currentFrame, ctx, "zoomin");
                         _s.zoomIn = true;
+                        if(thumbsSlider && thumbsSlider.config.sliderActive){
+                            thumbsSlider.toggleSlider();
+                        }
                     }
                 } else if (e.deltaY > 0) {
                     if (zoomLevel > 10) {
@@ -969,6 +975,7 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
             }
 
             feature_id = _s.hsData[forder].id;
+            thumbsSlider.gotoSlide(forder);
             forder = null;
             frame = getGoToFrame(loadedData.allCars, feature_id);
             //console.log(frame);
@@ -1039,6 +1046,11 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                     zoomLevel += 2;
                     zoomImg(_s.currentFrame, ctx, "zoomin", {left: pos.x, top: pos.y});
                     _s.zoomIn = true;
+                }
+                if(thumbsSlider){
+                    thumbsSlider.gotoSlide(_s.hsData.findIndex(function (hotspot) {
+                        return hotspot.id == hs.mainId
+                    }));
                 }
             } else {
                 $("#info-box").removeClass('displayed');
@@ -1620,6 +1632,7 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
         this.nextSlide = this.nextSlide.bind(this);
         this.prevSlide = this.prevSlide.bind(this);
         this.toggleSlider = this.toggleSlider.bind(this);
+        this.gotoSlide = this.gotoSlide.bind(this);
         this.activeSlide = 0;
         this.registerEvents();
         this.init();
@@ -1627,7 +1640,7 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
     };
     imageSlider.prototype.init = function () {
         this.element.style.cursor = "pointer";
-        this.prevNavElement.style.display = "none";
+        this.prevNavElement.disabled = true;
         this.config.childrenCount = this.element.children.length;
         this.element.style.transform = "translateX(-"+this.activeSlide*this.element.offsetWidth/3+"px)";
     };
@@ -1685,13 +1698,13 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
         transform[0] = Number(transform[0]) + (currentX - this.config.lastX);
         if(transform[0]>0){
             transform[0]=0;
-            this.prevNavElement.style.display = "none";
+            this.prevNavElement.disabled = true;
         }else if(Math.abs(transform[0])>this.config.maxTranslate){
             transform[0] = -this.config.maxTranslate;
-            this.nextNavElement.style.display = "none";
+            this.nextNavElement.disabled = true;
         }else{
-            this.prevNavElement.style.display = "block";
-            this.nextNavElement.style.display = "block";
+            this.prevNavElement.disabled = false;
+            this.nextNavElement.disabled = false;
         }
         this.activeSlide = Math.floor(Math.abs(transform[0])/(this.element.clientWidth/this.config.childPerView));
         this.element.style.transform = "translateX("+transform[0]+"px)";
@@ -1733,6 +1746,12 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
         }
         this.config.sliderActive = !this.config.sliderActive;
     };
+    imageSlider.prototype.gotoSlide = function(slide){
+        if(slide!== undefined && slide !== -1){
+            this.activeSlide = slide<=(this.config.childrenCount-this.config.childPerView)?slide:(this.config.childrenCount-this.config.childPerView);
+            this.update();
+        }
+    };
     imageSlider.prototype.on = function (event,callback) {
         switch (event) {
             case "feature-select":
@@ -1743,12 +1762,12 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
     imageSlider.prototype.update = function () {
         this.config.maxTranslate = (this.config.childrenCount - this.config.childPerView)*(this.element.clientWidth/3);
         if(this.activeSlide===0){
-            this.prevNavElement.style.display = "none";
+            this.prevNavElement.disabled = true;
         }else if(this.activeSlide === (this.config.childrenCount-this.config.childPerView)){
-            this.nextNavElement.style.display = "none";
+            this.nextNavElement.disabled = true;
         }else {
-            this.prevNavElement.style.display = "block";
-            this.nextNavElement.style.display = "block";
+            this.prevNavElement.disabled = false;
+            this.nextNavElement.disabled = false;
         }
         this.element.style.transform = "translateX(-"+this.activeSlide*this.element.offsetWidth/3+"px)";
     }
