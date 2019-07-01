@@ -410,6 +410,10 @@ canvas {
 #share-icon{
     position: relative;
 }
+.thumbs-player #share-icon #share-list{
+    top: 100%;
+    bottom: auto;
+}
 #share-icon #share-list{
     position: absolute;
     display: flex;
