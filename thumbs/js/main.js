@@ -353,7 +353,7 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
     function initThumbsPlaye() {
         document.getElementById('wrapper').classList.add('thumbs-player');
         document.getElementById('features-list').style.display = "none";
-        if(_s.hsData.length) {
+        if (_s.hsData.length) {
             document.getElementById('feature-thumbs-container').style.display = "block"
         }
     }
@@ -414,7 +414,7 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
         _s.redrawImgCount = getSpeed(_s.totalImages);
         setSpinIndicator();
         changeSpinIndicator();
-        if(thumbsSlider) {
+        if (thumbsSlider) {
             thumbsSlider.update();
         }
     }
@@ -458,20 +458,20 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                     allfeatures.allFeatures.forEach(function (feature, index) {
                         _s.hsData.push(feature);
                         features += "<div data-fid='" + feature.id + "' class='slide-item'>" +
-                            "<img src='" + (feature.src?feature.src:'./img/feature-default.jpg') + "' alt='feature' />" +
+                            "<img src='" + (feature.src ? feature.src : './img/feature-default.jpg') + "' alt='feature' />" +
                             "<div class='slide-title'>" + feature.featureName + "</div></div>"
                     });
                     document.getElementById('feature-thumbs').innerHTML = features;
                     initThumbsPlaye();
                     thumbsSlider = new imageSlider(
                         {
-                            "sliderId":'feature-thumbs',
-                            "containerId":"feature-thumbs-container",
-                            "nextNav" : "next-button",
-                            "prevNav" : "prev-button",
-                            "toggleButtom" : "toggle-button"
+                            "sliderId": 'feature-thumbs',
+                            "containerId": "feature-thumbs-container",
+                            "nextNav": "next-button",
+                            "prevNav": "prev-button",
+                            "toggleButtom": "toggle-button"
                         }
-                        );
+                    );
                     thumbsSlider.on("feature-select", function (id) {
                         var featureId = id;
                         var goToFrame = getGoToFrame(loadedData.allCars, featureId);
@@ -488,7 +488,7 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                     $('#hotspots-icon').show();
                 }
             } else {
-                if(window.globalVar.isThumbsPlayer){
+                if (window.globalVar.isThumbsPlayer) {
                     initThumbsPlaye();
                 }
                 $("#features-list").hide();
@@ -852,7 +852,7 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                     zoomLevel += 2;
                     zoomImg(_s.currentFrame, ctx, "zoomin");
                     _s.zoomIn = true;
-                    if(thumbsSlider && thumbsSlider.config.sliderActive){
+                    if (thumbsSlider && thumbsSlider.config.sliderActive) {
                         thumbsSlider.toggleSlider();
                     }
                 }
@@ -881,7 +881,7 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                         zoomLevel += 2;
                         zoomImg(_s.currentFrame, ctx, "zoomin");
                         _s.zoomIn = true;
-                        if(thumbsSlider && thumbsSlider.config.sliderActive){
+                        if (thumbsSlider && thumbsSlider.config.sliderActive) {
                             thumbsSlider.toggleSlider();
                         }
                     }
@@ -1050,7 +1050,7 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                     zoomImg(_s.currentFrame, ctx, "zoomin", {left: pos.x, top: pos.y});
                     _s.zoomIn = true;
                 }
-                if(thumbsSlider){
+                if (thumbsSlider) {
                     thumbsSlider.gotoSlide(_s.hsData.findIndex(function (hotspot) {
                         return hotspot.id == hs.mainId
                     }));
@@ -1170,14 +1170,14 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
             $("#info-box").removeClass('displayed');
             $("#info-box").hide();
             i = startFrame;
-            var anim;
-            var total = loadedData.allCars.length;
-
-            anim = setInterval(function () {
+            var anim,
+                total = loadedData.allCars.length,
+                dist = Math.abs(startFrame - endFrame),
+                outerDist = total - dist,
+                isForward = endFrame < startFrame ^ dist < outerDist; //finding to rotate player in forward or backward direction where 1 is forward and 0 is backward
+                anim = setInterval(function () {
+                window.ondeviceorientation = null;
                 _s.runAnim = true;
-                if (i === total) {
-                    i = 0;
-                }
                 changeSpinIndicator(i);
                 draw(i, ctx, _s.playerWidth, _s.playerHeight);
                 _s.runAnim = false;
@@ -1224,7 +1224,15 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                         //console.log("no hotspot");
                     }
                 }
-                i++;
+                if (isForward) {
+                    if (++i === total) {
+                        i = 0;
+                    }
+                } else {
+                    if (--i === -1) {
+                        i = (total - 1);
+                    }
+                }
             }, 40);
         }
 
@@ -1494,7 +1502,7 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
             _s.redrawImgCount = getSpeed(_s.totalImages);
             setSpinIndicator();
             changeSpinIndicator();
-            if(thumbsSlider) {
+            if (thumbsSlider) {
                 thumbsSlider.update();
             }
             draw(_s.currentFrame, ctx, _s.playerWidth, _s.playerHeight, true);
@@ -1612,12 +1620,12 @@ var imageSlider = function (options) {
         return new imageSlider(options);
     }
     this.config = {
-        lastX : 0,
-        sliderActive : true,
-        isDragging : false,
-        childrenCount : 0,
-        childPerView : 3,
-        maxTranslate : 0
+        lastX: 0,
+        sliderActive: true,
+        isDragging: false,
+        childrenCount: 0,
+        childPerView: 3,
+        maxTranslate: 0
     };
     this.id = options.sliderId;
     this.containerId = options.containerId;
@@ -1645,16 +1653,16 @@ var imageSlider = function (options) {
 imageSlider.prototype.init = function () {
     this.element.style.cursor = "pointer";
     this.config.childrenCount = this.element.children.length;
-    this.config.maxTranslate = (this.config.childrenCount - this.config.childPerView)*(this.element.clientWidth/3);
-    if(this.activeSlide===0){
+    this.config.maxTranslate = (this.config.childrenCount - this.config.childPerView) * (this.element.clientWidth / 3);
+    if (this.activeSlide === 0) {
         this.prevNavElement.disabled = true;
-    }else if(this.activeSlide === (this.config.childrenCount-this.config.childPerView)){
+    } else if (this.activeSlide === (this.config.childrenCount - this.config.childPerView)) {
         this.nextNavElement.disabled = true;
-    }else {
+    } else {
         this.prevNavElement.disabled = false;
         this.nextNavElement.disabled = false;
     }
-    this.element.style.transform = "translateX(-"+this.activeSlide*this.element.offsetWidth/3+"px)";
+    this.element.style.transform = "translateX(-" + this.activeSlide * this.element.offsetWidth / 3 + "px)";
 };
 imageSlider.prototype.registerEvents = function () {
     let self = this;
@@ -1678,10 +1686,10 @@ imageSlider.prototype.registerEvents = function () {
 };
 imageSlider.prototype.touchStart = function (e) {
     //e.preventDefault();
-    if (typeof e.pageX !== "undefined" && e.pageX>0) {
+    if (typeof e.pageX !== "undefined" && e.pageX > 0) {
         this.config.lastX = e.pageX;
         this.config.touchStartX = e.clientX;
-    }else if(e.touches && typeof e.touches[0].pageX !== "undefined"){
+    } else if (e.touches && typeof e.touches[0].pageX !== "undefined") {
         this.config.lastX = e.touches[0].pageX;
         this.config.touchStartX = e.touches[0].pageX;
     } else if (e.originalEvent && typeof e.originalEvent.touches[0].pageX !== "undefined") {
@@ -1693,12 +1701,12 @@ imageSlider.prototype.touchStart = function (e) {
 imageSlider.prototype.touchMove = function (e) {
     e.preventDefault();
     var currentX;
-    if (typeof e.pageX !== "undefined" && e.pageX>0) {
+    if (typeof e.pageX !== "undefined" && e.pageX > 0) {
         currentX = e.pageX;
-    }else if(e.touches && typeof e.touches[0].pageX !== "undefined"){
+    } else if (e.touches && typeof e.touches[0].pageX !== "undefined") {
         currentX = e.touches[0].pageX;
     } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
-        currentX =  e.originalEvent.touches[0].pageX;
+        currentX = e.originalEvent.touches[0].pageX;
     }
     if (this.config.lastX === currentX) {
         return;
@@ -1708,49 +1716,49 @@ imageSlider.prototype.touchMove = function (e) {
     }
     var transform = this.element.style.transform.replace(/[^0-9\-.,]/g, '').split(',');
     transform[0] = Number(transform[0]) + (currentX - this.config.lastX);
-    if(transform[0]>0){
-        transform[0]=0;
+    if (transform[0] > 0) {
+        transform[0] = 0;
         this.prevNavElement.disabled = true;
-    }else if(Math.abs(transform[0])>this.config.maxTranslate){
+    } else if (Math.abs(transform[0]) > this.config.maxTranslate) {
         transform[0] = -this.config.maxTranslate;
         this.nextNavElement.disabled = true;
-    }else{
+    } else {
         this.prevNavElement.disabled = false;
         this.nextNavElement.disabled = false;
     }
-    this.activeSlide = Math.floor(Math.abs(transform[0])/(this.element.clientWidth/this.config.childPerView));
-    this.element.style.transform = "translateX("+transform[0]+"px)";
+    this.activeSlide = Math.floor(Math.abs(transform[0]) / (this.element.clientWidth / this.config.childPerView));
+    this.element.style.transform = "translateX(" + transform[0] + "px)";
     this.config.lastX = currentX;
 };
-imageSlider.prototype.touchEnd = function(e){
-    if(this.config.isDragging){
+imageSlider.prototype.touchEnd = function (e) {
+    if (this.config.isDragging) {
         this.config.isDragging = false;
     }
 };
 imageSlider.prototype.featureClicked = function (e) {
-    if(Math.abs(this.config.touchStartX - e.clientX)<10) {
+    if (Math.abs(this.config.touchStartX - e.clientX) < 10) {
         this.featureSelectCallback(e.currentTarget.getAttribute('data-fid'));
     }
 };
-imageSlider.prototype.nextSlide = function(){
-    if(this.activeSlide<(this.config.childrenCount-this.config.childPerView)){
+imageSlider.prototype.nextSlide = function () {
+    if (this.activeSlide < (this.config.childrenCount - this.config.childPerView)) {
         this.activeSlide++;
         this.update();
     }
 };
-imageSlider.prototype.prevSlide = function(){
-    if(this.activeSlide>0){
+imageSlider.prototype.prevSlide = function () {
+    if (this.activeSlide > 0) {
         this.activeSlide--;
         this.update();
     }
 };
-imageSlider.prototype.toggleSlider = function(){
-    if(this.config.sliderActive){
+imageSlider.prototype.toggleSlider = function () {
+    if (this.config.sliderActive) {
         this.container.style.height = "0";
         this.toggleButton.classList.remove('active');
         this.nextNavElement.style.display = "none";
         this.prevNavElement.style.display = "none";
-    }else{
+    } else {
         this.container.style.height = "30%";
         this.toggleButton.classList.add('active');
         this.nextNavElement.style.display = "block";
@@ -1758,13 +1766,13 @@ imageSlider.prototype.toggleSlider = function(){
     }
     this.config.sliderActive = !this.config.sliderActive;
 };
-imageSlider.prototype.gotoSlide = function(slide){
-    if(slide!== undefined && slide !== -1){
-        this.activeSlide = slide<=(this.config.childrenCount-this.config.childPerView)?slide:(this.config.childrenCount-this.config.childPerView);
+imageSlider.prototype.gotoSlide = function (slide) {
+    if (slide !== undefined && slide !== -1) {
+        this.activeSlide = slide <= (this.config.childrenCount - this.config.childPerView) ? slide : (this.config.childrenCount - this.config.childPerView);
         this.update();
     }
 };
-imageSlider.prototype.on = function (event,callback) {
+imageSlider.prototype.on = function (event, callback) {
     switch (event) {
         case "feature-select":
             this.featureSelectCallback = callback;
@@ -1772,16 +1780,16 @@ imageSlider.prototype.on = function (event,callback) {
     }
 };
 imageSlider.prototype.update = function () {
-    this.config.maxTranslate = (this.config.childrenCount - this.config.childPerView)*(this.element.clientWidth/3);
-    if(this.activeSlide===0){
+    this.config.maxTranslate = (this.config.childrenCount - this.config.childPerView) * (this.element.clientWidth / 3);
+    if (this.activeSlide === 0) {
         this.prevNavElement.disabled = true;
-    }else if(this.activeSlide === (this.config.childrenCount-this.config.childPerView)){
+    } else if (this.activeSlide === (this.config.childrenCount - this.config.childPerView)) {
         this.nextNavElement.disabled = true;
-    }else {
+    } else {
         this.prevNavElement.disabled = false;
         this.nextNavElement.disabled = false;
     }
-    this.element.style.transform = "translateX(-"+this.activeSlide*this.element.offsetWidth/3+"px)";
+    this.element.style.transform = "translateX(-" + this.activeSlide * this.element.offsetWidth / 3 + "px)";
 };
 /* ==== coed for image slider ends here ==== */
 var Player360 = function (options) {
