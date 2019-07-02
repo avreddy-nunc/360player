@@ -667,6 +667,7 @@ canvas {
     position: absolute;
     bottom: 0;
     height: 30%;
+    width: 100%;
     z-index: 21;
     -webkit-transition: height linear 0.2s;
     -moz-transition: height linear 0.2s;
@@ -733,7 +734,7 @@ canvas {
     margin: calc(4%/6);
     border-radius: 4px;
     overflow: hidden;
-    opacity: 0.7;
+    opacity: 0.5;
     -webkit-transition: transform linear 0.2s, opacity linear 0.2s;
     -moz-transition: transform linear 0.2s, opacity linear 0.2s;
     -ms-transition: transform linear 0.2s, opacity linear 0.2s;
@@ -748,11 +749,14 @@ canvas {
 #feature-thumbs .slide-item .slide-title{
     position: absolute;
     top: 0;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.6);
     width: 100%;
     color: #fff;
     text-align: center;
+    text-overflow: ellipsis;
     padding: 3px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .feature-thumbs-wrapper #prev-button,
 .feature-thumbs-wrapper #next-button{

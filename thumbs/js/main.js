@@ -353,7 +353,9 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
     function initThumbsPlaye() {
         document.getElementById('wrapper').classList.add('thumbs-player');
         document.getElementById('features-list').style.display = "none";
-        document.getElementById('feature-thumbs-container').style.display = "block"
+        if(_s.hsData.length) {
+            document.getElementById('feature-thumbs-container').style.display = "block"
+        }
     }
 
     function setPlayerSize(imgWidth, imgHeight) {
@@ -361,9 +363,6 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
         var $wrapper = $('#wrapper');
         var wrapperWidth = $wrapper.width();
         var otherWidth = 0;
-        if (window.globalVar.isThumbsPlayer) {
-            initThumbsPlaye()
-        }
         _s.aspectRatio = getAspectRatio(imgWidth, imgHeight);
         _s.maxImageHeight = _s.aspectRatio * _s.maxImageWidth;
         parent.postMessage(JSON.stringify({"aspectRation": _s.aspectRatio}), "*");
@@ -459,10 +458,11 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                     allfeatures.allFeatures.forEach(function (feature, index) {
                         _s.hsData.push(feature);
                         features += "<div data-fid='" + feature.id + "' class='slide-item'>" +
-                            "<img src='" + feature.src + "' alt='feature' />" +
+                            "<img src='" + (feature.src?feature.src:'./img/feature-default.jpg') + "' alt='feature' />" +
                             "<div class='slide-title'>" + feature.featureName + "</div></div>"
                     });
                     document.getElementById('feature-thumbs').innerHTML = features;
+                    initThumbsPlaye();
                     thumbsSlider = new imageSlider(
                         {
                             "sliderId":'feature-thumbs',
@@ -488,6 +488,9 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                     $('#hotspots-icon').show();
                 }
             } else {
+                if(window.globalVar.isThumbsPlayer){
+                    initThumbsPlaye();
+                }
                 $("#features-list").hide();
                 $('#hotspots-icon').hide();
             }
@@ -1602,176 +1605,185 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
         var height = imgheight || Number(window.globalVar.maxHeight);
         return height / width;
     }
-
-    var imageSlider = function (options) {
-        if (!(this instanceof imageSlider)) {
-            return new imageSlider(options);
-        }
-        this.config = {
-            lastX : 0,
-            sliderActive : true,
-            isDragging : false,
-            childrenCount : 0,
-            childPerView : 3,
-            maxTranslate : 0
-        };
-        this.id = options.sliderId;
-        this.containerId = options.containerId;
-        this.nextNavId = options.nextNav;
-        this.prevNavId = options.prevNav;
-        this.toggleButtonId = options.toggleButtom;
-        this.element = document.getElementById(this.id);
-        this.container = document.getElementById(this.containerId);
-        this.nextNavElement = document.getElementById(this.nextNavId);
-        this.prevNavElement = document.getElementById(this.prevNavId);
-        this.toggleButton = document.getElementById(this.toggleButtonId);
-        this.featureClicked = this.featureClicked.bind(this);
-        this.touchStart = this.touchStart.bind(this);
-        this.touchMove = this.touchMove.bind(this);
-        this.touchEnd = this.touchEnd.bind(this);
-        this.nextSlide = this.nextSlide.bind(this);
-        this.prevSlide = this.prevSlide.bind(this);
-        this.toggleSlider = this.toggleSlider.bind(this);
-        this.gotoSlide = this.gotoSlide.bind(this);
-        this.activeSlide = 0;
-        this.registerEvents();
-        this.init();
-        return this;
-    };
-    imageSlider.prototype.init = function () {
-        this.element.style.cursor = "pointer";
-        this.prevNavElement.disabled = true;
-        this.config.childrenCount = this.element.children.length;
-        this.element.style.transform = "translateX(-"+this.activeSlide*this.element.offsetWidth/3+"px)";
-    };
-    imageSlider.prototype.registerEvents = function () {
-        let self = this;
-        this.element.children.forEveryElement(function (elem) {
-            elem.addEventListener("click", self.featureClicked);
-            elem.addEventListener("touch", self.featureClicked);
-        });
-        this.container.addEventListener("mousedown", this.touchStart);
-        this.container.addEventListener("touchstart", this.touchStart);
-        this.container.addEventListener("mousemove", this.touchMove);
-        this.container.addEventListener("touchmove", this.touchMove);
-        this.container.addEventListener("mouseup", this.touchEnd);
-        this.container.addEventListener("mouseleave", this.touchEnd);
-        this.container.addEventListener("touchleave", this.touchEnd);
-        this.container.addEventListener("touchend", this.touchEnd);
-        this.nextNavElement.addEventListener("click", this.nextSlide);
-        this.nextNavElement.addEventListener("touch", this.nextSlide);
-        this.prevNavElement.addEventListener("click", this.prevSlide);
-        this.prevNavElement.addEventListener("touch", this.prevSlide);
-        this.toggleButton.addEventListener("click", this.toggleSlider)
-    };
-    imageSlider.prototype.touchStart = function (e) {
-        e.preventDefault();
-        if (typeof e.pageX !== "undefined" && e.pageX>0) {
-            this.config.lastX = e.pageX;
-            this.config.touchStartX = e.clientX;
-        }else if(e.touches && typeof e.touches[0].pageX !== "undefined"){
-            this.config.lastX = e.touches[0].pageX;
-            this.config.touchStartX = e.touches[0].pageX;
-        } else if (e.originalEvent && typeof e.originalEvent.touches[0].pageX !== "undefined") {
-            this.config.lastX = e.originalEvent.touches[0].pageX;
-            this.config.touchStartX = e.originalEvent.touches[0].pageX;
-        }
-        this.config.isDragging = true;
-    };
-    imageSlider.prototype.touchMove = function (e) {
-        e.preventDefault();
-        var currentX;
-        if (typeof e.pageX !== "undefined" && e.pageX>0) {
-            currentX = e.pageX;
-        }else if(e.touches && typeof e.touches[0].pageX !== "undefined"){
-            currentX = e.touches[0].pageX;
-        } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
-            currentX =  e.originalEvent.touches[0].pageX;
-        }
-        if (this.config.lastX === currentX) {
-            return;
-        }
-        if (!this.config.isDragging) {
-            return;
-        }
-        var transform = this.element.style.transform.replace(/[^0-9\-.,]/g, '').split(',');
-        transform[0] = Number(transform[0]) + (currentX - this.config.lastX);
-        if(transform[0]>0){
-            transform[0]=0;
-            this.prevNavElement.disabled = true;
-        }else if(Math.abs(transform[0])>this.config.maxTranslate){
-            transform[0] = -this.config.maxTranslate;
-            this.nextNavElement.disabled = true;
-        }else{
-            this.prevNavElement.disabled = false;
-            this.nextNavElement.disabled = false;
-        }
-        this.activeSlide = Math.floor(Math.abs(transform[0])/(this.element.clientWidth/this.config.childPerView));
-        this.element.style.transform = "translateX("+transform[0]+"px)";
-        this.config.lastX = currentX;
-    };
-    imageSlider.prototype.touchEnd = function(e){
-        if(this.config.isDragging){
-            this.config.isDragging = false;
-        }
-    };
-    imageSlider.prototype.featureClicked = function (e) {
-        if(Math.abs(this.config.touchStartX - e.clientX)<10) {
-            this.featureSelectCallback(e.currentTarget.getAttribute('data-fid'));
-        }
-    };
-    imageSlider.prototype.nextSlide = function(){
-        if(this.activeSlide<(this.config.childrenCount-this.config.childPerView)){
-            this.activeSlide++;
-            this.update();
-        }
-    };
-    imageSlider.prototype.prevSlide = function(){
-        if(this.activeSlide>0){
-            this.activeSlide--;
-            this.update();
-        }
-    };
-    imageSlider.prototype.toggleSlider = function(){
-        if(this.config.sliderActive){
-            this.container.style.height = "0";
-            this.toggleButton.classList.remove('active');
-            this.nextNavElement.style.display = "none";
-            this.prevNavElement.style.display = "none";
-        }else{
-            this.container.style.height = "30%";
-            this.toggleButton.classList.add('active');
-            this.nextNavElement.style.display = "block";
-            this.prevNavElement.style.display = "block";
-        }
-        this.config.sliderActive = !this.config.sliderActive;
-    };
-    imageSlider.prototype.gotoSlide = function(slide){
-        if(slide!== undefined && slide !== -1){
-            this.activeSlide = slide<=(this.config.childrenCount-this.config.childPerView)?slide:(this.config.childrenCount-this.config.childPerView);
-            this.update();
-        }
-    };
-    imageSlider.prototype.on = function (event,callback) {
-        switch (event) {
-            case "feature-select":
-                this.featureSelectCallback = callback;
-                break;
-        }
-    };
-    imageSlider.prototype.update = function () {
-        this.config.maxTranslate = (this.config.childrenCount - this.config.childPerView)*(this.element.clientWidth/3);
-        if(this.activeSlide===0){
-            this.prevNavElement.disabled = true;
-        }else if(this.activeSlide === (this.config.childrenCount-this.config.childPerView)){
-            this.nextNavElement.disabled = true;
-        }else {
-            this.prevNavElement.disabled = false;
-            this.nextNavElement.disabled = false;
-        }
-        this.element.style.transform = "translateX(-"+this.activeSlide*this.element.offsetWidth/3+"px)";
-    }
 }(window));
+/* ==== code for image slider starts here ==== */
+var imageSlider = function (options) {
+    if (!(this instanceof imageSlider)) {
+        return new imageSlider(options);
+    }
+    this.config = {
+        lastX : 0,
+        sliderActive : true,
+        isDragging : false,
+        childrenCount : 0,
+        childPerView : 3,
+        maxTranslate : 0
+    };
+    this.id = options.sliderId;
+    this.containerId = options.containerId;
+    this.nextNavId = options.nextNav;
+    this.prevNavId = options.prevNav;
+    this.toggleButtonId = options.toggleButtom;
+    this.element = document.getElementById(this.id);
+    this.container = document.getElementById(this.containerId);
+    this.nextNavElement = document.getElementById(this.nextNavId);
+    this.prevNavElement = document.getElementById(this.prevNavId);
+    this.toggleButton = document.getElementById(this.toggleButtonId);
+    this.featureClicked = this.featureClicked.bind(this);
+    this.touchStart = this.touchStart.bind(this);
+    this.touchMove = this.touchMove.bind(this);
+    this.touchEnd = this.touchEnd.bind(this);
+    this.nextSlide = this.nextSlide.bind(this);
+    this.prevSlide = this.prevSlide.bind(this);
+    this.toggleSlider = this.toggleSlider.bind(this);
+    this.gotoSlide = this.gotoSlide.bind(this);
+    this.activeSlide = 0;
+    this.registerEvents();
+    this.init();
+    return this;
+};
+imageSlider.prototype.init = function () {
+    this.element.style.cursor = "pointer";
+    this.config.childrenCount = this.element.children.length;
+    this.config.maxTranslate = (this.config.childrenCount - this.config.childPerView)*(this.element.clientWidth/3);
+    if(this.activeSlide===0){
+        this.prevNavElement.disabled = true;
+    }else if(this.activeSlide === (this.config.childrenCount-this.config.childPerView)){
+        this.nextNavElement.disabled = true;
+    }else {
+        this.prevNavElement.disabled = false;
+        this.nextNavElement.disabled = false;
+    }
+    this.element.style.transform = "translateX(-"+this.activeSlide*this.element.offsetWidth/3+"px)";
+};
+imageSlider.prototype.registerEvents = function () {
+    let self = this;
+    this.element.children.forEveryElement(function (elem) {
+        elem.addEventListener("click", self.featureClicked);
+        elem.addEventListener("touch", self.featureClicked);
+    });
+    this.container.addEventListener("mousedown", this.touchStart);
+    this.container.addEventListener("touchstart", this.touchStart);
+    this.container.addEventListener("mousemove", this.touchMove);
+    this.container.addEventListener("touchmove", this.touchMove);
+    this.container.addEventListener("mouseup", this.touchEnd);
+    this.container.addEventListener("mouseleave", this.touchEnd);
+    this.container.addEventListener("touchleave", this.touchEnd);
+    this.container.addEventListener("touchend", this.touchEnd);
+    this.nextNavElement.addEventListener("click", this.nextSlide);
+    this.nextNavElement.addEventListener("touch", this.nextSlide);
+    this.prevNavElement.addEventListener("click", this.prevSlide);
+    this.prevNavElement.addEventListener("touch", this.prevSlide);
+    this.toggleButton.addEventListener("click", this.toggleSlider)
+};
+imageSlider.prototype.touchStart = function (e) {
+    //e.preventDefault();
+    if (typeof e.pageX !== "undefined" && e.pageX>0) {
+        this.config.lastX = e.pageX;
+        this.config.touchStartX = e.clientX;
+    }else if(e.touches && typeof e.touches[0].pageX !== "undefined"){
+        this.config.lastX = e.touches[0].pageX;
+        this.config.touchStartX = e.touches[0].pageX;
+    } else if (e.originalEvent && typeof e.originalEvent.touches[0].pageX !== "undefined") {
+        this.config.lastX = e.originalEvent.touches[0].pageX;
+        this.config.touchStartX = e.originalEvent.touches[0].pageX;
+    }
+    this.config.isDragging = true;
+};
+imageSlider.prototype.touchMove = function (e) {
+    e.preventDefault();
+    var currentX;
+    if (typeof e.pageX !== "undefined" && e.pageX>0) {
+        currentX = e.pageX;
+    }else if(e.touches && typeof e.touches[0].pageX !== "undefined"){
+        currentX = e.touches[0].pageX;
+    } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
+        currentX =  e.originalEvent.touches[0].pageX;
+    }
+    if (this.config.lastX === currentX) {
+        return;
+    }
+    if (!this.config.isDragging) {
+        return;
+    }
+    var transform = this.element.style.transform.replace(/[^0-9\-.,]/g, '').split(',');
+    transform[0] = Number(transform[0]) + (currentX - this.config.lastX);
+    if(transform[0]>0){
+        transform[0]=0;
+        this.prevNavElement.disabled = true;
+    }else if(Math.abs(transform[0])>this.config.maxTranslate){
+        transform[0] = -this.config.maxTranslate;
+        this.nextNavElement.disabled = true;
+    }else{
+        this.prevNavElement.disabled = false;
+        this.nextNavElement.disabled = false;
+    }
+    this.activeSlide = Math.floor(Math.abs(transform[0])/(this.element.clientWidth/this.config.childPerView));
+    this.element.style.transform = "translateX("+transform[0]+"px)";
+    this.config.lastX = currentX;
+};
+imageSlider.prototype.touchEnd = function(e){
+    if(this.config.isDragging){
+        this.config.isDragging = false;
+    }
+};
+imageSlider.prototype.featureClicked = function (e) {
+    if(Math.abs(this.config.touchStartX - e.clientX)<10) {
+        this.featureSelectCallback(e.currentTarget.getAttribute('data-fid'));
+    }
+};
+imageSlider.prototype.nextSlide = function(){
+    if(this.activeSlide<(this.config.childrenCount-this.config.childPerView)){
+        this.activeSlide++;
+        this.update();
+    }
+};
+imageSlider.prototype.prevSlide = function(){
+    if(this.activeSlide>0){
+        this.activeSlide--;
+        this.update();
+    }
+};
+imageSlider.prototype.toggleSlider = function(){
+    if(this.config.sliderActive){
+        this.container.style.height = "0";
+        this.toggleButton.classList.remove('active');
+        this.nextNavElement.style.display = "none";
+        this.prevNavElement.style.display = "none";
+    }else{
+        this.container.style.height = "30%";
+        this.toggleButton.classList.add('active');
+        this.nextNavElement.style.display = "block";
+        this.prevNavElement.style.display = "block";
+    }
+    this.config.sliderActive = !this.config.sliderActive;
+};
+imageSlider.prototype.gotoSlide = function(slide){
+    if(slide!== undefined && slide !== -1){
+        this.activeSlide = slide<=(this.config.childrenCount-this.config.childPerView)?slide:(this.config.childrenCount-this.config.childPerView);
+        this.update();
+    }
+};
+imageSlider.prototype.on = function (event,callback) {
+    switch (event) {
+        case "feature-select":
+            this.featureSelectCallback = callback;
+            break;
+    }
+};
+imageSlider.prototype.update = function () {
+    this.config.maxTranslate = (this.config.childrenCount - this.config.childPerView)*(this.element.clientWidth/3);
+    if(this.activeSlide===0){
+        this.prevNavElement.disabled = true;
+    }else if(this.activeSlide === (this.config.childrenCount-this.config.childPerView)){
+        this.nextNavElement.disabled = true;
+    }else {
+        this.prevNavElement.disabled = false;
+        this.nextNavElement.disabled = false;
+    }
+    this.element.style.transform = "translateX(-"+this.activeSlide*this.element.offsetWidth/3+"px)";
+};
+/* ==== coed for image slider ends here ==== */
 var Player360 = function (options) {
     // return instance if called as a function
     if (!(this instanceof Player360)) {
