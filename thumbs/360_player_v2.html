@@ -16,7 +16,7 @@
     <!--<link rel="stylesheet" href="./css/360pano/custom.css">
     <link rel="stylesheet" href="./css/360pano/photo-sphere-viewer.min.css">-->
 </head>
-<body>
+<body class="centered">
 <div id="wrapper">
     <div id="ar" class="exterior-components"></div>
     <canvas id="canvas" class="exterior-components"></canvas>
@@ -104,9 +104,11 @@
         </svg>
     </div>
     <div class="feature-thumbs-wrapper" id="feature-thumbs-container" style="display: none;">
-        <div class="toggle-button active" id="toggle-button"><img src="./img/arrowheads.svg" alt="toggle-button" /></div>
+        <div class="toggle-button active" id="toggle-button"><img src="./img/arrowheads.svg" style="display: block;" alt="toggle-button" /></div>
+        <div style="width: 100%;height: 100%;overflow: hidden;">
         <div id="feature-thumbs">
 
+        </div>
         </div>
         <button id="prev-button"><img src="./img/chevron-left-solid.svg" alt="prev"/></button>
         <button id="next-button"><img src="./img/chevron-right-solid.svg" alt="prev"/></button>
@@ -167,6 +169,7 @@ window.firstLoadImg = "https:\/\/gcsimages.storage.googleapis.com\/clients\/224\
         window.globalVar.totalImages = '197';
         window.globalVar.rotationReverse = window.query.rotation ? window.query.rotation : "<!--PLAYER_ROTATION-->";
         window.globalVar.isThumbsPlayer = window.query.thumbs_player || false;
+        window.globalVar.isThumbsOut = window.query.thumbs_out || false;
         window.globalVar.initLoad = false;
         window.globalVar.maxWidth = 960;
         window.globalVar.maxHeight = 540;

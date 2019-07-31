@@ -5,7 +5,7 @@ html,body {
     width: 100%;
     font-family: 'Arial', sans-serif;
 }
-body{
+body.centered{
     display: flex;
     flex-direction: column;
 }
@@ -71,9 +71,10 @@ div, span, p, canvas {
     background-color: transparent;
     max-height: 540px;
     max-width: 960px;
+}
+#wrapper:not(.thumbs-out-player){
     overflow: hidden;
 }
-
 .ar-4-3 {
     padding-bottom: 75%;
 }
@@ -152,7 +153,6 @@ canvas {
     height: auto;
     max-width: 100%;
     position: absolute;
-    position: -webkit-sticky;
     top: 0;
     left: 0;
     right: 0;
@@ -327,14 +327,14 @@ canvas {
     max-height: 20px;
 }
 
-
-.thumbs-player .ctrls{
+.thumbs-inline-player .ctrls,
+.thumbs-out-player .ctrls{
     bottom: auto;
     top: 8px;
 }
+
 .ctrls {
     position: absolute;
-    position: -webkit-sticky;
     bottom: 8px;
     left: 4px;
     z-index: 12;
@@ -410,7 +410,8 @@ canvas {
 #share-icon{
     position: relative;
 }
-.thumbs-player #share-icon #share-list{
+.thumbs-inline-player #share-icon #share-list,
+.thumbs-out-player #share-icon #share-list{
     top: 100%;
     bottom: auto;
 }
@@ -431,7 +432,6 @@ canvas {
     background-color: rgba(0, 0, 0, 0.4);
     /* padding: 15px; */
     position: absolute;
-    position: -webkit-sticky;
     z-index: 23;
     margin-left: auto;
     left: auto;
@@ -675,6 +675,18 @@ canvas {
     -o-transition: height linear 0.2s;
     transition: height linear 0.2s;
 }
+.feature-thumbs-wrapper.collapse{
+    height: 0;
+}
+@media all and (max-width: 600px) {
+    .feature-thumbs-wrapper{
+        height: 50%;
+    }
+}
+.thumbs-out-player .feature-thumbs-wrapper{
+    top: 100%;
+    bottom: auto;
+}
 .feature-thumbs-wrapper .toggle-button{
     width: 20px;
     left: 0;
@@ -709,7 +721,6 @@ canvas {
     transform: rotateZ(0deg);
 }
 .feature-thumbs-wrapper #feature-thumbs .slide-item:hover{
-    opacity: 1;
     -webkit-transform: scale(1.05);
     -moz-transform: scale(1.05);
     -ms-transform: scale(1.05);
@@ -721,6 +732,7 @@ canvas {
     width: 100%;
     height: 100%;
     flex-direction: row;
+    opacity: 0.5;
     -webkit-transition: transform linear 0.2s,opacity linear 0.2s;
     -moz-transition: transform linear 0.2s,opacity linear 0.2s;
     -ms-transition: transform linear 0.2s,opacity linear 0.2s;
@@ -734,12 +746,24 @@ canvas {
     margin: calc(4%/6);
     border-radius: 4px;
     overflow: hidden;
-    opacity: 0.5;
     -webkit-transition: transform linear 0.2s, opacity linear 0.2s;
     -moz-transition: transform linear 0.2s, opacity linear 0.2s;
     -ms-transition: transform linear 0.2s, opacity linear 0.2s;
     -o-transition: transform linear 0.2s, opacity linear 0.2s;
     transition: transform linear 0.2s, opacity linear 0.2s;
+}
+.thumbs-out-player #feature-thumbs {
+    opacity: 1;
+}
+#feature-thumbs:hover{
+    opacity: 1;
+}
+.thumbs-out-player .toggle-button{
+    -webkit-transform: rotateZ(180deg);
+    -moz-transform: rotateZ(180deg);
+    -ms-transform: rotateZ(180deg);
+    -o-transform: rotateZ(180deg);
+    transform: rotateZ(180deg);
 }
 #feature-thumbs .slide-item img{
     width: 100%;
@@ -888,7 +912,8 @@ canvas {
 }
 
 /*==== styles for 360 spin indicator ====*/
-.thumbs-player #circle-indicator{
+.thumbs-inline-player #circle-indicator,
+.thumbs-out-player #circle-indicator{
     top: 8px;
     bottom: auto;
 }
