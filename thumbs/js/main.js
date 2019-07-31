@@ -415,10 +415,18 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
             _s.playerWidth = $wrapper.width();
             _s.playerHeight = _s.playerWidth * _s.aspectRatio;
         }
-        if (window.innerHeight < _s.playerHeight) {
-            _s.playerWidth = window.innerHeight / _s.aspectRatio;
-            _s.playerHeight = _s.playerWidth * _s.aspectRatio;
-            $wrapper.width(_s.playerWidth);
+        if(_s.isThumbsOut) {
+            if (window.innerHeight < _s.playerHeight*1.3) {
+                _s.playerWidth = window.innerHeight / (_s.aspectRatio*1.3);
+                _s.playerHeight = _s.playerWidth * _s.aspectRatio;
+                $("#wrapper").width(_s.playerWidth);
+            }
+        }else{
+            if (window.innerHeight < _s.playerHeight) {
+                _s.playerWidth = window.innerHeight / _s.aspectRatio;
+                _s.playerHeight = _s.playerWidth * _s.aspectRatio;
+                $("#wrapper").width(_s.playerWidth);
+            }
         }
         $wrapper.height(_s.playerHeight);
         if (isMobile()) {
@@ -1487,10 +1495,18 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                 _s.playerWidth = $("#wrapper").width();
                 _s.playerHeight = _s.playerWidth * _s.aspectRatio;
             }
-            if (window.innerHeight < _s.playerHeight) {
-                _s.playerWidth = window.innerHeight / _s.aspectRatio;
-                _s.playerHeight = _s.playerWidth * _s.aspectRatio;
-                $("#wrapper").width(_s.playerWidth);
+            if(_s.isThumbsOut) {
+                if (window.innerHeight < _s.playerHeight*1.3) {
+                    _s.playerWidth = window.innerHeight / (_s.aspectRatio*1.3);
+                    _s.playerHeight = _s.playerWidth * _s.aspectRatio;
+                    $("#wrapper").width(_s.playerWidth);
+                }
+            }else{
+                if (window.innerHeight < _s.playerHeight) {
+                    _s.playerWidth = window.innerHeight / _s.aspectRatio;
+                    _s.playerHeight = _s.playerWidth * _s.aspectRatio;
+                    $("#wrapper").width(_s.playerWidth);
+                }
             }
             $("#wrapper").height(_s.playerHeight);
             if ($('#features-list ul li').length) {
