@@ -715,6 +715,9 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                 _s.runAnim = false;
                 e.preventDefault();
                 e.stopImmediatePropagation();
+                if (thumbsSlider && thumbsSlider.config.sliderActive && !_s.isThumbsOut) {
+                    thumbsSlider.toggleSlider();
+                }
                 showHotspot(e);
             });
 
@@ -1545,6 +1548,13 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
             if ($('#features-list ul li').length) {
                 $('#features-list').slideUp(100);
             }
+            if(_s.isThumbsPlayer ){
+                if(_s.isThumbsOut){
+                    $('.feature-thumbs-wrapper .toggle-button').slideUp(100)
+                }else {
+                    $('#feature-thumbs-container').fadeOut(100);
+                }
+            }
             parent.postMessage(JSON.stringify({"action": "removeCross"}), "*");
         }
 
@@ -1552,6 +1562,13 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
             $('.ctrls').slideDown(100);
             if ($('#features-list ul li').length) {
                 $('#features-list').slideDown(100);
+            }
+            if(_s.isThumbsPlayer ){
+                if(_s.isThumbsOut){
+                    $('.feature-thumbs-wrapper .toggle-button').slideDown(100)
+                }else {
+                    $('#feature-thumbs-container').fadeIn(100);
+                }
             }
             parent.postMessage(JSON.stringify({"action": "addCross"}), "*");
         }

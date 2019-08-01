@@ -16,7 +16,7 @@
     _s.maxImageWidth = Number(window.globalVar.maxWidth);
     _s.maxImageHeight = _s.maxImageWidth * _s.aspectRatio;
     _s.maxZoomLevel = 40;
-    _s.redrawImgCount =  3;
+    _s.redrawImgCount = 3;
     _s.resetRedrawCount = 0;
     _s.requiredImgCount = 216;
     _s.zoomIn = false;
@@ -30,8 +30,8 @@
     _s.stats.count = 0;
     _s.stats.prevImg;
     _s.showHighlights = true;
-    _s.swipeThreshold = (window.globalVar.swipeThreshold && !isNaN(Number(window.globalVar.swipeThreshold)) && Number(window.globalVar.swipeThreshold))? Number(window.globalVar.swipeThreshold): 0.6;
-    _s.swipeTotalImages =  (window.globalVar.totalImages && !isNaN(Number(window.globalVar.totalImages)) && Number(window.globalVar.totalImages))? Number(window.globalVar.totalImages): 0;
+    _s.swipeThreshold = (window.globalVar.swipeThreshold && !isNaN(Number(window.globalVar.swipeThreshold)) && Number(window.globalVar.swipeThreshold)) ? Number(window.globalVar.swipeThreshold) : 0.6;
+    _s.swipeTotalImages = (window.globalVar.totalImages && !isNaN(Number(window.globalVar.totalImages)) && Number(window.globalVar.totalImages)) ? Number(window.globalVar.totalImages) : 0;
     _s.baseImgWidth = window.globalVar.baseImgWidth;
     _s.baseImgHeight = window.globalVar.baseImgHeight;
 
@@ -64,9 +64,9 @@
         getUrl = url + "&playerType=" + carsJson;
         location.replace(getUrl);
     });
-    $('#hotspots-icon').on('click', function(){
+    $('#hotspots-icon').on('click', function () {
         closeShareList();
-        _s.showHighlights ? _s.showHighlights = false:_s.showHighlights = true;
+        _s.showHighlights ? _s.showHighlights = false : _s.showHighlights = true;
         $('.hotspot').toggle();
         $(this).toggleClass('active');
     });
@@ -89,71 +89,77 @@
         var url = "https://twitter.com/intent/tweet?text=" + encodeURI(pageTitle) + "&url=" + encodeURI(window.location);
         window.open(url, 'mywin', 'left=355, top=200, width=600, height=368, toolbar=1, resizable=0');
     });
-    function closeShareList(){
+
+    function closeShareList() {
         $('#share-icon').removeClass('active');
         $('#share-list').hide();
     }
+
     function closeFullscreen() {
         if (document.fullscreenElement && document.exitFullscreen) {
             document.exitFullscreen();
             $('#hotspots-div, #wrapper').css('max-width', _s.maxImageWidth + "px");
-            $('#hotspots-div, #wrapper').css('max-height',_s.maxImageHeight + "px");
+            $('#hotspots-div, #wrapper').css('max-height', _s.maxImageHeight + "px");
             $('#fullscreen-icon').removeClass('active');
-            $('#fullscreen-icon img').attr({"src":"./img/fullscreen.svg"});
+            $('#fullscreen-icon img').attr({"src": "./img/fullscreen.svg"});
         }
     }
+
     //alert(window.orientation)
-    if(document.fullscreenEnabled){
+    if (document.fullscreenEnabled) {
         $('#fullscreen-icon').show();
     }
     $('#fullscreen-icon').on("click touch", function (e) {
         var elem = document.body;
         if (!document.fullscreenElement) {
             elem.requestFullscreen();
-            $('#hotspots-div, #wrapper').css('max-width',"100%");
-            $('#hotspots-div, #wrapper').css('max-height',"100%");
+            $('#hotspots-div, #wrapper').css('max-width', "100%");
+            $('#hotspots-div, #wrapper').css('max-height', "100%");
             $('#fullscreen-icon').addClass('active');
-            $('#fullscreen-icon img').attr({"src":"./img/fullscreen-close.svg"});
+            $('#fullscreen-icon img').attr({"src": "./img/fullscreen-close.svg"});
         } else {
             if (document.exitFullscreen) {
                 document.exitFullscreen();
                 $('#hotspots-div, #wrapper').css('max-width', _s.maxImageWidth + "px");
-                $('#hotspots-div, #wrapper').css('max-height',_s.maxImageHeight + "px");
+                $('#hotspots-div, #wrapper').css('max-height', _s.maxImageHeight + "px");
                 $('#fullscreen-icon').removeClass('active');
-                $('#fullscreen-icon img').attr({"src":"./img/fullscreen.svg"});
+                $('#fullscreen-icon img').attr({"src": "./img/fullscreen.svg"});
             }
         }
     });
+
     function fullscreenChanged() {
         if (document.fullscreenElement) {
             $('#fullscreen-icon').addClass('active');
-            $('#hotspots-div, #wrapper').css('max-width',"100%");
-            $('#hotspots-div, #wrapper').css('max-height',"100%");
+            $('#hotspots-div, #wrapper').css('max-width', "100%");
+            $('#hotspots-div, #wrapper').css('max-height', "100%");
             $('#fullscreen-icon img').attr({"src": "./img/fullscreen-close.svg"});
         } else {
             $('#fullscreen-icon').removeClass('active');
             $('#hotspots-div, #wrapper').css('max-width', _s.maxImageWidth + "px");
-            $('#hotspots-div, #wrapper').css('max-height',_s.maxImageHeight + "px");
+            $('#hotspots-div, #wrapper').css('max-height', _s.maxImageHeight + "px");
             $('#fullscreen-icon img').attr({"src": "./img/fullscreen.svg"});
         }
     }
-    document.addEventListener("fullscreenchange", fullscreenChanged,false);
-    document.addEventListener("MSFullscreenChange", fullscreenChanged,false);
-    document.addEventListener("mozfullscreenchange", fullscreenChanged,false);
-    document.addEventListener("webkitfullscreenchange", fullscreenChanged,false);
-    document.addEventListener("webkitfullscreenchange", fullscreenChanged,false);
+
+    document.addEventListener("fullscreenchange", fullscreenChanged, false);
+    document.addEventListener("MSFullscreenChange", fullscreenChanged, false);
+    document.addEventListener("mozfullscreenchange", fullscreenChanged, false);
+    document.addEventListener("webkitfullscreenchange", fullscreenChanged, false);
+    document.addEventListener("webkitfullscreenchange", fullscreenChanged, false);
 
     function isMobile() {
         var userAgent = navigator.userAgent || navigator.vendor || window.opera;
         return (/android/i.test(userAgent)) || (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream)
     }
-    if(isMobile()){
+
+    if (isMobile()) {
         $('#circle-indicator').addClass('mobile');
         $('.ctrls').addClass('mobile');
     }
-    if(window.globalVar.nextPlayerType === 'interior'){
+    if (window.globalVar.nextPlayerType === 'interior') {
         $("#int-player-icon").show();
-    }else if(window.globalVar.nextPlayerType === 'interior-pano'){
+    } else if (window.globalVar.nextPlayerType === 'interior-pano') {
         $("#pano-player-icon").show();
     }
     if (window.globalVar.playerType === "exterior" || typeof window.globalVar.playerType === "undefined") {
@@ -180,31 +186,32 @@
         $('#pano-player-icon').off('touch');
     }
     Array.prototype.tweenLoad = function (callback) {
-        var start = 0, end=this.length-1;
-        callback(this[start],start);
-        callback(this[end],end);
+        var start = 0, end = this.length - 1;
+        callback(this[start], start);
+        callback(this[end], end);
         var self = this;
-        sendMid.call(null,[start,end]);
+        sendMid.call(null, [start, end]);
+
         function sendMid() {
             var args = [];
-            for(var i=0;i<sendMid.arguments.length;i++){
+            for (var i = 0; i < sendMid.arguments.length; i++) {
                 var start = sendMid.arguments[i][0];
                 var end = sendMid.arguments[i][1];
-                if ((end - start)>1) {
+                if ((end - start) > 1) {
                     if ((start + end) % 2 === 0) {
                         var mid = (start + end) / 2;
                         callback(self[mid], mid);
-                        args.push([start,mid]);
-                        args.push([mid,end]);
+                        args.push([start, mid]);
+                        args.push([mid, end]);
                     } else {
                         var mid1 = Math.floor((start + end) / 2);
                         var mid2 = Math.ceil((start + end) / 2);
                         callback(self[mid1], mid1);
                         callback(self[mid2], mid2);
-                        args.push([start,mid1]);
-                        args.push([mid2,end]);
+                        args.push([start, mid1]);
+                        args.push([mid2, end]);
                     }
-                }else{
+                } else {
                     return start;
                 }
             }
@@ -215,11 +222,11 @@
     var ctx = canvas.getContext('2d');
     var loadedImagesCount = 0;
     var wrapper = document.getElementById('wrapper');
-    wrapper.style.backgroundImage =  "url('"+window.firstLoadImg+"')";
-    wrapper.style.backgroundImage =  "url('"+window.firstLoadImg+"')";
+    wrapper.style.backgroundImage = "url('" + window.firstLoadImg + "')";
+    wrapper.style.backgroundImage = "url('" + window.firstLoadImg + "')";
     wrapper.style.backgroundSize = "cover";
     var fi = new Image();
-    fi.onload = function(){
+    fi.onload = function () {
         setPlayerSize(this.width, this.height);
     };
     fi.src = window.firstLoadImg;
@@ -228,8 +235,9 @@
     var _loadedImages = [];
     var _loadedHighResImages = [];
     var _loadedHighResImagesSample = [];
-    var _rawData = {allCars:[]};
-    function loadedCars(cars){
+    var _rawData = {allCars: []};
+
+    function loadedCars(cars) {
         var count = 0,
             onload = function () {
                 count++;
@@ -250,47 +258,52 @@
 
     var xhr = new XMLHttpRequest();
     xhr.open('GET', window.getDataUrl, true);
-    xhr.onload = function(e) {
+    xhr.onload = function (e) {
         if (this.status == 200) {
             _rawData = JSON.parse(this.response);
-            _dataLength =  _rawData.allCars.length;
+            _dataLength = _rawData.allCars.length;
+            _s.totalImages = _dataLength;
             loadedCars(_rawData.allCars);
         }
     };
     xhr.send();
-    function getData(done){
-        var getDataInterval = setInterval(function(){
-            if( _loadedImages.length > 0 && _rawData.allCars.length > 0){
+
+    function getData(done) {
+        var getDataInterval = setInterval(function () {
+            if (_loadedImages.length > 0 && _rawData.allCars.length > 0) {
                 done([_loadedImages, _rawData]);
                 clearInterval(getDataInterval);
             }
         }, 10);
     }
+
     function getHighResImages(done) {
         _rawData.allCars.forEach(function (img, index) {
             var el = document.createElement('img');
             // Avoid early reflows as images load without sizes. Wait for onload.
             el.onload = onload;
-            el.src = img.highResSrc?img.highResSrc:img.src;
+            el.src = img.highResSrc ? img.highResSrc : img.src;
             _loadedHighResImages.push(el);
         });
         done(_loadedHighResImages);
     }
+
     function assignLoadedHighImage(lowResImage, highResImages) {
         var assignDataInterval = setInterval(function () {
             var assigned = 0;
-            for(var i=0;i<loadedImages.length;i++){
-                if(loadedHighResImages[i].complete){
+            for (var i = 0; i < loadedImages.length; i++) {
+                if (loadedHighResImages[i].complete) {
                     assigned++;
                     loadedImages[i] = loadedHighResImages[i];
                     //console.log(loadedImages[i].src,i);
                 }
             }
-            if(assigned===loadedImages.length){
+            if (assigned === loadedImages.length) {
                 clearInterval(assignDataInterval);
             }
-        },200);
+        }, 200);
     }
+
     function imageLoaded(loadedCount) {
         _s.redrawImgCount = getSpeed(loadedCount);
         _s.redrawGyroImgCount = getGyroSpeed(loadedCount);
@@ -309,52 +322,53 @@
     function getSpeed(totalCount) {
         var speed = 3;
         //var speed = 0;
-        if(_s.swipeTotalImages > 0){
-            var touchDistance = Math.floor((_s.swipeThreshold*_s.playerWidth));
-            speed = Math.floor(touchDistance/totalCount);
-            speed =  speed>75?75:speed;
+        if (_s.swipeTotalImages > 0) {
+            var touchDistance = Math.floor((_s.swipeThreshold * _s.playerWidth));
+            speed = Math.floor(touchDistance / totalCount);
+            speed = speed > 75 ? 75 : speed;
         }
         return speed;
     }
+
     function getGyroSpeed(totalCount) {
         var speed;
         var touchDistance = 360;
-        speed = Math.floor(touchDistance/totalCount);
-        speed =  speed>2?2:(speed<=1?1:speed);
+        speed = Math.floor(touchDistance / totalCount);
+        speed = speed > 2 ? 2 : (speed <= 1 ? 1 : speed);
         return speed;
     }
 
-    function setPlayerSize(imgWidth, imgHeight){
+    function setPlayerSize(imgWidth, imgHeight) {
 
         var $wrapper = $('#wrapper');
         var wrapperWidth = $wrapper.width();
         var otherWidth = 0;
 
         _s.aspectRatio = getAspectRatio(imgWidth, imgHeight);
-        _s.maxImageHeight = _s.aspectRatio*_s.maxImageWidth;
-        parent.postMessage(JSON.stringify({"aspectRation":_s.aspectRatio}),"*");
-        if(_s.aspectRatio === 0.5625){
+        _s.maxImageHeight = _s.aspectRatio * _s.maxImageWidth;
+        parent.postMessage(JSON.stringify({"aspectRation": _s.aspectRatio}), "*");
+        if (_s.aspectRatio === 0.5625) {
             $("#ar").addClass('ar-16-9');
-        }else if(_s.aspectRatio === 0.75){
+        } else if (_s.aspectRatio === 0.75) {
             $("#ar").addClass('ar-4-3');
-        }else{
-            if(imgWidth > _s.maxImageWidth){
-                otherWidth = _s.maxImageWidth;
-            }else{
-                otherWidth = imgWidth;
-            }
-            $wrapper.css('max-width',otherWidth+'px');
-            $("#ar").css('padding-bottom', _s.aspectRatio*100+'%');
+        } else {
+            /* if(imgWidth > _s.maxImageWidth){
+                 otherWidth = _s.maxImageWidth;
+             }else{
+                 otherWidth = imgWidth;
+             }
+             $wrapper.css('max-width',otherWidth+'px');*/
+            $("#ar").css('padding-bottom', _s.aspectRatio * 100 + '%');
         }
         var iOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g);
         //alert(screen.width);
         /*explicit ipad condition is used because while orientation change ipad innerwidth is not updateding, this condition can be removed if ipad functionality changes*/
         if (isMobile()) {
-            if(iOS && iOS[0]==="iPad"){
+            if (iOS && iOS[0] === "iPad") {
                 $wrapper.css('width', window.outerWidth);
                 _s.playerWidth = window.outerWidth;
                 _s.playerHeight = _s.playerWidth * _s.aspectRatio;
-            }else {
+            } else {
                 $wrapper.css('width', $(window).innerWidth());
                 _s.playerWidth = $(window).innerWidth();
                 _s.playerHeight = _s.playerWidth * _s.aspectRatio;
@@ -362,29 +376,30 @@
 
         } else {
             $wrapper.css('width', '100%');
-        _s.playerWidth = $wrapper.width();
-        _s.playerHeight = _s.playerWidth * _s.aspectRatio;
+            _s.playerWidth = $wrapper.width();
+            _s.playerHeight = _s.playerWidth * _s.aspectRatio;
         }
-        if(window.innerHeight < _s.playerHeight){
+        if (window.innerHeight < _s.playerHeight) {
             _s.playerWidth = window.innerHeight / _s.aspectRatio;
             _s.playerHeight = _s.playerWidth * _s.aspectRatio;
             $wrapper.width(_s.playerWidth);
         }
         $wrapper.height(_s.playerHeight);
-        if(isMobile()) {
+        if (isMobile()) {
             $wrapper.css('max-width', '100%');
             $wrapper.css('max-height', '100%');
-        }else{
-            $wrapper.css('max-width', _s.maxImageWidth+'px');
-            $wrapper.css('max-height', _s.maxImageHeight+'px');
+        } else {
+            $wrapper.css('max-width', _s.maxImageWidth + 'px');
+            $wrapper.css('max-height', _s.maxImageHeight + 'px');
         }
-            _s.redrawImgCount = getSpeed(_s.totalImages);
-            setSpinIndicator();
-            changeSpinIndicator();
-        }
-    function drawPlayer(e){
+        _s.redrawImgCount = getSpeed(_s.totalImages);
+        setSpinIndicator();
+        changeSpinIndicator();
+    }
+
+    function drawPlayer(e) {
         //console.log(e.alpha);
-        if(e.alpha) {
+        if (e.alpha) {
             _s.runAnim = true;
             var currAlpha = Math.floor(e.alpha);
             var total = loadedImages.length - 1;
@@ -408,9 +423,9 @@
         }
     }
 
-    if(window.globalVar.playerType==='exterior' || window.globalVar.playerType==='interior') {
+    if (window.globalVar.playerType === 'exterior' || window.globalVar.playerType === 'interior') {
 
-        var allfeatures = $.getJSON("?RUN_TYPE=GET_HOT_SPOTS&videoId=" + window.videoId + "&type=" + window.globalVar.playerType + "&all=true&player=true&dataType=json&time=" + Date.now(), function (data) {
+        var allfeatures = $.getJSON("/features.json", function (data) {
 
         }).done(function (allfeatures) {
             if (allfeatures.allFeatures.length) {
@@ -435,7 +450,7 @@
 
         var loadedData = {};
         //var allCars = [];
-        loadedData = {allCars:[]};
+        loadedData = {allCars: []};
         var loadedImages = [];
         var loadedHighResImages = [];
         var loadedZoomImages = [];
@@ -454,7 +469,7 @@
                 loadedImages.reverse();
             }
             registerEvents(ctx);
-                    if (window.globalVar.initLoad) {
+            if (window.globalVar.initLoad) {
                 $("#temp-div").show();
                 //firstLoad();
                 normalLoad();
@@ -470,10 +485,11 @@
                 logStats({percentCompleted: percentCompleted * 100, count: _s.stats.count})
             }, 5000)
         });
-        function loadHighResImages(){
+
+        function loadHighResImages() {
             getHighResImages(function (value) {
                 loadedHighResImages = value;
-                assignLoadedHighImage(loadedImages,loadedHighResImages);
+                assignLoadedHighImage(loadedImages, loadedHighResImages);
                 value.forEach(function (node) {
                     loadedZoomImages.push(node.cloneNode(true));
                 });
@@ -486,7 +502,7 @@
             var newImg = new Image();
             newImg.onload = function () {
                 setPlayerSize(this.width, this.height);
-            ctx.canvas.width = _s.playerWidth;
+                ctx.canvas.width = _s.playerWidth;
                 ctx.canvas.height = _s.playerHeight;
                 ctx.drawImage(newImg, 0, 0, _s.playerWidth, _s.playerHeight);
 
@@ -502,13 +518,13 @@
             $("#temp-div").hide();
             $("#user-info-box").fadeOut();
             $("#loading-div").fadeOut();
-            if(window.DeviceMotionEvent){
+            if (window.DeviceMotionEvent) {
                 _s.lastAlpha = 0;
                 window.ondeviceorientation = drawPlayer;
             }
-            console.log(Math.abs((new Date()).getTime()-timeStart.getTime()));
+            console.log(Math.abs((new Date()).getTime() - timeStart.getTime()));
             var wrapper = document.getElementById('wrapper');
-            wrapper.style.backgroundImage =  "none";
+            wrapper.style.backgroundImage = "none";
         }
 
         function loadHl() {
@@ -568,7 +584,7 @@
         }
 
         function getFrame(total, direction, currentFrame, isGyro) {
-            var redrawCount = isGyro?_s.redrawGyroImgCount:_s.redrawImgCount;
+            var redrawCount = isGyro ? _s.redrawGyroImgCount : _s.redrawImgCount;
             if (redrawCount > _s.resetRedrawCount) {
                 _s.resetRedrawCount++;
                 return currentFrame;
@@ -646,7 +662,7 @@
                 if ($(e.target).attr('id') !== "hotspots-div") {
                     return;
                 }
-                if (typeof e.pageX !== "undefined" && e.pageX>0) {
+                if (typeof e.pageX !== "undefined" && e.pageX > 0) {
                     _s.lastX = e.pageX;
                     _s.redrawImgCount = getSetTime();
                 } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
@@ -667,9 +683,9 @@
                         return;
                     }
                 } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
-                        if (_s.lastX === e.originalEvent.touches[0].pageX) {
-                            return;
-                        }
+                    if (_s.lastX === e.originalEvent.touches[0].pageX) {
+                        return;
+                    }
                 }
 
                 if (!_s.runAnim) {
@@ -703,9 +719,9 @@
                         _s.currentFrame = getFrame(total, _s.direction, _s.currentFrame);
                         changeSpinIndicator();
                     }
-                }while (!loadedImages[_s.currentFrame].complete);
-                if(prevFrame!==_s.currentFrame) {
-                draw(_s.currentFrame, ctx, _s.playerWidth, _s.playerHeight);
+                } while (!loadedImages[_s.currentFrame].complete);
+                if (prevFrame !== _s.currentFrame) {
+                    draw(_s.currentFrame, ctx, _s.playerWidth, _s.playerHeight);
                 }
                 _s.lastX = pageX;
 
@@ -726,8 +742,8 @@
 
                 $(this).parent().fadeOut();
                 $(this).parent().removeClass('displayed');
-                    zoomImg(_s.currentFrame, ctx, "zoomout");
-                    _s.zoomIn = false;
+                zoomImg(_s.currentFrame, ctx, "zoomout");
+                _s.zoomIn = false;
                 if (_s.stats.highlights.length) {
                     _s.stats.highlights[0].timeEnd = getCurDateTime();
                     logStats(_s.stats.highlights[0]);
@@ -782,7 +798,7 @@
             });
 
             $('#zoom-in-icon').on("click touch", function (e) {
-                if(zoomLevel<_s.maxZoomLevel) {
+                if (zoomLevel < _s.maxZoomLevel) {
                     zoomLevel += 2;
                     zoomImg(_s.currentFrame, ctx, "zoomin");
                     _s.zoomIn = true;
@@ -790,7 +806,7 @@
             });
 
             $('#zoom-out-icon').on("click touch", function (e) {
-                if(zoomLevel>10) {
+                if (zoomLevel > 10) {
                     zoomLevel -= 2;
                     if (zoomLevel === 10) {
                         zoomImg(_s.currentFrame, ctx, "zoomout");
@@ -799,21 +815,22 @@
                             _s.stats.highlights[0].timeEnd = getCurDateTime();
                             logStats(_s.stats.highlights[0]);
                         }
-                    }else{
+                    } else {
                         zoomImg(_s.currentFrame, ctx, "zoomstepout");
                     }
                 }
             });
-            function MouseWheelHandler(e){
-                if(e.deltaY<0){
-                    if(zoomLevel<_s.maxZoomLevel) {
+
+            function MouseWheelHandler(e) {
+                if (e.deltaY < 0) {
+                    if (zoomLevel < _s.maxZoomLevel) {
                         e.preventDefault();
                         zoomLevel += 2;
                         zoomImg(_s.currentFrame, ctx, "zoomin");
                         _s.zoomIn = true;
                     }
-                }else if(e.deltaY>0){
-                    if(zoomLevel>10) {
+                } else if (e.deltaY > 0) {
+                    if (zoomLevel > 10) {
                         e.preventDefault();
                         zoomLevel -= 2;
                         if (zoomLevel === 10) {
@@ -823,12 +840,13 @@
                                 logStats(_s.stats.highlights[0]);
                             }
 
-                        }else{
+                        } else {
                             zoomImg(_s.currentFrame, ctx, "zoomstepout");
                         }
                     }
                 }
             }
+
             document.getElementById('hotspots-div').addEventListener("mousewheel", MouseWheelHandler, false);
             // Firefox
             document.getElementById('hotspots-div').onwheel = MouseWheelHandler;
@@ -842,8 +860,8 @@
 
         /*=========== functions for 360 spin indicators =======*/
         function setSpinIndicator(totalImages) {
-            if(!totalImages){
-                totalImages =  _s.totalImages;
+            if (!totalImages) {
+                totalImages = _s.totalImages;
             }
             var indicator = document.getElementById('progress-indicator');
             var circumference = 2 * Math.PI * indicator.r.baseVal.value;
@@ -1152,21 +1170,21 @@
             closeShareList();
             //alert('done');
             var img = loadedZoomImages[frame];
-            if(!img){
+            if (!img) {
                 img = loadedImages[frame];
-                if(!loadedZoomImages[frame] && loadedData.allCars[frame].highResSrc) {
+                if (!loadedZoomImages[frame] && loadedData.allCars[frame].highResSrc) {
                     loadedZoomImages[frame] = new Image();
                     loadedZoomImages[frame].onload = function () {
                         /*var styles = $('#zoom-div img')[0].style;
                         $('#zoom-div').empty().append(this).show();
                         $('#zoom-div img')[0].style = styles;*/
-                        $('#zoom-div img').attr("src",this.src);
+                        $('#zoom-div img').attr("src", this.src);
                     };
                     loadedZoomImages[frame].src = loadedData.allCars[frame].highResSrc;
                 }
             }
             if (img) {
-                if(zoomLevel===12 && action==='zoomin'){
+                if (zoomLevel === 12 && action === 'zoomin') {
                     $('#zoom-div').empty();
                     $('#zoom-div').append(img).show();
                     $('#zoom-div img').addClass('item');
@@ -1184,7 +1202,7 @@
                         $('#zoom-out-icon').removeClass('active');
                         break;
                 }
-                if ((action === 'zoomin'||action === 'zoomstepout') && zoomLevel>=10 && zoomLevel<=_s.maxZoomLevel) {
+                if ((action === 'zoomin' || action === 'zoomstepout') && zoomLevel >= 10 && zoomLevel <= _s.maxZoomLevel) {
                     window.ondeviceorientation = null;
                     $('#circle-indicator').fadeOut();
                     var e = $('#zoom-div');
@@ -1192,13 +1210,13 @@
                     var center = _s.playerWidth / 2;
                     var middle = _s.playerHeight / 2;
 
-                    var zoomedImgWidth = _s.playerWidth * zoomLevel/10;
-                    var zoomedImgHeight = _s.playerHeight * zoomLevel/10;
+                    var zoomedImgWidth = _s.playerWidth * zoomLevel / 10;
+                    var zoomedImgHeight = _s.playerHeight * zoomLevel / 10;
                     var zoomSize = zoomedImgWidth / _s.playerWidth;
                     var aHeight = zoomedImgHeight - _s.playerHeight;
                     var aWidth = zoomedImgWidth - _s.playerWidth;
-                    var left = -aWidth/2 +'px';
-                    var top = -aHeight/2 +'px';
+                    var left = -aWidth / 2 + 'px';
+                    var top = -aHeight / 2 + 'px';
                     if (typeof pos !== "undefined") {
                         left = center - (pos.left * zoomSize);
                         if (left < 0) {
@@ -1220,16 +1238,16 @@
                             top = 0;
                         }
                     }
-                    if($('#features-list ul li').length){
+                    if ($('#features-list ul li').length) {
                         $('#features-list').fadeOut();
                     }
                     $("#zoom-div img").stop();
-                    $("#zoom-div img").animate({width: zoomLevel*10+'%', left: left, top: top});
+                    $("#zoom-div img").animate({width: zoomLevel * 10 + '%',height : zoomLevel * 10 + '%', left: left, top: top});
                     $('#zoom-out-icon').removeClass('disable');
                     $('#zoom-in-icon').removeClass('disable');
-                    if(zoomLevel===_s.maxZoomLevel){
+                    if (zoomLevel === _s.maxZoomLevel) {
                         $('#zoom-in-icon').addClass('disable');
-                    }else if(zoomLevel === 10){
+                    } else if (zoomLevel === 10) {
                         $('#zoom-out-icon').addClass('disable');
                     }
                     var imgId = $("#zoom-div img").attr('id');
@@ -1237,11 +1255,11 @@
                 } else if (action === "zoomout") {
                     window.ondeviceorientation = drawPlayer;
                     $('#circle-indicator').fadeIn();
-                    if($('#features-list ul li').length){
+                    if ($('#features-list ul li').length) {
                         $('#features-list').fadeIn();
                     }
                     $('#info-box').fadeOut();
-                    $("#zoom-div img").animate({width: '100%', left: '0', top: '0'}, function () {
+                    $("#zoom-div img").animate({width: '100%',height : '100%' , left: '0', top: '0'}, function () {
                         $(this).parent().hide();
                     });
                     $('#zoom-out-icon').addClass('disable');
@@ -1251,13 +1269,14 @@
                 }
             }
         }
+
         var isDragging = false;
         var zIndexTop = 1;
         var prevX = 0;
         var prevY = 0;
         $("#zoom-div").on("mousedown touchstart", ".item", function (e) {
             var $this = $(e.target);
-            if (typeof e.pageX !== "undefined" && e.pageX>0) {
+            if (typeof e.pageX !== "undefined" && e.pageX > 0) {
                 prevX = e.pageX;
                 prevY = e.pageY;
             } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
@@ -1280,22 +1299,22 @@
 
         $("#zoom-div").on("mousemove touchmove", ".item", function (e) {
             var touch = false;
-            if (typeof e.pageX !== "undefined" && e.pageX>0) {
+            if (typeof e.pageX !== "undefined" && e.pageX > 0) {
                 if (prevX === e.pageX) {
                     return;
                 }
             } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
-                    if (prevX === e.originalEvent.touches[0].pageX) {
-                        return;
+                if (prevX === e.originalEvent.touches[0].pageX) {
+                    return;
                 }
             }
 
             if (!isDragging) {
                 return;
             }
-            var pageX = 0,pageY = 0;
+            var pageX = 0, pageY = 0;
 
-            if (typeof e.pageX !== "undefined" && e.pageX>0) {
+            if (typeof e.pageX !== "undefined" && e.pageX > 0) {
                 pageX = e.pageX;
                 pageY = e.pageY;
             } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
@@ -1307,7 +1326,7 @@
             var allowedHeight = $this.outerHeight() - _s.playerHeight;
             var allowedWidth = $this.outerWidth() - _s.playerWidth;
 
-            var top = $this.position().top + pageY - prevY  ;
+            var top = $this.position().top + pageY - prevY;
             var left = $this.position().left + pageX - prevX;
 
             //console.log(top,left);
@@ -1344,6 +1363,7 @@
             isDragging = false;
             $this.removeClass('is-dragging');
         });
+
         function adjustPositionOnZoomLeft(imageSizeWidth, spotPositionLeft) {
             if (spotPositionLeft > 500) {
                 return true;
@@ -1369,11 +1389,11 @@
             //alert(screen.width);
             /*explicit ipad condition is used because while orientation change ipad innerwidth is not updateding, this condition can be removed if ipad functionality changes*/
             if (isMobile()) {
-                if(iOS && iOS[0]==="iPad"){
+                if (iOS && iOS[0] === "iPad") {
                     $("#wrapper").css('width', window.outerWidth);
                     _s.playerWidth = window.outerWidth;
                     _s.playerHeight = _s.playerWidth * _s.aspectRatio;
-                }else {
+                } else {
                     $("#wrapper").css('width', $(window).innerWidth());
                     _s.playerWidth = $(window).innerWidth();
                     _s.playerHeight = _s.playerWidth * _s.aspectRatio;
@@ -1394,7 +1414,7 @@
                 $('#features-list').fadeIn();
             }
             $('#circle-indicator').fadeIn();
-            if(_s.zoomIn){
+            if (_s.zoomIn) {
                 zoomImg(_s.currentFrame, ctx, 'zoomout');
             }
             /*$("#zoom-div img").animate(
@@ -1417,50 +1437,55 @@
         if (window.globalVar.playerType === 'exterior' || window.globalVar.playerType === 'interior') {
             window.addEventListener('resize', reloadPlayer);
         }
-        function hideNavbar(){
+
+        function hideNavbar() {
             $('.ctrls').slideUp(100);
             if ($('#features-list ul li').length) {
                 $('#features-list').slideUp(100);
             }
-            parent.postMessage(JSON.stringify({"action":"removeCross"}),"*");
+            parent.postMessage(JSON.stringify({"action": "removeCross"}), "*");
         }
+
         function unhideNavbar() {
             $('.ctrls').slideDown(100);
             if ($('#features-list ul li').length) {
                 $('#features-list').slideDown(100);
             }
-            parent.postMessage(JSON.stringify({"action":"addCross"}),"*");
+            parent.postMessage(JSON.stringify({"action": "addCross"}), "*");
         }
+
         //360 stats enhancement - 29th jan 2018.
     }
-    function toggleHotspot(){
-        if(_s.showHighlights){
+
+    function toggleHotspot() {
+        if (_s.showHighlights) {
             $('.hotspot').show();
-        }else{
+        } else {
             $('.hotspot').hide();
         }
     }
+
     function logStats(data) {
         var form_data = {
-            opens : data.opens || 0,
+            opens: data.opens || 0,
             trackID: _s.stats.trackID,
             spins: data.spin || 0,
             hid: data.hid,
             featureName: data.featureName,
             source: data.source,
             timeStart: data.timeStart,
-            timeEnd : data.timeEnd,
-            imageSource : data.src,
-            imageId : data.imageId,
-            imageType : data.imgType,
-            imageStartTime : data.imgTimeStart,
-            imageEndTime : data.imgTimeEnd,
-            percentCompleted : _s.stats.spins ? 0: data.percentCompleted,
-            count : data.count || 0
+            timeEnd: data.timeEnd,
+            imageSource: data.src,
+            imageId: data.imageId,
+            imageType: data.imgType,
+            imageStartTime: data.imgTimeStart,
+            imageEndTime: data.imgTimeEnd,
+            percentCompleted: _s.stats.spins ? 0 : data.percentCompleted,
+            count: data.count || 0
         };
         //console.log(form_data);
         _s.stats.spins = 0;
-        if(!data.count) {
+        if (!data.count) {
             _s.stats.highlights = [];
         }
 
@@ -1509,6 +1534,7 @@
 
         return yyyy + "-" + mn + "-" + dd + " " + hh + ":" + mm + ":" + ss;
     }
+
     function getAspectRatio(imgwidth, imgheight) {
         var width = imgwidth || Number(window.globalVar.maxWidth);
         var height = imgheight || Number(window.globalVar.maxHeight);
@@ -1517,7 +1543,7 @@
         return aspectRatio;
     }
 }(window));
-var Player360 = function(options) {
+var Player360 = function (options) {
     // return instance if called as a function
     if (!(this instanceof Player360)) {
         return new Player360(options);
@@ -1527,10 +1553,10 @@ var Player360 = function(options) {
     this.deepmerge(this.config, options);
     console.log(this.config);
 };
-Player360.prototype.clone = function(src){
-    Player360.prototype.deepmerge(null,src)
+Player360.prototype.clone = function (src) {
+    Player360.prototype.deepmerge(null, src)
 };
-Player360.prototype.deepmerge = function(target, src) {
+Player360.prototype.deepmerge = function (target, src) {
     var first = src;
 
     return (function merge(target, src) {
@@ -1541,7 +1567,7 @@ Player360.prototype.deepmerge = function(target, src) {
             else {
                 target.length = 0;
             }
-            src.forEach(function(e, i) {
+            src.forEach(function (e, i) {
                 target[i] = merge(null, e);
             });
         }
@@ -1549,7 +1575,7 @@ Player360.prototype.deepmerge = function(target, src) {
             if (!target || Array.isArray(target)) {
                 target = {};
             }
-            Object.keys(src).forEach(function(key) {
+            Object.keys(src).forEach(function (key) {
                 if (typeof src[key] !== 'object' || !src[key] || !this.isPlainObject(src[key])) {
                     target[key] = src[key];
                 }
@@ -1573,51 +1599,51 @@ Player360.prototype.deepmerge = function(target, src) {
 Player360.prototype.getAspectRatio = function (imgwidth, imgheight) {
     var width = imgwidth || globalVar.maxWidth;
     var height = imgheight || globalVar.maxHeight;
-    return  height / width;
+    return height / width;
 };
-Player360.prototype.elements = function(){
+Player360.prototype.elements = function () {
     return {
         wrapper: $('#wrapper'),
     }
 };
-Player360.prototype.DEFAULTS = function(){
+Player360.prototype.DEFAULTS = function () {
     return {
-        carImgs : [],
-        carsData : [],
-        hsData : [],
-        lastX : 0,
-        direction : "",
-        currentFrame : 0,
-        runAnim : false,
-        imgCount : 0,
-        totalImages : globalVar.totalImages,
-        aspectRatio : this.getAspectRatio(1200, 675),
-        playerWidth : parseFloat(this.elements().wrapper.width()),
-        playerHeight : this.playerWidth * this.aspectRatio,
-        maxImageWidth : globalVar.maxWidth,
-        maxImageHeight : this.maxImageWidth * this.aspectRatio,
-        redrawImgCount :  3,
-        resetRedrawCount : 0,
-        requiredImgCount : 216,
-        zoomIn : false,
-        spinCompleted : 0,
-        stats : {
-            trackID : globalVar.trackID || "abc123456",
-            spins : 0,
-            highlights : [],
-            prevImgStartTime : getCurDateTime(),
-            seenImages : [],
-            count : 0,
-            prevImg : '',
+        carImgs: [],
+        carsData: [],
+        hsData: [],
+        lastX: 0,
+        direction: "",
+        currentFrame: 0,
+        runAnim: false,
+        imgCount: 0,
+        totalImages: globalVar.totalImages,
+        aspectRatio: this.getAspectRatio(1200, 675),
+        playerWidth: parseFloat(this.elements().wrapper.width()),
+        playerHeight: this.playerWidth * this.aspectRatio,
+        maxImageWidth: globalVar.maxWidth,
+        maxImageHeight: this.maxImageWidth * this.aspectRatio,
+        redrawImgCount: 3,
+        resetRedrawCount: 0,
+        requiredImgCount: 216,
+        zoomIn: false,
+        spinCompleted: 0,
+        stats: {
+            trackID: globalVar.trackID || "abc123456",
+            spins: 0,
+            highlights: [],
+            prevImgStartTime: getCurDateTime(),
+            seenImages: [],
+            count: 0,
+            prevImg: '',
         },
-        showHighlights : true,
-        swipeThreshold : (globalVar.swipeThreshold && !isNaN(Number(globalVar.swipeThreshold)) && Number(globalVar.swipeThreshold))? Number(globalVar.swipeThreshold): 0.6,
-        swipeTotalImages :  (globalVar.totalImages && !isNaN(Number(globalVar.totalImages)) && Number(globalVar.totalImages))? Number(globalVar.totalImages): 0,
-        baseImgWidth : globalVar.baseImgWidth,
-        baseImgHeight : globalVar.baseImgHeight,
+        showHighlights: true,
+        swipeThreshold: (globalVar.swipeThreshold && !isNaN(Number(globalVar.swipeThreshold)) && Number(globalVar.swipeThreshold)) ? Number(globalVar.swipeThreshold) : 0.6,
+        swipeTotalImages: (globalVar.totalImages && !isNaN(Number(globalVar.totalImages)) && Number(globalVar.totalImages)) ? Number(globalVar.totalImages) : 0,
+        baseImgWidth: globalVar.baseImgWidth,
+        baseImgHeight: globalVar.baseImgHeight,
     }
 };
-Player360.prototype.isPlainObject = function(obj) {
+Player360.prototype.isPlainObject = function (obj) {
     // Basic check for Type object that's not null
     if (typeof obj === 'object' && obj !== null) {
         // If Object.getPrototypeOf supported, use it

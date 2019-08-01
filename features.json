@@ -1,0 +1,74 @@
+{
+  "allFeatures": [
+    {
+      "spotName": "s1",
+      "featureName": "wheel",
+      "iconName": "fa-bullseye",
+      "src": "",
+      "description": "This is wheel",
+      "id": "196604",
+      "frameImgId": 0,
+      "forder": 0
+    },
+    {
+      "spotName": "s2",
+      "featureName": "exuahst",
+      "iconName": "fa-exclamation-triangle",
+      "src": "",
+      "description": "",
+      "id": "196605",
+      "frameImgId": 1,
+      "forder": 1
+    },
+    {
+      "spotName": "s3",
+      "featureName": "mirror",
+      "iconName": "fa-exclamation-circle",
+      "src": "https:\/\/gcsimages.storage.googleapis.com\/clients\/224\/images\/60A808C6-BB0E-4BC1-B899-986EDA59F3DB\/60A808C6-BB0E-4BC1-B899-986EDA59F3DB_f00193.jpg",
+      "description": "",
+      "id": "196606",
+      "frameImgId": 2,
+      "forder": 2
+    },
+    {
+      "spotName": "s4",
+      "featureName": "trunk",
+      "iconName": "fa-bullseye",
+      "src": "https:\/\/gcsimages.storage.googleapis.com\/clients\/224\/images\/60A808C6-BB0E-4BC1-B899-986EDA59F3DB\/60A808C6-BB0E-4BC1-B899-986EDA59F3DB_f00008.jpg",
+      "description": "",
+      "id": "196607",
+      "frameImgId": 3,
+      "forder": 3
+    },
+    {
+      "spotName": "s5",
+      "featureName": "four",
+      "iconName": "fa-exclamation-circle",
+      "src": "",
+      "description": "this is fourth highlight",
+      "id": "196608",
+      "frameImgId": 4,
+      "forder": 4
+    },
+    {
+      "spotName": "s6",
+      "featureName": "five",
+      "iconName": "fa-exclamation-triangle",
+      "src": "https:\/\/gcsimages.storage.googleapis.com\/clients\/224\/images\/60A808C6-BB0E-4BC1-B899-986EDA59F3DB\/60A808C6-BB0E-4BC1-B899-986EDA59F3DB_f00003.jpg",
+      "description": "",
+      "id": "196609",
+      "frameImgId": 5,
+      "forder": 5
+    },
+    {
+      "spotName": "s7",
+      "featureName": "six",
+      "iconName": "fa-bullseye",
+      "src": "https:\/\/gcsimages.storage.googleapis.com\/clients\/224\/images\/60A808C6-BB0E-4BC1-B899-986EDA59F3DB\/60A808C6-BB0E-4BC1-B899-986EDA59F3DB_f00001.jpg",
+      "description": "",
+      "id": "196610",
+      "frameImgId": 6,
+      "forder": 6
+    }
+  ]
+}
