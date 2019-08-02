@@ -826,6 +826,9 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                     _s.stats.highlights[0].timeEnd = getCurDateTime();
                     logStats(_s.stats.highlights[0]);
                 }
+                if(_s.isThumbsPlayer && !_s.isThumbsOut){
+                    $('#feature-thumbs-container').fadeIn(100);
+                }
             });
 
             $("#info-box").on('click touch', "#thumb-img", function (e) {
@@ -1225,9 +1228,13 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                                         displayInfoBox(hs, false);
                                     } else {
                                         displayInfoBox(hs, false);
+                                        if(_s.isThumbsPlayer && !_s.isThumbsOut){
+                                            $('#feature-thumbs-container').fadeOut(100);
+                                        }
                                         zoomLevel += 2;
                                         zoomImg(_s.currentFrame, ctx, "zoomin", {left: pos.x, top: pos.y});
                                         _s.zoomIn = true;
+
                                     }
                                     /*=== added for the change of T476 ====*/
                                     var data = {}; //360 stats.
