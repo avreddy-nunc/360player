@@ -1080,6 +1080,9 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                     zoomLevel += 2;
                     zoomImg(_s.currentFrame, ctx, "zoomin", {left: pos.x, top: pos.y});
                     _s.zoomIn = true;
+                    if(_s.isThumbsPlayer && !_s.isThumbsOut){
+                        $('#feature-thumbs-container').fadeOut(100);
+                    }
                 }
                 if (thumbsSlider) {
                     thumbsSlider.gotoSlide(_s.hsData.findIndex(function (hotspot) {
