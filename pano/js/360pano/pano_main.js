@@ -47,13 +47,6 @@ var renderMarker = function() {
         data.markers = getMarkers(data.markers);
         //console.log(window.innerHeight, window.innerWidth);
         var navBarData = [
-            {
-                id : 'ext-player-icon',
-                title : 'Exterior Player',
-                className: 'psv-button--hover-scale',
-                content: carIcon,
-                onClick : exteriorPlayer
-            }
 
         ];
         if(data.markers.length){
