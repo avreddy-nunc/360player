@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,  user-scalable=no">
+    <title>360 Player with thumbs</title>
+    <!--<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">-->
+    <!--<style>
+        @font-face {
+            font-family: 'Roboto';
+            src: url('/fonts/Roboto-Regular.ttf');
+        }
+    </style>-->
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/360pano/photo-sphere-viewer.min.css">
+    <link rel="stylesheet" href="./css/360pano/custom.css">
+</head>
+<body class="centered">
+<div id="wrapper">
+    <div id="ar" class="exterior-components"></div>
+    <canvas id="canvas" class="exterior-components"></canvas>
+    <div id="viewer" style="width: 100%;height: 100%;display: none;"></div>
+    <div id="hotspots-div" class="exterior-components"></div>
+    <div id="temp-div" class="exterior-components"></div>
+    <div id="zoom-div" class="exterior-components"></div>
+    <div id="modal">
+        <span></span> <a href="#0" id="close-modal"><img class="fa-times info-close-icon" src="./img/times-solid.svg" alt="...">&nbsp;&nbsp;Close</a>
+
+    </div>
+    <div id="features-list" class="exterior-components" style="display: none;">
+        <p><img  class="fas fa-bars" style="width: 15px;height: 15px;" src="./img/fa-bars.svg" aria-hidden="true">
+            <span class="f-label">Features <img src="./img/chevron-down-solid.svg" style="width: 10px;height: 10px;" aria-hidden="true"></span>
+        </p>
+        <ul></ul>
+    </div>
+    <div class="ctrls exterior-components">
+        <!--<ul id="ctrls-toggle-button">
+            <li>
+                <img id="arrow-down" src="&lt;!&ndash;ROOT_PATH&ndash;&gt;/apps/360playerV4./img/chevron-down-solid.svg" alt="..." style="display: block;">
+                <img id="arrow-up" src="&lt;!&ndash;ROOT_PATH&ndash;&gt;/apps/360playerV4./img/chevron-up-solid.svg" alt="..." style="display: none;">
+            </li>
+        </ul>-->
+        <ul>
+            <li id="ext-player-icon" title="Exterior player">
+                <img src="./img/car-solid.svg" alt="..."></li>
+            <li id="int-player-icon" title="Interior player" style="display: none;">
+                <img src="./img/tachometer-alt-solid.svg" alt="..."></li>
+            <li id="pano-player-icon" title="Pano player" style="display: none;">
+                <img src="./img/pano-image.svg" alt="..."></li>
+            <!--<li id="features-list" title="Features">
+                <img src="&lt;!&ndash;ROOT_PATH&ndash;&gt;/apps/360playerV4./img/fa-bars.svg" atl=""></li>-->
+            <li id="zoom-in-icon" title="Zoom In" class="exterior-components">
+                <img src="./img//search-plus-solid.svg" alt="..."></li>
+            <li id="zoom-out-icon" title="zoom Out" class="exterior-components disable" >
+                <img src="./img/search-minus-solid.svg" alt="..."></li>
+            <li id="hotspots-icon" title="Show or Hide Highlights">
+                <img src="./img/bullseye-solid.svg" alt=""></li>
+            <li id="share-icon" title="Show icon">
+                <img src="./img/share-alt-solid.svg" alt="...">
+                <ul id="share-list" style="display: none;">
+                    <li id="facebook-icon" title="Facebook">
+                        <img src="./img/facebook-f-brands.svg" alt="..."></li>
+                    <li id="twitter-icon" title="Twitter">
+                        <img src="./img/twitter-brands.svg" alt="..."></li>
+                </ul>
+            </li>
+            <li id="fullscreen-icon" title="Fullscreen" style="display: none;">
+                <img src="./img/fullscreen.svg" alt="..."></li>
+        </ul>
+    </div>
+    <!--<div class="ctrls position-bottom-right exterior-components">
+        <ul>
+
+        </ul>
+    </div>-->
+    <!--<div id="features-list-box">
+        <h1>Features</h1>
+        <span class="close-button"><img src="&lt;!&ndash;ROOT_PATH&ndash;&gt;/apps/360playerV4./img/times-circle-solid.svg" alt=""></span>
+    </div>-->
+    <div id="user-info-box" class="exterior-components">
+        <div id="box-wrapper">
+            <img class="fa-chevron-left" src="./img/chevron-left-solid.svg" alt="">
+            <h4>CLICK AND DRAG TO SPIN VEHICLE</h4>
+            <img class="fa-chevron-right" src="./img/chevron-right-solid.svg" alt="">
+        </div>
+    </div>
+    <div id="info-box" class="exterior-components"></div>
+    <div id="loading-div" class="exterior-components">
+        <div id="loading-msg">
+            <p>Loading! please wait...</p>
+        </div>
+        <div id="circleG">
+            <div id="circleG_1" class="circleG"></div>
+            <div id="circleG_2" class="circleG"></div>
+            <div id="circleG_3" class="circleG"></div>
+        </div>
+    </div>
+    <div id="circle-indicator" class="exterior-components">
+        <svg width="40" height="40" viewBox="0 0 40 40" style="display: block;">
+            <circle cx="20" cy="20" r="17" fill="none" stroke="rgba(0,0,0,0.5)" stroke-width="6" />
+            <circle cx="20" cy="20" r="17" fill="none" stroke="#e6e6e6" stroke-width="6"
+                    stroke-dasharray="106.81 106.81" stroke-dashoffset="104" stroke-linecap="round" id="progress-indicator"/>
+        </svg>
+    </div>
+    <div class="feature-thumbs-wrapper" id="feature-thumbs-container" style="display: none;">
+        <div class="toggle-button active" id="toggle-button"><img src="./img/arrowheads.svg" style="display: block;" alt="toggle-button" /></div>
+        <div style="width: 100%;height: 100%;overflow: hidden;">
+        <div id="feature-thumbs">
+
+        </div>
+        </div>
+        <button id="prev-button"><img src="./img/chevron-left-solid.svg" alt="prev"/></button>
+        <button id="next-button"><img src="./img/chevron-right-solid.svg" alt="prev"/></button>
+    </div>
+</div>
+<script>
+window.getDataUrl = './cars-hotspot.json';
+window.firstLoadImg = "https:\/\/gcsimages.storage.googleapis.com\/clients\/224\/images\/60A808C6-BB0E-4BC1-B899-986EDA59F3DB\/960\/60A808C6-BB0E-4BC1-B899-986EDA59F3DB_f00001.jpg";
+</script>
+<!--<script src="./js/loaddata.js"></script>-->
+<script src="./js/jquery-3.2.1.min.js"></script>
+<script src="./js/jquery.touch.min.js"></script>
+<!-- =======photosphere dependencies==========  -->
+<script src="./js/360pano/three.min.js"></script>
+<script src="./js/360pano/device-orientation.js"></script>
+<script src="./js/360pano/D.min.js"></script>
+<script src="./js/360pano/doT.min.js"></script>
+<script src="./js/360pano/uevent.min.js"></script>
+<!--  photoshpere denpendencies end  -->
+<!--  photosphere files   -->
+<script src="./js/360pano/photo-sphere-viewer.min.js"></script>
+<script>
+    window.panoVideoId = '<!--VIDEO_ID-->';
+    window.panotrackID = '<!--TRACK_ID-->';
+</script>
+
+<script>
+    function getQueryParams(qs) {
+        qs = qs.split('+').join(' ');
+
+        var params = {},
+            tokens,
+            re = /[?&]?([^=]+)=([^&]*)/g;
+
+        while (tokens = re.exec(qs)) {
+            params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+        }
+
+        return params;
+    }
+
+    window.query = getQueryParams(document.location.search);
+    window.globalVar = {};
+    window.videoId = '<!--VIDEO_ID-->';
+    window.trackID = '<!--TRACK_ID-->';
+    window.videoFK = '<!--VIDEO_FK-->';
+    window.isThumnailPlayer = true;
+    (function () {
+        var player = window.query.playerType;
+        window.globalVar.trackID = window.trackID;
+        window.globalVar.playerType = "exterior";
+        window.globalVar.nextPlayerType = "interior";
+
+        window.globalVar.runType = "ADD_HOT_SPOT_EXTERIOR";
+        window.globalVar.baseImgWidth = "0";
+        window.globalVar.baseImgHeight = "0";
+        window.globalVar.swipeThreshold = '0.6';
+        window.globalVar.totalImages = '197';
+        window.globalVar.rotationReverse = window.query.rotation ? window.query.rotation : "<!--PLAYER_ROTATION-->";
+        window.globalVar.isThumbsPlayer = window.query.thumbs_player || false;
+        window.globalVar.isThumbsOut = window.query.thumbs_out || false;
+        window.globalVar.initLoad = false;
+        window.globalVar.maxWidth = 960;
+        window.globalVar.maxHeight = 540;
+
+        if(query.initLoad!="" && (query.initLoad=='true' || query.initLoad=='1'))
+            window.globalVar.initLoad = true;
+
+        if (player === "interior") {
+            window.globalVar.playerType = "interior";
+            window.globalVar.runType = "ADD_HOT_SPOT_INTERIOR";
+        }
+        if (player === "interior-pano") {
+            $('#viewer').show();
+            $('#ctrls').removeClass('z-index-100');
+            window.globalVar.playerType = "interior-pano";
+            window.globalVar.runType = "ADD_PANO_INTERIOR";
+            $('.exterior-components').hide();
+        }
+    }());
+
+</script>
+<script type="text/javascript">
+    /* =============== IE polyfill for object.find ============ */
+    if (!Array.prototype.find) {
+        Object.defineProperty(Array.prototype, 'find', {
+            value: function(predicate) {
+                // 1. Let O be ? ToObject(this value).
+                if (this == null) {
+                    throw new TypeError('"this" is null or not defined');
+                }
+
+                var o = Object(this);
+
+                // 2. Let len be ? ToLength(? Get(O, "length")).
+                var len = o.length >>> 0;
+
+                // 3. If IsCallable(predicate) is false, throw a TypeError exception.
+                if (typeof predicate !== 'function') {
+                    throw new TypeError('predicate must be a function');
+                }
+
+                // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
+                var thisArg = arguments[1];
+
+                // 5. Let k be 0.
+                var k = 0;
+
+                // 6. Repeat, while k < len
+                while (k < len) {
+                    // a. Let Pk be ! ToString(k).
+                    // b. Let kValue be ? Get(O, Pk).
+                    // c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
+                    // d. If testResult is true, return kValue.
+                    var kValue = o[k];
+                    if (predicate.call(thisArg, kValue, k, o)) {
+                        return kValue;
+                    }
+                    // e. Increase k by 1.
+                    k++;
+                }
+
+                // 7. Return undefined.
+                return undefined;
+            }
+        });
+    }
+    /* ============= End of IE Polyfill for object.find  ============ */
+    /* ============= Full screen polyfill for vendor prefix browsers ============ */
+    const spec = [
+        'fullscreen',
+        'fullscreenEnabled',
+        'fullscreenElement',
+        'fullscreenchange',
+        'fullscreenerror',
+        'exitFullscreen',
+        'requestFullscreen'
+    ];
+
+    const webkit = [
+        'webkitIsFullScreen',
+        'webkitFullscreenEnabled',
+        'webkitFullscreenElement',
+        'webkitfullscreenchange',
+        'webkitfullscreenerror',
+        'webkitExitFullscreen',
+        'webkitRequestFullscreen'
+    ];
+
+    const moz = [
+        'mozFullScreen',
+        'mozFullScreenEnabled',
+        'mozFullScreenElement',
+        'mozfullscreenchange',
+        'mozfullscreenerror',
+        'mozCancelFullScreen',
+        'mozRequestFullScreen'
+    ];
+
+    const ms = [
+        '',
+        'msFullscreenEnabled',
+        'msFullscreenElement',
+        'MSFullscreenChange',
+        'MSFullscreenError',
+        'msExitFullscreen',
+        'msRequestFullscreen'
+    ];
+
+    // Make sure document exist, if it doesn't make it a dumb object
+    document ? document : (document = {})
+
+    // Get the vendor fullscreen prefixed api
+    const fsVendorKeywords = (function getFullscreenApi () {
+        const fullscreenEnabled = [spec[1], webkit[1], moz[1], ms[1]].find(function(prefix){return document[prefix]})
+        return [spec, webkit, moz, ms].find(function(vendor) {
+            return vendor.find(function(prefix) {return prefix === fullscreenEnabled})
+        }) || []
+    })();
+
+    function handleEvent (eventType, ev) {
+        var event;
+        if(typeof(Event) === 'function') {
+            event = new Event(eventType);
+        }else{
+            event = document.createEvent('HTMLEvents');
+            event.initEvent(eventType, true, true);
+        }
+
+        document[spec[0]] = document[fsVendorKeywords[0]] ||
+            !!document[fsVendorKeywords[2]] || false;
+        document[spec[1]] = document[fsVendorKeywords[1]] || false;
+        document[spec[2]] = document[fsVendorKeywords[2]] || null;
+        document.dispatchEvent(event, ev.target)
+    }
+
+    function setupShim () {
+        // fullscreen
+        // Defaults to false for cases like MS where they do not have this
+        // attribute. Another way to check whether fullscreen is active is to look
+        // at the fullscreenElement attribute.
+        document[spec[0]] = document[fsVendorKeywords[0]] ||
+            !!document[fsVendorKeywords[2]] || false;
+
+        // fullscreenEnabled
+        document[spec[1]] = document[fsVendorKeywords[1]] || false;
+
+        // fullscreenElement
+        document[spec[2]] = document[fsVendorKeywords[2]] || null;
+
+        // onfullscreenchange
+        document.addEventListener(fsVendorKeywords[3], handleEvent.bind(document, spec[3]), false);
+
+        // onfullscreenerror
+        document.addEventListener(fsVendorKeywords[4], handleEvent.bind(document, spec[4]), false);
+
+        // exitFullscreen
+        document[spec[5]] = function () { return document[fsVendorKeywords[5]]() };
+
+        // requestFullscreen
+        Element.prototype[spec[6]] = function () {
+            return this[fsVendorKeywords[6]].apply(this, arguments)
+        }
+    }
+    if(!document[spec[1]]){
+        setupShim()
+    }
+    /* ============= End of fullscreen polyfill ===================== */
+    /* === custom properties of object goes here === */
+    Object.defineProperty(Object.prototype, 'forEveryElement', {
+        value: function (done) {
+            if (this.length && this.length > 0) {
+                for (var i = 0; i < this.length; i++) {
+                    done(this[i]);
+                }
+            }
+        },
+        writable: false,
+        configurable: true,
+        enumerable: false
+    });
+    /* === custom properties of object ends here === */
+</script>
+<script src="./js/360pano/pano_main.js"></script>
+<!--<script src="./js/main.js"></script>-->
+</body>
+</html>

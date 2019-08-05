@@ -1,0 +1,48 @@
+{
+  "data": {
+    "pano_image": "https://gcsimages.storage.googleapis.com/clients/5110/images/E579E69A-6A2E-677F-6578-7E42BC9C55AD_pano.jpg",
+    "pano_id": "2278",
+    "caption": "",
+    "markers": [
+      {
+        "id": "316",
+        "longitude": "5.660347059796944",
+        "latitude": "0.1482246791429911",
+        "image": "http://nfmedia.flickfusion.net/ava/apps/360playerV2/img/fa-star.svg",
+        "imageid": "4",
+        "anchor": "top center",
+        "tooltip": "one",
+        "data": {
+          "thumbnail": "https://gcsimages.storage.googleapis.com/clients/224/images/736931B4-9F6C-4460-2973-61CF6A410DCD/736931B4-9F6C-4460-2973-61CF6A410DCD_f00001.jpg",
+          "description": "something"
+        }
+      },
+      {
+        "id": "317",
+        "longitude": "0.05631805510865256",
+        "latitude": "0.05378903670020718",
+        "image": "http://nfmedia.flickfusion.net/ava/apps/360playerV2/img/fa-bullseye.svg",
+        "imageid": "3",
+        "anchor": "top center",
+        "tooltip": "two",
+        "data": {
+          "thumbnail": "",
+          "description": "ggy"
+        }
+      },
+      {
+        "id": "318",
+        "longitude": "0.7236726424699448",
+        "latitude": "0.027040984502404886",
+        "image": "http://nfmedia.flickfusion.net/ava/apps/360playerV2/img/fa-exclamation-circle.svg",
+        "imageid": "2",
+        "anchor": "top center",
+        "tooltip": "po",
+        "data": {
+          "thumbnail": "",
+          "description": ""
+        }
+      }
+    ]
+  }
+}
