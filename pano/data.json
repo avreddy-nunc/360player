@@ -1,6 +1,6 @@
 {
   "data": {
-    "pano_image": "https://gcsimages.storage.googleapis.com/clients/5110/images/E579E69A-6A2E-677F-6578-7E42BC9C55AD_pano.jpg",
+    "pano_image": "./pano.jpg",
     "pano_id": "2278",
     "caption": "",
     "markers": [
