@@ -141,8 +141,9 @@ canvas {
     height: auto;
 }
 .info-close-icon{
-    width:15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
+    display: block;
 }
 .hl-icon{
     max-width:25px;
@@ -172,20 +173,15 @@ canvas {
 
 #modal #close-modal {
     position: absolute;
-    top: 2px;
-    left: calc(50% - 30px);
-    right: auto;
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.5);
+    top: 8px;
+    left: auto;
+    right: 8px;
+    padding: 5px;
+    background-color: #ac0a0a;
     color: white;
     cursor: pointer;
     box-sizing: border-box;
     text-decoration: none;
-    display: flex;
-    align-items: center;
-    -webkit-border-radius: 100rem;
-    -moz-border-radius: 100rem;
-    border-radius: 100rem;
 }
 /*#features-list-box.mobile .close-button{
     margin: 20px;

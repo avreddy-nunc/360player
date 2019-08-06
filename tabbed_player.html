@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,  user-scalable=no">
+    <title>Tabbed player</title>
+    <link href="css/tabbed_player_custom.css" rel="stylesheet">
+</head>
+<body>
+<div class="tabbed-player" id="main-widget-areaplayer">
+    <ul id="tab-navigation" style="display: flex;">
+        <li id="tab-1" class="nav-link player_360 active" data="player_360" style="width: 33.3333%;"><span></span></li>
+        <li id="tab-2" class="nav-link pano" data="pano" style="width: 33.3333%;"><span></span></li>
+        <li id="tab-3" class="nav-link video" data="video" style="width: 33.3333%;"><span></span></li>
+    </ul>
+    <div class="main-content">
+        <div class="content-tab player_360 active" style="padding-bottom: 73.125%">
+            <iframe src="/thumbs/360_player_v2.html?thumbs_player=1&thumbs_out=1" frameborder="0" allowfullscreen scrolling="no" ></iframe>
+        </div>
+        <div class="content-tab pano" style="padding-bottom: 73.125%">
+            <iframe src="/pano/360_player_v2.html?playerType=interior-pano&thumbs_player=1&thumbs_out=1" frameborder="0" allowfullscreen scrolling="no" ></iframe>
+        </div>
+        <div class="content-tab video">
+            <iframe src="https://media.flickfusion.net/videos/lp/lp.php?video_fkey=DA3D38C0-548E-FA47-3BD7-EEB681910C79&WRV=1&mv=DA3D38C0-548E-FA47-3BD7-EEB681910C79&referer=www.elkgrovetoyota.com" frameborder="0" allowfullscreen scrolling="no" ></iframe>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    /* === custom properties of object goes here === */
+    Object.defineProperty(Object.prototype, 'forEveryElement', {
+        value: function (done) {
+            if (this.length && this.length > 0) {
+                for (var i = 0; i < this.length; i++) {
+                    done(this[i]);
+                }
+            }
+        },
+        writable: false,
+        configurable: true,
+        enumerable: false
+    });
+    /* === custom properties of object ends here === */
+    (function () {
+        document.querySelectorAll('.nav-link').forEveryElement(function (elem) {
+            elem.addEventListener('click', function () {
+                document.querySelector('.nav-link.active').classList.remove('active');
+                document.querySelector('.content-tab.active').classList.remove('active');
+                this.classList.add('active');
+                document.querySelector('.content-tab.'+this.getAttribute('data')).classList.add('active');
+            });
+        })
+    }())
+</script>
+</body>
+</html>

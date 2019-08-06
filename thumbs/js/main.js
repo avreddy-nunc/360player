@@ -820,8 +820,8 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
 
                 $(this).parent().fadeOut();
                 $(this).parent().removeClass('displayed');
-                zoomImg(_s.currentFrame, ctx, "zoomout");
-                _s.zoomIn = false;
+                //zoomImg(_s.currentFrame, ctx, "zoomout");
+                //_s.zoomIn = false;
                 if (_s.stats.highlights.length) {
                     _s.stats.highlights[0].timeEnd = getCurDateTime();
                     logStats(_s.stats.highlights[0]);
@@ -857,8 +857,8 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                 e.stopImmediatePropagation();
                 var featureId = $(this).attr('data-feature-id');
                 goToFeature(e, featureId, 'nav-next');
-                zoomImg(_s.currentFrame, ctx, "zoomout");
-                _s.zoomIn = false;
+                //zoomImg(_s.currentFrame, ctx, "zoomout");
+                //_s.zoomIn = false;
                 $("#close-modal").trigger('click');
 
             });
@@ -872,8 +872,8 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                 e.stopImmediatePropagation();
                 var featureId = $(this).attr('data-feature-id');
                 goToFeature(e, featureId, 'nav-prev');
-                zoomImg(_s.currentFrame, ctx, "zoomout");
-                _s.zoomIn = false;
+                //zoomImg(_s.currentFrame, ctx, "zoomout");
+                //_s.zoomIn = false;
                 $("#close-modal").trigger('click');
 
             });
@@ -1077,9 +1077,9 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                     displayInfoBox(hs, false);
                 } else {
                     displayInfoBox(hs, false);
-                    zoomLevel += 2;
-                    zoomImg(_s.currentFrame, ctx, "zoomin", {left: pos.x, top: pos.y});
-                    _s.zoomIn = true;
+                    //zoomLevel += 2;
+                    //zoomImg(_s.currentFrame, ctx, "zoomin", {left: pos.x, top: pos.y});
+                    //_s.zoomIn = true;
                     if(_s.isThumbsPlayer && !_s.isThumbsOut){
                         $('#feature-thumbs-container').fadeOut(100);
                     }
@@ -1234,9 +1234,9 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                                         if(_s.isThumbsPlayer && !_s.isThumbsOut){
                                             $('#feature-thumbs-container').fadeOut(100);
                                         }
-                                        zoomLevel += 2;
-                                        zoomImg(_s.currentFrame, ctx, "zoomin", {left: pos.x, top: pos.y});
-                                        _s.zoomIn = true;
+                                        //zoomLevel += 2;
+                                        //zoomImg(_s.currentFrame, ctx, "zoomin", {left: pos.x, top: pos.y});
+                                        //_s.zoomIn = true;
 
                                     }
                                     /*=== added for the change of T476 ====*/
@@ -1248,9 +1248,9 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                                     data.timeEnd = getCurDateTime();
 
                                     _s.stats.highlights[0] = data;
-                                    _s.zoomIn = true;
-                                    zoomLevel += 2;
-                                    zoomImg(_s.currentFrame, ctx, "zoomin", {left: pos.x, top: pos.y});
+                                    //_s.zoomIn = true;
+                                    //zoomLevel += 2;
+                                    //zoomImg(_s.currentFrame, ctx, "zoomin", {left: pos.x, top: pos.y});
                                 }, 500);
                             }
                         });

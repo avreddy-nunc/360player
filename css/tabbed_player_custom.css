@@ -1,0 +1,136 @@
+
+*{
+    margin: 0;
+    padding:0;
+}
+html{
+    height: 100%;
+}
+body{
+    width: 100%;
+}
+body.height-100{
+    height : 100%;
+}
+#main-widget-areaplayer{
+    width: 100%;
+    max-width: 960px;
+    margin: auto;
+}
+#main-widget-areaplayer ul{
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+#main-widget-areaplayer ul li{
+    text-align: center;
+    border-top: solid 3px #cbcbcb;
+    background-color: #cbcbcb;
+    list-style-type: none;
+    cursor: pointer;
+    -webkit-box-shadow: inset -8px 3px 0px -6px #fff;
+    -moz-box-shadow: inset -8px 3px 0px -6px #fff;
+    box-shadow: inset -8px 3px 0px -6px #fff;
+}
+#main-widget-areaplayer ul li:last-child{
+    box-shadow: none;
+}
+#main-widget-areaplayer ul li span{
+
+    border-radius: 0px;
+    text-align: center;
+    font-size: 25px;
+    padding: 5px;
+    width: 45px;
+    height: 35px;
+    display: block;
+    margin: 0 auto;
+    background-size: 50%;
+}
+
+.player_360 span{
+    background:#ccc url('/img/360icon.png') no-repeat center;
+}
+.pano span{
+    background:#ccc url('/img/panoIcon.png') no-repeat center;
+}
+.video span{
+    background:#ccc url('/img/play_icon.png') no-repeat center;
+}
+.slider span{
+    background:#ccc url('/img/image_slider.png') no-repeat center;
+}
+
+#main-widget-areaplayer ul li:hover{
+    background-color: #d5d1d1;
+    border-top: solid 3px #b7b4b4;
+}
+
+#main-widget-areaplayer ul li:hover span{
+    background-color: #d5d1d1;
+}
+
+#main-widget-areaplayer ul li.active {
+    background-color: #fff !important;
+    border-top: solid 3px #1D9EEF;
+}
+#main-wrapper-content{
+    background : rgb(41, 41, 41);
+    overflow: auto;
+}
+.active span{
+    background-color: #fff !important;
+}
+
+.content-tab{
+    width: 100%;
+    display: none;
+}
+.content-tab{
+    width: 100%;
+    position: relative;
+    padding-bottom: 74.27%;
+    height: 0;
+    background: #ffffff url("https://media.flickfusion.net/videos/global/images/loading_lp.gif") no-repeat top center;
+    -webkit-background-size: contain;
+    background-size: contain;
+}
+.close-button{
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    margin: 15px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    cursor: pointer;
+    box-sizing: border-box;
+    z-index: 10000;
+}
+.close-button svg{
+    display: block;
+    width: 25px;
+    height: 25px;
+}
+@media all and (min-width: 800px){
+    .close-button{
+        margin: 25px;
+    }
+}
+.content-tab iframe{
+    position: absolute;
+    top: 0;
+    left: 0;
+    /*iOS orientation iframe width fix*/
+    height: 0 !important;
+    max-height: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    min-width: 100%;
+    width: 0 !important;
+}
+
+.content-tab.active{
+    display: block;
+}
