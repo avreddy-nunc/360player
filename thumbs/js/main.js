@@ -478,7 +478,7 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
 
         }).done(function (allfeatures) {
             if (allfeatures.allFeatures.length) {
-                var features = " ";
+                var features = document.getElementById('feature-thumbs').innerHTML;
                 if (_s.isThumbsPlayer) {
                     allfeatures.allFeatures.forEach(function (feature, index) {
                         _s.hsData.push(feature);
@@ -500,6 +500,13 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                     thumbsSlider.on("feature-select", function (id) {
                         var featureId = id;
                         var goToFrame = getGoToFrame(loadedData.allCars, featureId);
+                        if(!goToFrame){
+                            var degree = Number(id.split('-')[1]);
+                            if(typeof degree == "number"){
+                                goToFrame = Math.floor(loadedData.allCars.length * (degree/360));
+                                featureId = null;
+                            }
+                        }
                         changeSpinIndicator(goToFrame);
                         runPlayer(_s.currentFrame, goToFrame, ctx, featureId, "1");
                     });
@@ -545,6 +552,17 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                 loadedImages.reverse();
             }
             registerEvents(ctx);
+            if(_s.isThumbsPlayer && loadedData.allCars.length>=4){
+                var features = document.getElementById('feature-thumbs').innerHTML;
+                var degrees = [0,90,180,270];
+                degrees.forEach(function (degree) {
+                    features += "<div data-fid='ext-"+degree+"' class='slide-item'>" +
+                        "<img src='" + loadedData.allCars[Math.floor(loadedData.allCars.length*(degree/360))].src + "' alt='feature' />" +
+                        "<div class='slide-title'>Exterior "+degree+"<sup>0</sup></sup></div></div>";
+                });
+                document.getElementById('feature-thumbs').innerHTML = features;
+                thumbsSlider.init();
+            }
             if (window.globalVar.initLoad) {
                 $("#temp-div").show();
                 //firstLoad();
@@ -1705,7 +1723,6 @@ var imageSlider = function (options) {
     this.toggleSlider = this.toggleSlider.bind(this);
     this.gotoSlide = this.gotoSlide.bind(this);
     this.activeSlide = 0;
-    this.registerEvents();
     this.init();
     return this;
 };
@@ -1722,6 +1739,7 @@ imageSlider.prototype.init = function () {
         this.nextNavElement.disabled = false;
     }
     this.element.style.transform = "translateX(-" + this.activeSlide * this.element.offsetWidth / 3 + "px)";
+    this.registerEvents();
 };
 imageSlider.prototype.registerEvents = function () {
     let self = this;
