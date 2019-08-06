@@ -106,6 +106,29 @@ var renderMarker = function() {
                     "<img src='" + (feature.data.thumbnail ? feature.data.thumbnail : './img/feature-default.jpg') + "' alt='feature' />" +
                     "<div class='slide-title'>" + feature.tooltip + "</div></div>"
             });
+            var degrees = [
+                {
+                    degree : 0,
+                    image : './img/0.png'
+                },
+                {
+                    degree : 90,
+                    image : './img/90.png'
+                },
+                {
+                    degree : 180,
+                    image : './img/180.png'
+                },
+                {
+                    degree : 270,
+                    image : './img/270.png'
+                }
+            ];
+            degrees.forEach(function (data) {
+                features += "<div data-fid='int-"+data.degree+"' class='slide-item'>" +
+                    "<img src='" + data.image + "' alt='feature' />" +
+                    "<div class='slide-title'>Interior " + data.degree + "<sup>0</sup></div></div>"
+            });
             document.getElementById('feature-thumbs').innerHTML = features;
             if(isMobile() && !isEmpty(window.globalVar.isThumbsOut)){
                 _p.isThumbsOut = (window.orientation == '0' || window.orientation == '180');
@@ -132,9 +155,17 @@ var renderMarker = function() {
                 }
             );
             thumbsSlider.on("feature-select", function (id) {
-                var marker = viewer.getMarker(id);
-                viewer.gotoMarker(marker, 500);
-                selectedMarker = marker;
+                var isMarkerPresent = data.markers.findIndex(function (marker) {
+                    return marker.id == id
+                });
+                if(isMarkerPresent !== -1) {
+                    var marker = viewer.getMarker(id);
+                    viewer.gotoMarker(marker, 500);
+                    selectedMarker = marker;
+                }else{
+                    var degree = parseFloat(id.split('-')[1]) * (Math.PI/180);
+                    viewer.animate({longitude:degree,latitude:0},500);
+                }
             });
         }
         logStats({opens: 1});
