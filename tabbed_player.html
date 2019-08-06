@@ -44,12 +44,49 @@
     (function () {
         document.querySelectorAll('.nav-link').forEveryElement(function (elem) {
             elem.addEventListener('click', function () {
-                document.querySelector('.nav-link.active').classList.remove('active');
-                document.querySelector('.content-tab.active').classList.remove('active');
-                this.classList.add('active');
-                document.querySelector('.content-tab.'+this.getAttribute('data')).classList.add('active');
+                changeTab.call(this);
             });
-        })
+        });
+        var panoLoaded = false; //added this check because if pano player loaded in display none element(visibly hidden element) scroll is not working hence loading pan player for the first time only after clicking on the pano tab
+        var aspectRatio = 0.73125;
+        var tab = 'player_360';
+        function changeTab() {
+            document.querySelector('.nav-link.active').classList.remove('active');
+            document.querySelector('.content-tab.active').classList.remove('active');
+            this.classList.add('active');
+            tab = this.getAttribute('data');
+            if(tab==='pano' && !panoLoaded){
+                var panoIframe = document.querySelector('.content-tab.pano iframe');
+                panoIframe.src = panoIframe.getAttribute('src');
+                panoLoaded = true;
+            }
+            switch (tab) {
+                case 'player_360' :
+                case 'pano' :
+                    aspectRatio = 0.73125;
+                    break;
+                case 'vieo' :
+                default :
+                    aspectRatio = 0.7427;
+                    break;
+            }
+            reloadPlayer();
+        }
+        function reloadPlayer() {
+            var PlayerContainer = document.getElementById('main-widget-areaplayer');
+            PlayerContainer.style.width = '100%';
+            var width = PlayerContainer.clientWidth;
+            var aspectHeight = width * aspectRatio;
+            var navHeight = document.getElementById('tab-navigation').clientHeight;
+            if((aspectHeight + navHeight)>window.innerHeight){
+                var availHeight = window.innerHeight - navHeight;
+                PlayerContainer.style.width = availHeight / aspectRatio + 'px';
+            }
+            document.querySelector('.content-tab.'+tab).classList.add('active');
+            document.querySelector('.content-tab.'+tab).style.paddingBottom = aspectRatio*100 + '%';
+        }
+        reloadPlayer();
+        window.addEventListener('resize', reloadPlayer);
     }())
 </script>
 </body>
