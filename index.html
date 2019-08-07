@@ -106,7 +106,7 @@
 </div>
 <script>
     window.getDataUrl = './cars-hotspot.json';
-    window.firstLoadImg = "https://gcsimages.storage.googleapis.com/clients/224/images/60A808C6-BB0E-4BC1-B899-986EDA59F3DB/60A808C6-BB0E-4BC1-B899-986EDA59F3DB_f00001.jpg";
+    window.firstLoadImg = "https:\/\/gcsimages.storage.googleapis.com\/clients\/2412\/images\/5B651DF2-8652-047F-4605-DC1659D29D0F\/5B651DF2-8652-047F-4605-DC1659D29D0F_f00001.jpg";
 </script>
 <!--<script src="./js/loaddata.js"></script>-->
 <script src="./js/jquery-3.2.1.min.js"></script>
@@ -153,14 +153,14 @@
         window.globalVar.nextPlayerType = "exterior";
 
         window.globalVar.runType = "ADD_HOT_SPOT_EXTERIOR";
-        window.globalVar.baseImgWidth = "0";
-        window.globalVar.baseImgHeight = "0";
+        window.globalVar.baseImgWidth = "960";
+        window.globalVar.baseImgHeight = "540";
         window.globalVar.swipeThreshold = '0.6';
         window.globalVar.totalImages = '197';
         window.globalVar.rotationReverse = query.rotation ? query.rotation : "0";
         window.globalVar.initLoad = false;
-        window.globalVar.maxWidth = window.query.player_width || 1200;
-        window.globalVar.maxHeight = window.query.player_height || 675;
+        window.globalVar.maxWidth = window.query.player_width || 960;
+        window.globalVar.maxHeight = window.query.player_height || 540;
 
         if(query.initLoad!="" && (query.initLoad=='true' || query.initLoad=='1'))
             window.globalVar.initLoad = true;

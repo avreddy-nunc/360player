@@ -11,10 +11,10 @@
         "image": "http://nfmedia.flickfusion.net/ava/apps/360playerV2/img/fa-star.svg",
         "imageid": "4",
         "anchor": "top center",
-        "tooltip": "one",
+        "tooltip": "Steering ",
         "data": {
-          "thumbnail": "https://gcsimages.storage.googleapis.com/clients/224/images/736931B4-9F6C-4460-2973-61CF6A410DCD/736931B4-9F6C-4460-2973-61CF6A410DCD_f00001.jpg",
-          "description": "something"
+          "thumbnail": "./img/steering_thumb.jpg",
+          "description": "Steering Description"
         }
       },
       {
@@ -24,22 +24,22 @@
         "image": "http://nfmedia.flickfusion.net/ava/apps/360playerV2/img/fa-bullseye.svg",
         "imageid": "3",
         "anchor": "top center",
-        "tooltip": "two",
+        "tooltip": "Dashboard",
         "data": {
-          "thumbnail": "",
-          "description": "ggy"
+          "thumbnail": "./img/dashboard_thumb.jpg",
+          "description": "Dashboard description"
         }
       },
       {
         "id": "318",
         "longitude": "0.7236726424699448",
         "latitude": "0.027040984502404886",
-        "image": "http://nfmedia.flickfusion.net/ava/apps/360playerV2/img/fa-exclamation-circle.svg",
-        "imageid": "2",
+        "image": "http://nfmedia.flickfusion.net/ava/apps/360playerV2/img/fa-exclamation-triangle.svg",
+        "imageid": "1",
         "anchor": "top center",
-        "tooltip": "po",
+        "tooltip": "Vents",
         "data": {
-          "thumbnail": "",
+          "thumbnail": "./img/aircon_thumb.jpg",
           "description": ""
         }
       }

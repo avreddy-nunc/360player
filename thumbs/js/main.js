@@ -507,6 +507,9 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                                 featureId = null;
                             }
                         }
+                        if($('#modal').is(':visible')){
+                            $("#close-modal").trigger('click');
+                        }
                         changeSpinIndicator(goToFrame);
                         runPlayer(_s.currentFrame, goToFrame, ctx, featureId, "1");
                     });
@@ -554,11 +557,11 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
             registerEvents(ctx);
             if(_s.isThumbsPlayer && loadedData.allCars.length>=4){
                 var features = document.getElementById('feature-thumbs').innerHTML;
-                var degrees = [0,90,180,270];
+                var degrees = [0,45,90,135,180,225,270,315];
                 degrees.forEach(function (degree) {
                     features += "<div data-fid='ext-"+degree+"' class='slide-item'>" +
                         "<img src='" + loadedData.allCars[Math.floor(loadedData.allCars.length*(degree/360))].src + "' alt='feature' />" +
-                        "<div class='slide-title'>Exterior "+degree+"<sup>0</sup></sup></div></div>";
+                        "<div class='slide-title'>Exterior "+degree+"<sup>o</sup></div></div>";
                 });
                 document.getElementById('feature-thumbs').innerHTML = features;
                 thumbsSlider.init();
