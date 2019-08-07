@@ -8,7 +8,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "94",
@@ -25,7 +25,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "94",
@@ -42,7 +42,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "93",
@@ -59,7 +59,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "96",
@@ -76,7 +76,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "98",
@@ -93,7 +93,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "100",
@@ -110,7 +110,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "99",
@@ -127,7 +127,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "104",
@@ -144,7 +144,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "103",
@@ -161,7 +161,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "106",
@@ -178,7 +178,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "106",
@@ -195,7 +195,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "110",
@@ -212,7 +212,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "114",
@@ -229,7 +229,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "112",
@@ -246,7 +246,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "114",
@@ -263,7 +263,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "116",
@@ -280,7 +280,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "116",
@@ -297,7 +297,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "114",
@@ -1860,7 +1860,7 @@
           "mainId": "196606"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "65",
@@ -1885,7 +1885,7 @@
           "mainId": "196606"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "68",
@@ -1902,7 +1902,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "68",
@@ -1919,7 +1919,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "67",
@@ -1936,7 +1936,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "98",
@@ -1944,7 +1944,7 @@
           "mainId": "196605"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "68",
@@ -1961,7 +1961,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "68",
@@ -1969,7 +1969,7 @@
           "mainId": "196607"
         },
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "101",
@@ -1986,7 +1986,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "102",
@@ -1994,7 +1994,7 @@
           "mainId": "196605"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "65",
@@ -2011,7 +2011,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "63",
@@ -2019,7 +2019,7 @@
           "mainId": "196607"
         },
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "102",
@@ -2036,7 +2036,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "100",
@@ -2044,7 +2044,7 @@
           "mainId": "196605"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "66",
@@ -2061,7 +2061,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "103",
@@ -2069,7 +2069,7 @@
           "mainId": "196605"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "66",
@@ -2086,7 +2086,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "103",
@@ -2094,7 +2094,7 @@
           "mainId": "196605"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "68",
@@ -2111,7 +2111,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "102",
@@ -2119,7 +2119,7 @@
           "mainId": "196605"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "64",
@@ -2136,7 +2136,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "102",
@@ -2144,7 +2144,7 @@
           "mainId": "196605"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "62",
@@ -2161,7 +2161,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "101",
@@ -2169,7 +2169,7 @@
           "mainId": "196605"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "68",
@@ -2186,7 +2186,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "104",
@@ -2194,7 +2194,7 @@
           "mainId": "196605"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "66",
@@ -2211,7 +2211,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "103",
@@ -2219,7 +2219,7 @@
           "mainId": "196605"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "66",
@@ -2236,7 +2236,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "104",
@@ -2244,7 +2244,7 @@
           "mainId": "196605"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "70",
@@ -2261,7 +2261,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "107",
@@ -2269,7 +2269,7 @@
           "mainId": "196605"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "67",
@@ -2286,7 +2286,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "108",
@@ -2294,7 +2294,7 @@
           "mainId": "196605"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "67",
@@ -2311,7 +2311,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "111",
@@ -2319,7 +2319,7 @@
           "mainId": "196605"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "69",
@@ -2336,7 +2336,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "111",
@@ -2344,7 +2344,7 @@
           "mainId": "196605"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "70",
@@ -2361,7 +2361,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "74",
@@ -2369,7 +2369,7 @@
           "mainId": "196607"
         },
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "111",
@@ -2386,7 +2386,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "110",
@@ -2394,7 +2394,7 @@
           "mainId": "196605"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "73",
@@ -2411,7 +2411,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "71",
@@ -2419,7 +2419,7 @@
           "mainId": "196607"
         },
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "111",
@@ -2436,7 +2436,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "113",
@@ -2444,7 +2444,7 @@
           "mainId": "196605"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "72",
@@ -2461,7 +2461,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "116",
@@ -2469,7 +2469,7 @@
           "mainId": "196605"
         },
         {
-          "featureName": "trunk",
+          "featureName": "Trunk",
           "iconName": "fa-bullseye",
           "spotName": "s4",
           "top": "71",
@@ -2486,7 +2486,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "112",
@@ -2503,7 +2503,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "112",
@@ -2520,7 +2520,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "113",
@@ -2537,7 +2537,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "111",
@@ -2554,7 +2554,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "109",
@@ -2571,7 +2571,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "111",
@@ -2588,7 +2588,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "110",
@@ -2605,7 +2605,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "111",
@@ -2622,7 +2622,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "111",
@@ -2639,7 +2639,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "109",
@@ -2656,7 +2656,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "111",
@@ -2673,7 +2673,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "111",
@@ -2690,7 +2690,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "110",
@@ -2707,7 +2707,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "111",
@@ -2724,7 +2724,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "109",
@@ -2741,7 +2741,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "112",
@@ -2758,7 +2758,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "109",
@@ -2775,7 +2775,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "108",
@@ -2792,7 +2792,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "111",
@@ -2809,7 +2809,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "111",
@@ -2826,7 +2826,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "87",
@@ -2834,7 +2834,7 @@
           "mainId": "196604"
         },
         {
-          "featureName": "exuahst",
+          "featureName": "Exhaust",
           "iconName": "fa-exclamation-triangle",
           "spotName": "s2",
           "top": "107",
@@ -2851,7 +2851,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "89",
@@ -2868,7 +2868,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "88",
@@ -2885,7 +2885,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "91",
@@ -2902,7 +2902,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "91",
@@ -2919,7 +2919,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "93",
@@ -2936,7 +2936,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "94",
@@ -2953,7 +2953,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "96",
@@ -2970,7 +2970,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "96",
@@ -2987,7 +2987,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "96",
@@ -3004,7 +3004,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "93",
@@ -3021,7 +3021,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "93",
@@ -3038,7 +3038,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "97",
@@ -3055,7 +3055,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "95",
@@ -3072,7 +3072,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "94",
@@ -3089,7 +3089,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "97",
@@ -3106,7 +3106,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "95",
@@ -3123,7 +3123,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "97",
@@ -3140,7 +3140,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "96",
@@ -3157,7 +3157,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "96",
@@ -3174,7 +3174,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "96",
@@ -3191,7 +3191,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "94",
@@ -3208,7 +3208,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "93",
@@ -3225,7 +3225,7 @@
       "imgType": "exterior",
       "hotSpot": [
         {
-          "featureName": "wheel",
+          "featureName": "Wheels",
           "iconName": "fa-bullseye",
           "spotName": "s1",
           "top": "96",
