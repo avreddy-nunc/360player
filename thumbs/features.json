@@ -2,7 +2,7 @@
   "allFeatures": [
     {
       "spotName": "s1",
-      "featureName": "wheel",
+      "featureName": "Wheels",
       "iconName": "fa-bullseye",
       "src": "./img/wheels_thumb.jpg",
       "description": "",
@@ -12,7 +12,7 @@
     },
     {
       "spotName": "s2",
-      "featureName": "exuahst",
+      "featureName": "Exhaust",
       "iconName": "fa-exclamation-triangle",
       "src": "./img/exhaust.jpg",
       "description": "",
@@ -32,7 +32,7 @@
     },
     {
       "spotName": "s4",
-      "featureName": "trunk",
+      "featureName": "Trunk",
       "iconName": "fa-bullseye",
       "src": "./img/bumper_thumb.jpg",
       "description": "",
