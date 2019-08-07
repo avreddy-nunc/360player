@@ -133,7 +133,7 @@ var renderMarker = function() {
                 },
                 {
                     degree : 45,
-                    image : './img/0.png'
+                    image : './img/45.png'
                 },
                 {
                     degree : 90,
@@ -141,7 +141,7 @@ var renderMarker = function() {
                 },
                 {
                     degree : 135,
-                    image : './img/90.png'
+                    image : './img/135.png'
                 },
                 {
                     degree : 180,
@@ -149,7 +149,7 @@ var renderMarker = function() {
                 },
                 {
                     degree : 225,
-                    image : './img/180.png'
+                    image : './img/225.png'
                 },
                 {
                     degree : 270,
@@ -157,7 +157,7 @@ var renderMarker = function() {
                 },
                 {
                     degree : 315,
-                    image : './img/270.png'
+                    image : './img/315.png'
                 }
             ];
             degrees.forEach(function (data) {
