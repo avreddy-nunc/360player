@@ -1011,7 +1011,7 @@
             if (desc.desc) {
                 box += '<p>' + desc.desc + '</p>';
             }
-            box += '<p class="arrows"><img src="/img/arrow-circle-left-solid.svg" alt="..." class="fa-arrow-circle-left nav-prev" data-feature-id="' + desc.id + '"><img src="/img/arrow-circle-right-solid.svg" alt="..." class="fa-arrow-circle-right nav-next" data-feature-id="' + desc.id + '"></p>';
+            box += '<p class="arrows"><img src="/meain12rtha/img/arrow-circle-left-solid.svg" alt="..." class="fa-arrow-circle-left nav-prev" data-feature-id="' + desc.id + '"><img src="/meain12rtha/img/arrow-circle-right-solid.svg" alt="..." class="fa-arrow-circle-right nav-next" data-feature-id="' + desc.id + '"></p>';
             return box;
         }
 
