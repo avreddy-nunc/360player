@@ -1692,7 +1692,7 @@ Array.prototype.tweenLoad = function (callback) {
      * @summary This method hides all the elements on player excluding spinner to enhance the visibility of player. This method also sends a post message to parent to remove any elements place on the player */
     function hideNavbar() {
         $('.ctrls').slideUp(100);
-        $('.inside-button').slideUp(100);
+        $('.interior-button').slideUp(100);
         if ($('#features-list ul li').length) {
             $('#features-list').slideUp(100);
         }
@@ -1711,7 +1711,7 @@ Array.prototype.tweenLoad = function (callback) {
      * @summary This method unhides all the elements on player to revert back the full functionality of the player and also sends a post message to parent to place back any hidden elements on player*/
     function unhideNavbar() {
         $('.ctrls').slideDown(100);
-        $('.inside-button').slideDown(100);
+        $('.interior-button').slideDown(100);
         if ($('#features-list ul li').length) {
             $('#features-list').slideDown(100);
         }
