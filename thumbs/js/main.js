@@ -1,4 +1,12 @@
-/* === custom properties of object goes here === */
+/** @namespace 360 Player */
+/** @namespace EventListeners */
+/**
+ * @summary We are adding forEveryElement property to existing element object to use it even for multiple elements select
+ * @example document.querySelectorAll('.className').forEveryElement(function(elem){
+ *     iterateds through all elements of query
+ * })
+ * @param {function} done - Callback function invokes for every iteration
+ * @method forEveryElement*/
 Object.defineProperty(Object.prototype, 'forEveryElement', {
     value: function (done) {
         if (this.length && this.length > 0) {
@@ -12,11 +20,56 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
     enumerable: false
 });
 /* === custom properties of object ends here === */
+
+/**
+ * @method tweenLoad
+ * @param {tweenLoadCallback} callback - Callback function invokes for every element of array in {@link https://en.wikipedia.org/wiki/Inbetweening tweenign} pattern
+ * @summary This is an extension of array.prototype used to call the array elements using {@link https://en.wikipedia.org/wiki/Inbetweening Inbetweenign} loading algorithm  */
+Array.prototype.tweenLoad = function (callback) {
+    var start = 0, end = this.length - 1;
+    callback(this[start], start);
+    callback(this[end], end);
+    var self = this;
+    sendMid.call(null, [start, end]);
+
+    function sendMid() {
+        var args = [];
+        for (var i = 0; i < sendMid.arguments.length; i++) {
+            var start = sendMid.arguments[i][0];
+            var end = sendMid.arguments[i][1];
+            if ((end - start) > 1) {
+                if ((start + end) % 2 === 0) {
+                    var mid = (start + end) / 2;
+                    callback(self[mid], mid);
+                    args.push([start, mid]);
+                    args.push([mid, end]);
+                } else {
+                    var mid1 = Math.floor((start + end) / 2);
+                    var mid2 = Math.ceil((start + end) / 2);
+                    callback(self[mid1], mid1);
+                    callback(self[mid2], mid2);
+                    args.push([start, mid1]);
+                    args.push([mid2, end]);
+                }
+            } else {
+                return start;
+            }
+        }
+        return sendMid.apply(null, args);
+    }
+};
+
 (function (window) {
-    var _s = {}; //settings or initial values global object;
-    _s.carImgs = [];
-    _s.carsData = [];
-    _s.hsData = [];
+    /**
+     * @typedef {Object}
+     * @constant _s
+     * @property {int} playerWidth - Width of the player we use globally and should not exceed
+     * @property {int} playerHeight - Height of the player we use globally
+     * @property {float} aspectRatio - Aspect ratio of the player and it is very important to maintain the aspect ratio of player while resizing the player
+     * @property {Object} stats - Object containing all properties for logging stats
+     * @summary This is the object containing all configurations of player */
+    var _s = {};
+    _s.hotspotsData = [];
     _s.lastX = 0;
     _s.direction = "";
     _s.currentFrame = 0;
@@ -31,7 +84,6 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
     _s.maxZoomLevel = 40;
     _s.redrawImgCount = 3;
     _s.resetRedrawCount = 0;
-    _s.requiredImgCount = 216;
     _s.zoomIn = false;
     _s.spinCompleted = 0;
     _s.stats = {};
@@ -42,6 +94,7 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
     _s.stats.seenImages = [];
     _s.stats.count = 0;
     _s.stats.prevImg;
+    _s.playerAnimation = null;
     _s.showHighlights = true;
     _s.swipeThreshold = (window.globalVar.swipeThreshold && !isNaN(Number(window.globalVar.swipeThreshold)) && Number(window.globalVar.swipeThreshold)) ? Number(window.globalVar.swipeThreshold) : 0.6;
     _s.swipeTotalImages = (window.globalVar.totalImages && !isNaN(Number(window.globalVar.totalImages)) && Number(window.globalVar.totalImages)) ? Number(window.globalVar.totalImages) : 0;
@@ -51,12 +104,11 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
     _s.isThumbsOut = !isEmpty(window.globalVar.isThumbsOut);
 
     $('#wrapper').height(_s.playerHeight);
-    /*var imgDim = new Image();
-    imgDim.onload = function(){
-        setPlayerSize(this.width, this.height);
-    };
-    imgDim.src = window.firstLoadImg;
-*/
+
+
+    /** @memberof EventListeners
+     * @summary Adding event listeners to control buttons of player
+     * @name Control buttons event listeners*/
     $('#ext-player-icon').on('click', function () {
         closeFullscreen();
         var carsJson = 'exterior';
@@ -81,7 +133,7 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
     });
     $('#hotspots-icon').on('click', function () {
         closeShareList();
-        _s.showHighlights ? _s.showHighlights = false : _s.showHighlights = true;
+        _s.showHighlights = !_s.showHighlights;
         $('.hotspot').toggle();
         $(this).toggleClass('active');
     });
@@ -104,26 +156,6 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
         var url = "https://twitter.com/intent/tweet?text=" + encodeURI(pageTitle) + "&url=" + encodeURI(window.location);
         window.open(url, 'mywin', 'left=355, top=200, width=600, height=368, toolbar=1, resizable=0');
     });
-
-    function closeShareList() {
-        $('#share-icon').removeClass('active');
-        $('#share-list').hide();
-    }
-
-    function closeFullscreen() {
-        if (document.fullscreenElement && document.exitFullscreen) {
-            document.exitFullscreen();
-            $('#hotspots-div, #wrapper').css('max-width', _s.maxImageWidth + "px");
-            $('#hotspots-div, #wrapper').css('max-height', _s.maxImageHeight + "px");
-            $('#fullscreen-icon').removeClass('active');
-            $('#fullscreen-icon img').attr({"src": "./../img/fullscreen.svg"});
-        }
-    }
-
-    //alert(window.orientation)
-    if (document.fullscreenEnabled) {
-        $('#fullscreen-icon').show();
-    }
     $('#fullscreen-icon').on("click touch", function (e) {
         var elem = document.body;
         if (!document.fullscreenElement) {
@@ -142,7 +174,63 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
             }
         }
     });
+    document.addEventListener("fullscreenchange", fullscreenChanged, false);
+    document.addEventListener("MSFullscreenChange", fullscreenChanged, false);
+    document.addEventListener("mozfullscreenchange", fullscreenChanged, false);
+    document.addEventListener("webkitfullscreenchange", fullscreenChanged, false);
+    document.addEventListener("webkitfullscreenchange", fullscreenChanged, false);
 
+    if(_s.isThumbsPlayer && _s.isThumbsOut){
+        var ctrlsLeft = $('<ul>')[0];
+        ctrlsLeft.appendChild($('#ext-player-icon').clone(true)[0]);
+        ctrlsLeft.appendChild($('#int-player-icon').clone(true)[0]);
+        ctrlsLeft.appendChild($('#pano-player-icon').clone(true)[0]);
+        ctrlsLeft.appendChild($('#zoom-in-icon').clone(true)[0]);
+        ctrlsLeft.appendChild($('#zoom-out-icon').clone(true)[0]);
+        ctrlsLeft.appendChild($('#hotspots-icon').clone(true)[0]);
+        var ctrlsRight = $('<ul>')[0];
+        ctrlsRight.appendChild($('#facebook-icon').clone(true)[0]);
+        ctrlsRight.appendChild($('#twitter-icon').clone(true)[0]);
+        ctrlsRight.appendChild($('#fullscreen-icon').clone(true)[0]);
+        $('.ctrls').remove();
+        var leftContainerDiv = $('<div>')[0],
+            rightContainerDiv = $('<div>')[0];
+        leftContainerDiv.classList.add('ctrls');
+        leftContainerDiv.classList.add('bottom-right');
+        leftContainerDiv.appendChild(ctrlsLeft);
+        rightContainerDiv.classList.add('ctrls');
+        rightContainerDiv.classList.add('bottom-left');
+        rightContainerDiv.appendChild(ctrlsRight);
+        $('#wrapper').append(leftContainerDiv).append(rightContainerDiv);
+    }
+    /**
+     * @method closeShareList
+     * @summary Closing the sharing icons expanded list */
+    function closeShareList() {
+        $('#share-icon').removeClass('active');
+        $('#share-list').hide();
+    }
+
+    /**
+     * @method closeFullscreen
+     * @summary Closing fullscreen of the player*/
+    function closeFullscreen() {
+        if (document.fullscreenElement && document.exitFullscreen) {
+            document.exitFullscreen();
+            $('#hotspots-div, #wrapper').css('max-width', _s.maxImageWidth + "px");
+            $('#hotspots-div, #wrapper').css('max-height', _s.maxImageHeight + "px");
+            $('#fullscreen-icon').removeClass('active');
+            $('#fullscreen-icon img').attr({"src": "./../img/fullscreen.svg"});
+        }
+    }
+
+    if (document.fullscreenEnabled) {
+        $('#fullscreen-icon').show();
+    }
+
+    /**
+     * @method fullscreenChanged
+     * @summary Trigger this function to change the fullscreen icon and size of player when fullscreen of the player changes*/
     function fullscreenChanged() {
         if (document.fullscreenElement) {
             $('#fullscreen-icon').addClass('active');
@@ -157,12 +245,10 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
         }
     }
 
-    document.addEventListener("fullscreenchange", fullscreenChanged, false);
-    document.addEventListener("MSFullscreenChange", fullscreenChanged, false);
-    document.addEventListener("mozfullscreenchange", fullscreenChanged, false);
-    document.addEventListener("webkitfullscreenchange", fullscreenChanged, false);
-    document.addEventListener("webkitfullscreenchange", fullscreenChanged, false);
-
+    /**
+     * @method isMobile
+     * @summary Use this method when you need to check whether device is mobile or not
+     * @return {boolean} true if opened device is mobile */
     function isMobile() {
         var userAgent = navigator.userAgent || navigator.vendor || window.opera;
         return (/android/i.test(userAgent)) || (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream)
@@ -200,39 +286,6 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
         $('#pano-player-icon').off('click');
         $('#pano-player-icon').off('touch');
     }
-    Array.prototype.tweenLoad = function (callback) {
-        var start = 0, end = this.length - 1;
-        callback(this[start], start);
-        callback(this[end], end);
-        var self = this;
-        sendMid.call(null, [start, end]);
-
-        function sendMid() {
-            var args = [];
-            for (var i = 0; i < sendMid.arguments.length; i++) {
-                var start = sendMid.arguments[i][0];
-                var end = sendMid.arguments[i][1];
-                if ((end - start) > 1) {
-                    if ((start + end) % 2 === 0) {
-                        var mid = (start + end) / 2;
-                        callback(self[mid], mid);
-                        args.push([start, mid]);
-                        args.push([mid, end]);
-                    } else {
-                        var mid1 = Math.floor((start + end) / 2);
-                        var mid2 = Math.ceil((start + end) / 2);
-                        callback(self[mid1], mid1);
-                        callback(self[mid2], mid2);
-                        args.push([start, mid1]);
-                        args.push([mid2, end]);
-                    }
-                } else {
-                    return start;
-                }
-            }
-            return sendMid.apply(null, args);
-        }
-    };
     var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext('2d');
     var loadedImagesCount = 0;
@@ -252,6 +305,7 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
     var _loadedHighResImagesSample = [];
     var _rawData = {allCars: []};
 
+
     function loadedCars(cars) {
         var count = 0,
             onload = function () {
@@ -263,6 +317,11 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
                 delete this.onload;
             };
         cars.tweenLoad(function (img, index) {
+            /**
+             * @callback tweenLoadCallback
+             * @param {Object} img - Image element from array
+             * @param {int} index - Index of the element received
+             * @summary With the frame returned a DOM Image element is created and updated the _loadedImages object */
             var el = document.createElement('img');
             // Avoid early reflows as images load without sizes. Wait for onload.
             el.onload = onload;
@@ -351,26 +410,28 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
         speed = speed > 2 ? 2 : (speed <= 1 ? 1 : speed);
         return speed;
     }
-    if(isMobile() && _s.isThumbsPlayer){
+
+    if (isMobile() && _s.isThumbsPlayer) {
         window.addEventListener('orientationchange', function () {
             initThumbsPlaye();
         })
     }
+
     function initThumbsPlaye() {
-        if(isMobile() && !isEmpty(window.globalVar.isThumbsOut)){
+        if (isMobile() && !isEmpty(window.globalVar.isThumbsOut)) {
             _s.isThumbsOut = (window.orientation == '0' || window.orientation == '180');
         }
-        if(_s.isThumbsOut) {
+        if (_s.isThumbsOut) {
             document.body.classList.remove('centered');
             document.getElementById('wrapper').classList.add('thumbs-out-player');
             document.getElementById('wrapper').classList.remove('thumbs-inline-player');
-        }else{
+        } else {
             document.body.classList.add('centered');
             document.getElementById('wrapper').classList.remove('thumbs-out-player');
             document.getElementById('wrapper').classList.add('thumbs-inline-player');
         }
         document.getElementById('features-list').style.display = "none";
-        if (_s.hsData.length) {
+        if (_s.hotspotsData.length) {
             document.getElementById('feature-thumbs-container').style.display = "block"
         }
     }
@@ -415,13 +476,13 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
             _s.playerWidth = $wrapper.width();
             _s.playerHeight = _s.playerWidth * _s.aspectRatio;
         }
-        if(_s.isThumbsOut) {
-            if (window.innerHeight < _s.playerHeight*1.3) {
-                _s.playerWidth = window.innerHeight / (_s.aspectRatio*1.3);
+        if (_s.isThumbsOut) {
+            if (window.innerHeight < _s.playerHeight * 1.3) {
+                _s.playerWidth = window.innerHeight / (_s.aspectRatio * 1.3);
                 _s.playerHeight = _s.playerWidth * _s.aspectRatio;
                 $("#wrapper").width(_s.playerWidth);
             }
-        }else{
+        } else {
             if (window.innerHeight < _s.playerHeight) {
                 _s.playerWidth = window.innerHeight / _s.aspectRatio;
                 _s.playerHeight = _s.playerWidth * _s.aspectRatio;
@@ -470,1143 +531,1202 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
         }
     }
 
-    if (window.globalVar.playerType === 'exterior' || window.globalVar.playerType === 'interior') {
 
-        //var allfeatures = $.getJSON("?RUN_TYPE=GET_HOT_SPOTS&videoId=" + window.videoId + "&type=" + window.globalVar.playerType + "&all=true&player=true&dataType=json&time=" + Date.now(), function (data) {
-        var thumbsSlider;
-        var allfeatures = $.getJSON("./features.json", function (data) {
+    //var allfeatures = $.getJSON("?RUN_TYPE=GET_HOT_SPOTS&videoId=" + window.videoId + "&type=" + window.globalVar.playerType + "&all=true&player=true&dataType=json&time=" + Date.now(), function (data) {
+    var thumbsSlider;
+    var allfeatures = $.getJSON("./features.json", function (data) {
 
-        }).done(function (allfeatures) {
-            if (allfeatures.allFeatures.length) {
-                var features = document.getElementById('feature-thumbs').innerHTML;
-                if (_s.isThumbsPlayer) {
-                    allfeatures.allFeatures.forEach(function (feature, index) {
-                        _s.hsData.push(feature);
-                        features += "<div data-fid='" + feature.id + "' class='slide-item'>" +
-                            "<img src='" + (feature.src ? feature.src : './img/feature-default.jpg') + "' alt='feature' />" +
-                            "<div class='slide-title'>" + feature.featureName + "</div></div>"
-                    });
-                    document.getElementById('feature-thumbs').innerHTML = features;
-                    initThumbsPlaye();
-                    thumbsSlider = new imageSlider(
-                        {
-                            "sliderId": 'feature-thumbs',
-                            "containerId": "feature-thumbs-container",
-                            "nextNav": "next-button",
-                            "prevNav": "prev-button",
-                            "toggleButtom": "toggle-button"
-                        }
-                    );
-                    thumbsSlider.on("feature-select", function (id) {
-                        var featureId = id;
-                        var goToFrame = getGoToFrame(loadedData.allCars, featureId);
-                        if(!goToFrame){
-                            var degree = Number(id.split('-')[1]);
-                            if(typeof degree == "number"){
-                                goToFrame = Math.floor(loadedData.allCars.length * (degree/360));
-                                featureId = null;
-                            }
-                        }
-                        if($('#modal').is(':visible')){
-                            $("#close-modal").trigger('click');
-                        }
-                        changeSpinIndicator(goToFrame);
-                        runPlayer(_s.currentFrame, goToFrame, ctx, featureId, "1");
-                    });
-                } else {
-                    $.each(allfeatures.allFeatures, function (i, f) {
-                        _s.hsData.push(f);
-                        features += "<li data-fid='" + f.id + "'>" + f.featureName + "</li>";
-                    });
-                    $("#features-list ul").append(features);
-                    $("#features-list").show();
-                    $('#hotspots-icon').show();
-                }
-            } else {
-                if (_s.isThumbsPlayer) {
-                    initThumbsPlaye();
-                }
-                $("#features-list").hide();
-                $('#hotspots-icon').hide();
-            }
-
-        }).fail(function () {
-            console.log("error");
-        });
-
-        var loadedData = {};
-        //var allCars = [];
-        loadedData = {allCars: []};
-        var loadedImages = [];
-        var loadedHighResImages = [];
-        var loadedZoomImages = [];
-        var zoomLevel = 10;
-        getData(function (data) {
-
-            loadedImages = data[0];
-            loadedData = data[1];
-
-            //_s.totalImages = loadedData.allCars.length;
-            ctx.canvas.width = _s.playerWidth;
-            ctx.canvas.height = _s.playerHeight;
-            if (window.globalVar.rotationReverse == "1") {
-                //alert(window.globalVar.rotationReverse);
-                loadedData.allCars.reverse();
-                loadedImages.reverse();
-            }
-            registerEvents(ctx);
-            if(_s.isThumbsPlayer && loadedData.allCars.length>=4){
-                var features = document.getElementById('feature-thumbs').innerHTML;
-                var degrees = [0,45,90,135,180,225,270,315];
-                degrees.forEach(function (degree) {
-                    features += "<div data-fid='ext-"+degree+"' class='slide-item'>" +
-                        "<img src='" + loadedData.allCars[Math.floor(loadedData.allCars.length*(degree/360))].src + "' alt='feature' />" +
-                        "<div class='slide-title'>Exterior "+degree+"<sup>o</sup></div></div>";
+    }).done(function (allfeatures) {
+        if (allfeatures.allFeatures.length) {
+            var features = document.getElementById('feature-thumbs').innerHTML;
+            if (_s.isThumbsPlayer) {
+                allfeatures.allFeatures.forEach(function (feature, index) {
+                    _s.hotspotsData.push(feature);
+                    features += "<div data-fid='" + feature.id + "' class='slide-item'>" +
+                        "<img src='" + (feature.src ? feature.src : './img/feature-default.jpg') + "' alt='feature' />" +
+                        "<div class='slide-title'>" + feature.featureName + "</div></div>"
                 });
                 document.getElementById('feature-thumbs').innerHTML = features;
-                thumbsSlider.init();
-            }
-            if (window.globalVar.initLoad) {
-                $("#temp-div").show();
-                //firstLoad();
-                normalLoad();
+                initThumbsPlaye();
+                thumbsSlider = new imageSlider(
+                    {
+                        "sliderId": 'feature-thumbs',
+                        "containerId": "feature-thumbs-container",
+                        "nextNav": "next-button",
+                        "prevNav": "prev-button",
+                        "toggleButtom": "toggle-button"
+                    }
+                );
+                thumbsSlider.on("feature-select", function (id) {
+                    var featureId = id;
+                    var goToFrame = getGoToFrame(loadedData.allCars, featureId);
+                    if (!goToFrame) {
+                        var degree = Number(id.split('-')[1]);
+                        if (typeof degree == "number") {
+                            goToFrame = Math.floor(loadedData.allCars.length * (degree / 360));
+                            featureId = null;
+                        }
+                    }
+                    if ($('#modal').is(':visible')) {
+                        $("#close-modal").trigger('click');
+                    }
+                    changeSpinIndicator(goToFrame);
+                    runPlayer(_s.currentFrame, goToFrame, ctx, featureId, "1");
+                });
             } else {
-                normalLoad();
-            }
-            window.setInterval(function () {
-                var percentCompleted = 0;
-                if (loadedImages.length > 0) {
-                    percentCompleted = _s.stats.seenImages.length / loadedImages.length;
-                }
-                _s.stats.count++;
-                logStats({percentCompleted: percentCompleted * 100, count: _s.stats.count})
-            }, 5000)
-        });
-
-        function loadHighResImages() {
-            getHighResImages(function (value) {
-                loadedHighResImages = value;
-                assignLoadedHighImage(loadedImages, loadedHighResImages);
-                value.forEach(function (node) {
-                    loadedZoomImages.push(node.cloneNode(true));
+                $.each(allfeatures.allFeatures, function (i, f) {
+                    _s.hotspotsData.push(f);
+                    features += "<li data-fid='" + f.id + "'>" + f.featureName + "</li>";
                 });
+                $("#features-list ul").append(features);
+                $("#features-list").show();
+                $('#hotspots-icon').show();
+            }
+        } else {
+            if (_s.isThumbsPlayer) {
+                initThumbsPlaye();
+            }
+            $("#features-list").hide();
+            $('#hotspots-icon').hide();
+        }
+
+    }).fail(function () {
+        console.log("error");
+    });
+
+    var loadedData = {};
+    //var allCars = [];
+    loadedData = {allCars: []};
+    var loadedImages = [];
+    var loadedHighResImages = [];
+    var loadedZoomImages = [];
+    var zoomLevel = 10;
+    getData(function (data) {
+
+        loadedImages = data[0];
+        loadedData = data[1];
+
+        //_s.totalImages = loadedData.allCars.length;
+        ctx.canvas.width = _s.playerWidth;
+        ctx.canvas.height = _s.playerHeight;
+        if (window.globalVar.rotationReverse == "1") {
+            //alert(window.globalVar.rotationReverse);
+            loadedData.allCars.reverse();
+            loadedImages.reverse();
+        }
+        registerEvents(ctx);
+        if (_s.isThumbsPlayer && loadedData.allCars.length >= 4) {
+            var features = document.getElementById('feature-thumbs').innerHTML;
+            var degrees = [0, 45, 90, 135, 180, 225, 270, 315];
+            degrees.forEach(function (degree) {
+                features += "<div data-fid='ext-" + degree + "' class='slide-item'>" +
+                    "<img src='" + loadedData.allCars[Math.floor(loadedData.allCars.length * (degree / 360))].src + "' alt='feature' />" +
+                    "<div class='slide-title'>Exterior " + degree + "<sup>o</sup></div></div>";
             });
+            document.getElementById('feature-thumbs').innerHTML = features;
+            thumbsSlider.init();
         }
-
-        var counter = 0;
-
-        function normalLoad() {
-            var newImg = new Image();
-            newImg.onload = function () {
-                setPlayerSize(this.width, this.height);
-                ctx.canvas.width = _s.playerWidth;
-                ctx.canvas.height = _s.playerHeight;
-                ctx.drawImage(newImg, 0, 0, _s.playerWidth, _s.playerHeight);
-
-                loadHl();
-                endLoading();
-            };
-            newImg.src = loadedData.allCars[0].src;
+        if (window.globalVar.initLoad) {
+            $("#temp-div").show();
+            //firstLoad();
+            normalLoad();
+        } else {
+            normalLoad();
         }
-
-        function endLoading() {
-            _s.currentFrame = 0;
-            ctx.drawImage(loadedImages[_s.currentFrame], 0, 0, _s.playerWidth, _s.playerHeight);
-            $("#temp-div").hide();
-            $("#user-info-box").fadeOut();
-            $("#loading-div").fadeOut();
-            if (window.DeviceMotionEvent) {
-                _s.lastAlpha = 0;
-                window.ondeviceorientation = drawPlayer;
+        window.setInterval(function () {
+            var percentCompleted = 0;
+            if (loadedImages.length > 0) {
+                percentCompleted = _s.stats.seenImages.length / loadedImages.length;
             }
-            var wrapper = document.getElementById('wrapper');
-            wrapper.style.backgroundImage = "none";
-        }
+            _s.stats.count++;
+            logStats({percentCompleted: percentCompleted * 100, count: _s.stats.count})
+        }, 5000)
+    });
 
-        function loadHl() {
-            $("#hotspots-div").children('.hotspot').empty();
-            if (loadedData.allCars[_s.currentFrame].hotSpot.length) {
-                $.each(loadedData.allCars[_s.currentFrame].hotSpot, function (i, hs) {
-                    var updatedPos = getCoordinates(hs.left, hs.top);
-                    drawHotspot(ctx, hs, _s.currentFrame, updatedPos.x, updatedPos.y);
-                });
-            }
-        }
+    function loadHighResImages() {
+        getHighResImages(function (value) {
+            loadedHighResImages = value;
+            assignLoadedHighImage(loadedImages, loadedHighResImages);
+            value.forEach(function (node) {
+                loadedZoomImages.push(node.cloneNode(true));
+            });
+        });
+    }
 
+    var counter = 0;
 
-        function draw(currentFrame, ctx, width, height, resize) {
-
-            if (!_s.runAnim && !resize) {
-                return;
-            }
-
-            if (!resize) {
-                watchSpin(currentFrame, loadedImages.length);
-                if (_s.stats.prevImg !== loadedData.allCars[currentFrame].src) {
-                    logStats({
-                        "src": loadedData.allCars[currentFrame].src,
-                        "imageId": loadedData.allCars[currentFrame].imageId,
-                        "imgType": loadedData.allCars[currentFrame].imgType,
-                        "imgTimeStart": _s.stats.prevImgStartTime,
-                        "imgTimeEnd": getCurDateTime()
-                    });
-                    _s.stats.prevImgStartTime = getCurDateTime();
-                    _s.stats.prevImg = loadedData.allCars[currentFrame].src;
-                }
-            }
-            $('.hotspot').remove();
+    function normalLoad() {
+        var newImg = new Image();
+        newImg.onload = function () {
+            setPlayerSize(this.width, this.height);
             ctx.canvas.width = _s.playerWidth;
             ctx.canvas.height = _s.playerHeight;
+            ctx.drawImage(newImg, 0, 0, _s.playerWidth, _s.playerHeight);
 
-            ctx.drawImage(loadedImages[currentFrame], 0, 0, _s.playerWidth, _s.playerHeight);
-            //console.log(_s.carsData[currentFrame].hotSpot);
-            if (loadedData.allCars[currentFrame].hotSpot.length) {
-                $.each(loadedData.allCars[currentFrame].hotSpot, function (i, hs) {
-                    var updatedPos = getCoordinates(hs.left, hs.top);
-                    drawHotspot(ctx, hs, currentFrame, updatedPos.x, updatedPos.y);
+            loadHl();
+            endLoading();
+        };
+        newImg.src = loadedData.allCars[0].src;
+    }
+
+    function endLoading() {
+        _s.currentFrame = 0;
+        ctx.drawImage(loadedImages[_s.currentFrame], 0, 0, _s.playerWidth, _s.playerHeight);
+        $("#temp-div").hide();
+        $("#user-info-box").fadeOut();
+        $("#loading-div").fadeOut();
+        if (window.DeviceMotionEvent) {
+            _s.lastAlpha = 0;
+            window.ondeviceorientation = drawPlayer;
+        }
+        var wrapper = document.getElementById('wrapper');
+        wrapper.style.backgroundImage = "none";
+    }
+
+    function loadHl() {
+        $("#hotspots-div").children('.hotspot').empty();
+        if (loadedData.allCars[_s.currentFrame].hotSpot.length) {
+            $.each(loadedData.allCars[_s.currentFrame].hotSpot, function (i, hs) {
+                var updatedPos = getCoordinates(hs.left, hs.top);
+                drawHotspot(hs, updatedPos.x, updatedPos.y);
+            });
+        }
+    }
+
+
+    function draw(currentFrame, ctx, width, height, resize) {
+
+        if (!_s.runAnim && !resize) {
+            return;
+        }
+
+        if (!resize) {
+            watchSpin(currentFrame, loadedImages.length);
+            if (_s.stats.prevImg !== loadedData.allCars[currentFrame].src) {
+                logStats({
+                    "src": loadedData.allCars[currentFrame].src,
+                    "imageId": loadedData.allCars[currentFrame].imageId,
+                    "imgType": loadedData.allCars[currentFrame].imgType,
+                    "imgTimeStart": _s.stats.prevImgStartTime,
+                    "imgTimeEnd": getCurDateTime()
                 });
-            }
-
-        }
-
-        function watchSpin(currentFrame, totalFrames) {
-            if (parseInt(currentFrame) === parseInt(totalFrames - 1)) {
-                _s.spinCompleted++;
-                if (_s.spinCompleted > 3) {
-                    logStats({spin: +1});
-                    _s.spinCompleted = 0;
-                }
+                _s.stats.prevImgStartTime = getCurDateTime();
+                _s.stats.prevImg = loadedData.allCars[currentFrame].src;
             }
         }
+        $('.hotspot').remove();
+        ctx.canvas.width = _s.playerWidth;
+        ctx.canvas.height = _s.playerHeight;
 
-        function getFrame(total, direction, currentFrame, isGyro) {
-            var redrawCount = isGyro ? _s.redrawGyroImgCount : _s.redrawImgCount;
-            if (redrawCount > _s.resetRedrawCount) {
-                _s.resetRedrawCount++;
-                return currentFrame;
+        ctx.drawImage(loadedImages[currentFrame], 0, 0, _s.playerWidth, _s.playerHeight);
+        if (loadedData.allCars[currentFrame].hotSpot.length) {
+            $.each(loadedData.allCars[currentFrame].hotSpot, function (i, hs) {
+                var updatedPos = getCoordinates(hs.left, hs.top);
+                drawHotspot(hs, updatedPos.x, updatedPos.y);
+            });
+        }
+
+    }
+
+    function watchSpin(currentFrame, totalFrames) {
+        if (parseInt(currentFrame) === parseInt(totalFrames - 1)) {
+            _s.spinCompleted++;
+            if (_s.spinCompleted > 3) {
+                logStats({spin: +1});
+                _s.spinCompleted = 0;
+            }
+        }
+    }
+
+    function getFrame(total, direction, currentFrame, isGyro) {
+        var redrawCount = isGyro ? _s.redrawGyroImgCount : _s.redrawImgCount;
+        if (redrawCount > _s.resetRedrawCount) {
+            _s.resetRedrawCount++;
+            return currentFrame;
+        } else {
+            _s.resetRedrawCount = 0;
+        }
+
+        if (direction === 'moveright') {
+            if (total === currentFrame) {
+                currentFrame = 0;
             } else {
-                _s.resetRedrawCount = 0;
+                currentFrame++;
             }
-
-            if (direction === 'moveright') {
-                if (total === currentFrame) {
-                    currentFrame = 0;
-                } else {
-                    currentFrame++;
-                }
-            } else if (direction === 'moveleft') {
-                if (currentFrame === 0) {
-                    currentFrame = total;
-                } else {
-                    currentFrame--;
-                }
+        } else if (direction === 'moveleft') {
+            if (currentFrame === 0) {
+                currentFrame = total;
+            } else {
+                currentFrame--;
             }
-            if (_s.stats.seenImages.indexOf(currentFrame) == -1) {
-                _s.stats.seenImages.push(currentFrame);
-            }
-            return Math.abs(currentFrame);
         }
+        if (_s.stats.seenImages.indexOf(currentFrame) == -1) {
+            _s.stats.seenImages.push(currentFrame);
+        }
+        return Math.abs(currentFrame);
+    }
 
-        function registerEvents(ctx) {
+    /** @method registerEvents
+     * @param {Object} ctx - Context of the canvas where the player is rendered
+     * @summary This function registers events to the all the elements of 360 player once the player renders its first frame*/
+    function registerEvents(ctx) {
 
-            $('#features-list').on('click touch', function (e) {
-                e.preventDefault();
-                $('#features-list').find('ul').toggle();
-                /* setFListHeight();*/
-            });
-            $('#features-list').on('click touch', 'ul li', function (e) {
-                var featureId = $(this).attr("data-fid");
-                var goToFrame = getGoToFrame(loadedData.allCars, featureId);
-                changeSpinIndicator(goToFrame);
-                runPlayer(_s.currentFrame, goToFrame, ctx, featureId, "1");
-            });
 
-            $("#loading-div").on('mousedown mousemove click', function (e) {
+        $('#features-list').on('click touch', function (e) {
+            e.preventDefault();
+            $('#features-list').find('ul').toggle();
+            /* setFListHeight();*/
+        });
+        $('#features-list').on('click touch', 'ul li', function (e) {
+            var featureId = $(this).attr("data-fid");
+            var goToFrame = getGoToFrame(loadedData.allCars, featureId);
+            changeSpinIndicator(goToFrame);
+            runPlayer(_s.currentFrame, goToFrame, ctx, featureId, "1");
+        });
+
+        $("#loading-div").on('mousedown mousemove click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+        });
+
+        $('#hotspots-div').on("click touch", function (e) {
+            var x = e.pageX;
+            var y = e.pageY;
+            e.preventDefault();
+        });
+
+        $('#hotspots-div').on("click touch", '.hotspot', function (e) {
+            _s.runAnim = false;
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            if (thumbsSlider && thumbsSlider.config.sliderActive && !_s.isThumbsOut) {
+                thumbsSlider.toggleSlider();
+            }
+            showHotspot(e);
+        });
+
+        $('#hotspots-div').on('mouseover', function (event) {
+            $(this).removeClass("touch_mode_grabbing")
+                .addClass("touch_mode_grab");
+
+        });
+
+        $('#hotspots-div').on('mouseover', ".hotspot img", function (event) {
+            $(this).siblings('.hover-title').show();
+        }).on('mouseout', '.hotspot img', function (event) {
+            $(this).siblings('.hover-title').hide();
+        });
+
+        /**
+         * @summary Evenet Listeners to detect the swipe on player to rotate it
+         * @memberOf EventListeners
+         * @name */
+        $("body").on("mousedown touchstart", "#hotspots-div", function (e) {
+            $("#hotspots-div").removeClass("touch_mode_grab")
+                .addClass("touch_mode_grabbing");
+            $('#features-list ul').hide();
+            if ($(e.target).attr('id') !== "hotspots-div") {
+                return;
+            }
+            if (typeof e.pageX !== "undefined" && e.pageX > 0) {
+                _s.lastX = e.pageX;
+            } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
+                _s.lastX = e.originalEvent.touches[0].pageX;
+            }
+            _s.runAnim = true;
+            if (e.cancelable) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
-            });
+            }
+        });
 
-            $('#hotspots-div').on("click touch", function (e) {
-                var x = e.pageX;
-                var y = e.pageY;
-                e.preventDefault();
-            });
+        $("body").on("mousemove touchmove", "#hotspots-div", function (e) {
+            var touch = false;
+            if (typeof e.pageX !== "undefined" && e.pageX > 0) {
+                if (_s.lastX === e.pageX) {
+                    return;
+                }
+            } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
+                if (_s.lastX === e.originalEvent.touches[0].pageX) {
+                    return;
+                }
+            }
 
-            $('#hotspots-div').on("click touch", '.hotspot', function (e) {
+            if (!_s.runAnim) {
+                unhideNavbar();
+                return;
+            }
+            window.ondeviceorientation = null;
+            hideNavbar();
+            closeShareList();
+            var pageX = 0;
+
+            $("#info-box").removeClass('displayed');
+
+            $("#info-box").fadeOut();
+
+            if (typeof e.pageX !== "undefined" && e.pageX > 0) {
+                pageX = e.pageX;
+            } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
+                pageX = e.originalEvent.touches[0].pageX;
+                touch = true;
+            }
+            if (_s.lastX < pageX) {
+                _s.direction = 'moveright';
+            } else {
+                _s.direction = 'moveleft';
+            }
+            var total = loadedImages.length - 1;
+            var prevFrame = _s.currentFrame;
+            do {
+                for (var i = 0; i < Math.abs(_s.lastX - pageX); i++) {
+                    _s.currentFrame = getFrame(total, _s.direction, _s.currentFrame);
+                    changeSpinIndicator();
+                }
+            } while (!loadedImages[_s.currentFrame].complete);
+            if (prevFrame !== _s.currentFrame) {
+                draw(_s.currentFrame, ctx, _s.playerWidth, _s.playerHeight);
+            }
+            _s.lastX = pageX;
+
+        });
+
+        $("body").on("mouseup touchend mouseout touchleave", "#hotspots-div", function (e) {
+            $("#hotspots-div").removeClass("touch_mode_grabbing")
+                .addClass("touch_mode_grab");
+
+            if (_s.runAnim) {
                 _s.runAnim = false;
-                e.preventDefault();
-                e.stopImmediatePropagation();
+                unhideNavbar();
+                window.ondeviceorientation = drawPlayer;
+            }
+        });
+
+        $("#info-box").on('click touch', "#info-close-icon", function (e) {
+
+            $(this).parent().fadeOut();
+            $(this).parent().removeClass('displayed');
+            //zoomImg(_s.currentFrame, "zoomout");
+            //_s.zoomIn = false;
+            if (_s.stats.highlights.length) {
+                _s.stats.highlights[0].timeEnd = getCurDateTime();
+                logStats(_s.stats.highlights[0]);
+            }
+            if (_s.isThumbsPlayer && !_s.isThumbsOut) {
+                $('#feature-thumbs-container').fadeIn(100);
+            }
+        });
+
+        $("#info-box").on('click touch', "#thumb-img", function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var $img = $(this);
+            displayModalImg($img);
+        });
+
+        $("#close-modal").on('click touch', function (e) {
+            if (_s.zoomIn) {
+                zoomImg(_s.currentFrame, "zoomout");
+                _s.zoomIn = false;
+            }
+            $("#info-close-icon").trigger('click');
+            $(this).parents("#modal").fadeOut();
+        });
+
+
+        $("body").on('click touch', '.nav-next', function (e) {
+            if (_s.stats.highlights.length) {
+                _s.stats.highlights[0].timeEnd = getCurDateTime();
+                logStats(_s.stats.highlights[0]);
+            }
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var featureId = $(this).attr('data-feature-id');
+            goToFeature(e, featureId, 'nav-next');
+            //zoomImg(_s.currentFrame, "zoomout");
+            //_s.zoomIn = false;
+            $("#close-modal").trigger('click');
+
+        });
+
+        $("body").on('click touch', '.nav-prev', function (e) {
+            if (_s.stats.highlights.length) {
+                _s.stats.highlights[0].timeEnd = getCurDateTime();
+                logStats(_s.stats.highlights[0]);
+            }
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var featureId = $(this).attr('data-feature-id');
+            goToFeature(e, featureId, 'nav-prev');
+            //zoomImg(_s.currentFrame, "zoomout");
+            //_s.zoomIn = false;
+            $("#close-modal").trigger('click');
+
+        });
+
+        $('#zoom-in-icon').on("click touch", function (e) {
+            if (zoomLevel < _s.maxZoomLevel) {
+                zoomLevel += 2;
+                zoomImg(_s.currentFrame, "zoomin");
+                _s.zoomIn = true;
                 if (thumbsSlider && thumbsSlider.config.sliderActive && !_s.isThumbsOut) {
                     thumbsSlider.toggleSlider();
                 }
-                showHotspot(e);
-            });
+            }
+        });
 
-            $('#hotspots-div').on('mouseover', function (event) {
-                $(this).removeClass("touch_mode_grabbing")
-                    .addClass("touch_mode_grab");
-
-            });
-
-            $('#hotspots-div').on('mouseover', ".hotspot img", function (event) {
-                $(this).siblings('.hover-title').show();
-            }).on('mouseout', '.hotspot img', function (event) {
-                $(this).siblings('.hover-title').hide();
-            });
-
-            $("body").on("mousedown touchstart", "#hotspots-div", function (e) {
-                $("#hotspots-div").removeClass("touch_mode_grab")
-                    .addClass("touch_mode_grabbing");
-                $('#features-list ul').hide();
-                if ($(e.target).attr('id') !== "hotspots-div") {
-                    return;
-                }
-                if (typeof e.pageX !== "undefined" && e.pageX > 0) {
-                    _s.lastX = e.pageX;
-                    _s.redrawImgCount = getSetTime();
-                } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
-                    _s.lastX = e.originalEvent.touches[0].pageX;
-                    _s.redrawImgCount = getSetTime("touch");
-                }
-                _s.runAnim = true;
-                if (e.cancelable) {
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                }
-            });
-
-            $("body").on("mousemove touchmove", "#hotspots-div", function (e) {
-                var touch = false;
-                if (typeof e.pageX !== "undefined" && e.pageX > 0) {
-                    if (_s.lastX === e.pageX) {
-                        return;
-                    }
-                } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
-                    if (_s.lastX === e.originalEvent.touches[0].pageX) {
-                        return;
-                    }
-                }
-
-                if (!_s.runAnim) {
-                    unhideNavbar();
-                    return;
-                }
-                window.ondeviceorientation = null;
-                hideNavbar();
-                closeShareList();
-                var pageX = 0;
-
-                $("#info-box").removeClass('displayed');
-
-                $("#info-box").fadeOut();
-
-                if (typeof e.pageX !== "undefined" && e.pageX > 0) {
-                    pageX = e.pageX;
-                } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
-                    pageX = e.originalEvent.touches[0].pageX;
-                    touch = true;
-                }
-                if (_s.lastX < pageX) {
-                    _s.direction = 'moveright';
-                } else {
-                    _s.direction = 'moveleft';
-                }
-                var total = loadedImages.length - 1;
-                var prevFrame = _s.currentFrame;
-                do {
-                    for (var i = 0; i < Math.abs(_s.lastX - pageX); i++) {
-                        _s.currentFrame = getFrame(total, _s.direction, _s.currentFrame);
-                        changeSpinIndicator();
-                    }
-                } while (!loadedImages[_s.currentFrame].complete);
-                if (prevFrame !== _s.currentFrame) {
-                    draw(_s.currentFrame, ctx, _s.playerWidth, _s.playerHeight);
-                }
-                _s.lastX = pageX;
-
-            });
-
-            $("body").on("mouseup touchend mouseout touchleave", "#hotspots-div", function (e) {
-                $("#hotspots-div").removeClass("touch_mode_grabbing")
-                    .addClass("touch_mode_grab");
-
-                if (_s.runAnim) {
-                    _s.runAnim = false;
-                    unhideNavbar();
-                    window.ondeviceorientation = drawPlayer;
-                }
-            });
-
-            $("#info-box").on('click touch', "#info-close-icon", function (e) {
-
-                $(this).parent().fadeOut();
-                $(this).parent().removeClass('displayed');
-                //zoomImg(_s.currentFrame, ctx, "zoomout");
-                //_s.zoomIn = false;
-                if (_s.stats.highlights.length) {
-                    _s.stats.highlights[0].timeEnd = getCurDateTime();
-                    logStats(_s.stats.highlights[0]);
-                }
-                if(_s.isThumbsPlayer && !_s.isThumbsOut){
-                    $('#feature-thumbs-container').fadeIn(100);
-                }
-            });
-
-            $("#info-box").on('click touch', "#thumb-img", function (e) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                var $img = $(this);
-                displayModalImg($img);
-            });
-
-            $("#close-modal").on('click touch', function (e) {
-                if (_s.zoomIn) {
-                    zoomImg(_s.currentFrame, ctx, "zoomout");
+        $('#zoom-out-icon').on("click touch", function (e) {
+            if (zoomLevel > 10) {
+                zoomLevel -= 2;
+                if (zoomLevel === 10) {
+                    zoomImg(_s.currentFrame, "zoomout");
                     _s.zoomIn = false;
+                    if (_s.stats.highlights.length) {
+                        _s.stats.highlights[0].timeEnd = getCurDateTime();
+                        logStats(_s.stats.highlights[0]);
+                    }
+                } else {
+                    zoomImg(_s.currentFrame, "zoomstepout");
                 }
-                $("#info-close-icon").trigger('click');
-                $(this).parents("#modal").fadeOut();
-            });
+            }
+        });
 
-
-            $("body").on('click touch', '.nav-next', function (e) {
-                if (_s.stats.highlights.length) {
-                    _s.stats.highlights[0].timeEnd = getCurDateTime();
-                    logStats(_s.stats.highlights[0]);
-                }
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                var featureId = $(this).attr('data-feature-id');
-                goToFeature(e, featureId, 'nav-next');
-                //zoomImg(_s.currentFrame, ctx, "zoomout");
-                //_s.zoomIn = false;
-                $("#close-modal").trigger('click');
-
-            });
-
-            $("body").on('click touch', '.nav-prev', function (e) {
-                if (_s.stats.highlights.length) {
-                    _s.stats.highlights[0].timeEnd = getCurDateTime();
-                    logStats(_s.stats.highlights[0]);
-                }
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                var featureId = $(this).attr('data-feature-id');
-                goToFeature(e, featureId, 'nav-prev');
-                //zoomImg(_s.currentFrame, ctx, "zoomout");
-                //_s.zoomIn = false;
-                $("#close-modal").trigger('click');
-
-            });
-
-            $('#zoom-in-icon').on("click touch", function (e) {
+        function MouseWheelHandler(e) {
+            if (e.deltaY < 0) {
                 if (zoomLevel < _s.maxZoomLevel) {
+                    e.preventDefault();
                     zoomLevel += 2;
-                    zoomImg(_s.currentFrame, ctx, "zoomin");
+                    zoomImg(_s.currentFrame, "zoomin");
                     _s.zoomIn = true;
                     if (thumbsSlider && thumbsSlider.config.sliderActive && !_s.isThumbsOut) {
                         thumbsSlider.toggleSlider();
                     }
                 }
-            });
-
-            $('#zoom-out-icon').on("click touch", function (e) {
+            } else if (e.deltaY > 0) {
                 if (zoomLevel > 10) {
+                    e.preventDefault();
                     zoomLevel -= 2;
                     if (zoomLevel === 10) {
-                        zoomImg(_s.currentFrame, ctx, "zoomout");
-                        _s.zoomIn = false;
+                        zoomImg(_s.currentFrame, "zoomout");
                         if (_s.stats.highlights.length) {
                             _s.stats.highlights[0].timeEnd = getCurDateTime();
                             logStats(_s.stats.highlights[0]);
                         }
+
                     } else {
-                        zoomImg(_s.currentFrame, ctx, "zoomstepout");
-                    }
-                }
-            });
-
-            function MouseWheelHandler(e) {
-                if (e.deltaY < 0) {
-                    if (zoomLevel < _s.maxZoomLevel) {
-                        e.preventDefault();
-                        zoomLevel += 2;
-                        zoomImg(_s.currentFrame, ctx, "zoomin");
-                        _s.zoomIn = true;
-                        if (thumbsSlider && thumbsSlider.config.sliderActive && !_s.isThumbsOut) {
-                            thumbsSlider.toggleSlider();
-                        }
-                    }
-                } else if (e.deltaY > 0) {
-                    if (zoomLevel > 10) {
-                        e.preventDefault();
-                        zoomLevel -= 2;
-                        if (zoomLevel === 10) {
-                            zoomImg(_s.currentFrame, ctx, "zoomout");
-                            if (_s.stats.highlights.length) {
-                                _s.stats.highlights[0].timeEnd = getCurDateTime();
-                                logStats(_s.stats.highlights[0]);
-                            }
-
-                        } else {
-                            zoomImg(_s.currentFrame, ctx, "zoomstepout");
-                        }
+                        zoomImg(_s.currentFrame, "zoomstepout");
                     }
                 }
             }
-
-            document.getElementById('hotspots-div').addEventListener("mousewheel", MouseWheelHandler, false);
-            // Firefox
-            document.getElementById('hotspots-div').onwheel = MouseWheelHandler;
-            document.getElementById('hotspots-div').addEventListener('wheel', MouseWheelHandler);
-            document.getElementById('zoom-div').addEventListener("mousewheel", MouseWheelHandler, false);
-            // Firefox
-            document.getElementById('zoom-div').addEventListener('wheel', MouseWheelHandler);
-
-
         }
 
-        /*=========== functions for 360 spin indicators =======*/
-        function setSpinIndicator(totalImages) {
-            if (!totalImages) {
-                totalImages = _s.totalImages;
-            }
-            var indicator = document.getElementById('progress-indicator');
-            var circumference = 2 * Math.PI * indicator.r.baseVal.value;
-            indicator.style.strokeDashoffset = (circumference - circumference / totalImages) + 'px';
+        document.getElementById('hotspots-div').addEventListener("mousewheel", MouseWheelHandler, false);
+        // Firefox
+        document.getElementById('hotspots-div').onwheel = MouseWheelHandler;
+        document.getElementById('hotspots-div').addEventListener('wheel', MouseWheelHandler);
+        document.getElementById('zoom-div').addEventListener("mousewheel", MouseWheelHandler, false);
+        // Firefox
+        document.getElementById('zoom-div').addEventListener('wheel', MouseWheelHandler);
+
+
+    }
+
+    /*=========== functions for 360 spin indicators =======*/
+    /** @method setSpinIndicator
+     * @param {number} totalImages - Number of total frames loaded in 360 player
+     * @summary Sets the circular spin indicator at the corner of the player according to the frames loaded in the player to indicate the position of frame corresponding to the whole player*/
+    function setSpinIndicator(totalImages) {
+        if (!totalImages) {
+            totalImages = _s.totalImages;
+        }
+        var indicator = document.getElementById('progress-indicator');
+        var circumference = 2 * Math.PI * indicator.r.baseVal.value;
+        indicator.style.strokeDashoffset = (circumference - circumference / totalImages) + 'px';
+    }
+
+    /** @method changeSpinIndicator
+     * @param {number} [goto=_s.currentFrame] - Index of the frame to which the spin indicator should rotate (default is currentFrame)
+     * @summary Changes the spin indicator position according to the change in frame */
+    function changeSpinIndicator(goto) {
+        var frame = goto ? goto : _s.currentFrame;
+        var indicator = document.getElementById('progress-indicator');
+        var frameValue = frame * 360 / _s.totalImages;
+
+        if (isNaN(frameValue)) {
+            frameValue = 0;
         }
 
-        function changeSpinIndicator(goto) {
-            var frame = goto ? goto : _s.currentFrame;
-            var indicator = document.getElementById('progress-indicator');
-            var frameValue = frame * 360 / _s.totalImages;
+        var rotationDeg = 'rotate(' + frameValue + ' ' + indicator.cx.baseVal.value + ' ' + indicator.cy.baseVal.value + ')';
+        indicator.setAttribute('transform', rotationDeg);
+    }
 
-            if (isNaN(frameValue)) {
-                frameValue = 0;
-            }
+    /*=========== end of functions for 360 spin indicators ====*/
 
-            var rotationDeg = 'rotate(' + frameValue + ' ' + indicator.cx.baseVal.value + ' ' + indicator.cy.baseVal.value + ')';
-            indicator.setAttribute('transform', rotationDeg);
-        }
+    /**
+     * @method goToFeature
+     * @summary To run the player till the desired feature is visible, Invoked when you click the hotspot or feature thumbnail
+     * @param {Event} e - Clicked event whick invoked this function
+     * @param {String} featureId - Id string of the feature currently opened
+     * @param {String} navType - Type of navigation to the feature Ex: 'nav-next' | 'nav-prev' */
+    function goToFeature(e, featureId, navType) {
 
-        /*=========== end of functions for 360 spin indicators ====*/
-        function getSetTime(touch) {
+        var frame;
+        var feature_name;
+        var forder = null;
+        var feature_id;
+        var len = _s.hotspotsData.length;
 
-            if (_s.redrawImgCount === 0) {
-                _s.redrawImgCount = 3;
-
-            }
-            return _s.redrawImgCount;
-        }
-
-        function goToFeature(e, featureId, navType) {
-
-            var frame;
-            var feature_name;
-            var forder = null;
-            var feature_id;
-            var len = _s.hsData.length;
-
-            for (var i = 0; i < len; i++) {
-                if (_s.hsData[i].id === featureId) {
-                    forder = +_s.hsData[i].forder;
-                    break;
-                }
-            }
-
-            if (navType === "nav-next") {
-                if (forder + 1 === len) {
-                    forder = 0;
-                } else {
-                    forder = forder + 1;
-                }
-
-            } else if (navType === 'nav-prev') {
-                if (forder === 0) {
-                    forder = len - 1;
-                } else {
-                    forder = forder - 1;
-                }
-            }
-
-            feature_id = _s.hsData[forder].id;
-            thumbsSlider.gotoSlide(forder);
-            forder = null;
-            frame = getGoToFrame(loadedData.allCars, feature_id);
-            //console.log(frame);
-            setTimeout(function () {
-                runPlayer(_s.currentFrame, frame, ctx, feature_id, "3");
-            }, 500);
-        }
-
-        function getGoToFrame(carsData, featureId) {
-            var frame;
-            $.each(carsData, function (i, cd) {
-                if (cd.hotSpot.length) {
-                    $.each(cd.hotSpot, function (c, hs) {
-                        if (parseInt(hs.mainId) === parseInt(featureId)) {
-                            frame = i;
-                        }
-                    });
-                }
-            });
-            return frame;
-        }
-
-        function displayModalImg($img) {
-            if ($img.attr('src')) {
-                var img = $('<img/>');
-                $("#modal > span").children().remove();
-                img.on('load', function () {
-
-                    $("#modal > span").append(img);
-
-                });
-                img.attr('src', $img.attr('src'));
-                $("#modal").fadeIn();
+        for (var i = 0; i < len; i++) {
+            if (_s.hotspotsData[i].id === featureId) {
+                forder = +_s.hotspotsData[i].forder;
+                break;
             }
         }
 
-        function showHotspot(e) {
-            closeShareList();
-            var data = {};//360 stats
-            var $el = $(e.target);
-            var posX = e.pageX || e.originalEvent.touches[0].pageX;
-            var posY = e.pageY || e.originalEvent.touches[0].pageY;
-
-            var mainId = $(e.target).parent().attr('data-mainId');
-            var hs = findHotspot(mainId, _s.currentFrame);
-            var pos = getCoordinates(hs.left, hs.top);
-            data.hid = hs.mainId; //360 stats
-            data.featureName = hs.featureName;
-            data.source = 2;
-            data.timeStart = getCurDateTime();
-            data.timeEnd = getCurDateTime();
-            _s.stats.highlights.push(data);
-
-            if ($("#info-box").hasClass('displayed')) {
-                $("#info-box").removeClass('displayed');
-                $("#info-box").hide();
-            }
-
-            if (hs) {
-                var desc = getFeatureDesc(hs.spotName);
-                if (desc.thumb) {
-                    var $img = $('<img/>');
-                    $img.attr('src', desc.thumb);
-                    displayModalImg($img);
-                    displayInfoBox(hs, false);
-                } else {
-                    displayInfoBox(hs, false);
-                    //zoomLevel += 2;
-                    //zoomImg(_s.currentFrame, ctx, "zoomin", {left: pos.x, top: pos.y});
-                    //_s.zoomIn = true;
-                    if(_s.isThumbsPlayer && !_s.isThumbsOut){
-                        $('#feature-thumbs-container').fadeOut(100);
-                    }
-                }
-                if (thumbsSlider) {
-                    thumbsSlider.gotoSlide(_s.hsData.findIndex(function (hotspot) {
-                        return hotspot.id == hs.mainId
-                    }));
-                }
+        if (navType === "nav-next") {
+            if (forder + 1 === len) {
+                forder = 0;
             } else {
-                $("#info-box").removeClass('displayed');
-                $("#info-box").hide();
+                forder = forder + 1;
+            }
+
+        } else if (navType === 'nav-prev') {
+            if (forder === 0) {
+                forder = len - 1;
+            } else {
+                forder = forder - 1;
             }
         }
 
-        function buildInfoBox(desc, showImg) {
-            var box = '<h3>' + desc.name + '</h3>';
-            box += '<img class="fa-times info-close-icon" id="info-close-icon" src="./img/times-solid.svg" alt="..."/>';
+        feature_id = _s.hotspotsData[forder].id;
+        thumbsSlider.gotoSlide(forder);
+        forder = null;
+        frame = getGoToFrame(loadedData.allCars, feature_id);
+        //console.log(frame);
+        setTimeout(function () {
+            runPlayer(_s.currentFrame, frame, ctx, feature_id, "3");
+        }, 500);
+    }
 
-
-            if (desc.thumb && showImg) {
-                box += '<p class="featureThumb"><img id="thumb-img" src="' + desc.thumb + '" alt="feature thumbnail" title="click to view large image."></p>';
-            }
-
-            if (desc.desc) {
-                box += '<p>' + desc.desc + '</p>';
-            }
-            box += '<p class="arrows"><img src="/img/arrow-circle-left-solid.svg" alt="..." class="fa-arrow-circle-left nav-prev" data-feature-id="' + desc.id + '"><img src="/img/arrow-circle-right-solid.svg" alt="..." class="fa-arrow-circle-right nav-next" data-feature-id="' + desc.id + '"></p>';
-            return box;
-        }
-
-        function displayInfoBox(hs, showImg) {
-            var $infoBox = $("#info-box");
-            var desc = getFeatureDesc(hs.spotName);
-            var info = buildInfoBox(desc, false);
-            $infoBox.html(info);
-            $infoBox.addClass('displayed');
-            $infoBox.show();
-        }
-
-        function getFeatureDesc(spotName) {
-            var desc;
-            var thumb;
-            var name, id;
-            if (_s.hsData.length) {
-                $.each(_s.hsData, function (i, d) {
-                    if (d.spotName === spotName) {
-                        desc = d.description;
-                        thumb = d.src;
-                        name = d.featureName;
-                        id = d.id;
+    /**
+     * @method getGoToFrame
+     * @param {Object} carsData - Array of frames containing Image objects
+     * @param {String} featureId - Id of the hotspot to be searched for
+     * @return {string} Frame in which the specified hotspot first occurred in the player
+     * @summary This function is used to get the frame of player in which the selected feature is first occurred, with the obtained frame we run the player using {@link #runPlayer runPlayer} method */
+    function getGoToFrame(carsData, featureId) {
+        var frame;
+        $.each(carsData, function (i, cd) {
+            if (cd.hotSpot.length) {
+                $.each(cd.hotSpot, function (c, hs) {
+                    if (parseInt(hs.mainId) === parseInt(featureId)) {
+                        frame = i;
                     }
                 });
             }
-            var featureDesc = {
-                desc: desc,
-                thumb: thumb,
-                name: name,
-                id: id
-            };
-            return featureDesc;
-        }
+        });
+        return frame;
+    }
 
-        function drawHotspot(ctx, hs, currentFrame, left, top) {
-            var hotspot = $("<div/>");
-            hotspot.addClass('hotspot');
-            hotspot.attr("data-mainId", hs.mainId);
+    /**
+     * @method displayModalImg
+     * @param {Object} $img - Image element containing image source to display over feature*/
+    function displayModalImg($img) {
+        if ($img.attr('src')) {
+            var img = $('<img/>');
+            $("#modal > span").children().remove();
+            img.on('load', function () {
 
-            hotspot.css({'left': +left - 12.5, 'top': +top - 12.5});
+                $("#modal > span").append(img);
 
-            //var hsicon = "<i title='"+hs.featureName+"' class='fa "+hs.iconName+"'></i>";
-            var hsicon = "<img src='/img/" + hs.iconName + ".svg'><span class='hover-title'>" + hs.featureName + "</span>";
-
-            hotspot.append(hsicon);
-            $("#hotspots-div").append(hotspot).fadeIn();
-            toggleHotspot();
-
-        }
-
-        function getCoordinates(x, y) {
-            if (isEmpty(_s.baseImgWidth)) {
-                var p_width = x / 258;
-                if (_s.aspectRatio === 0.75) {
-                    var p_height = y / 194;
-                } else {
-                    var p_height = y / 145;
-                }
-            } else {
-                var p_width = x / (_s.baseImgWidth);
-                if (_s.aspectRatio === 0.75) {
-                    var p_height = y / (_s.baseImgHeight);
-                } else {
-                    var p_height = y / (_s.baseImgHeight);
-                }
-            }
-            var positionX = p_width * _s.playerWidth;
-            var positionY = p_height * _s.playerHeight;
-            return {x: positionX, y: positionY};
-
-        }
-
-        function findHotspot(mainId, currentFrame) {
-            var hotspot;
-            var hotspots = loadedData.allCars[currentFrame].hotSpot;
-            $.each(hotspots, function (i, hs) {
-                if (mainId === hs.mainId) {
-                    hotspot = hs;
-                }
             });
-            if (typeof hotspot === "undefined") {
-                return false;
-            } else {
-                return hotspot;
-            }
+            img.attr('src', $img.attr('src'));
+            $("#modal").fadeIn();
         }
+    }
 
-        function runPlayer(startFrame, endFrame, ctx, featureId, menu) {
+    /**
+     * @method showHotspot
+     * @param {event} e - Click event of the hotspot icon
+     * @summary Displays the feature information like thumbnail(if any) and description of the feature in an info box, This funcitons zoom the player focusing the hotspot if there is no feature image to show*/
+    function showHotspot(e) {
+        closeShareList();
+        var data = {};//360 stats
+        var $el = $(e.target);
+        var posX = e.pageX || e.originalEvent.touches[0].pageX;
+        var posY = e.pageY || e.originalEvent.touches[0].pageY;
+
+        var mainId = $(e.target).parent().attr('data-mainId');
+        var hs = findHotspot(mainId, _s.currentFrame);
+        var pos = getCoordinates(hs.left, hs.top);
+        data.hid = hs.mainId; //360 stats
+        data.featureName = hs.featureName;
+        data.source = 2;
+        data.timeStart = getCurDateTime();
+        data.timeEnd = getCurDateTime();
+        _s.stats.highlights.push(data);
+
+        if ($("#info-box").hasClass('displayed')) {
             $("#info-box").removeClass('displayed');
             $("#info-box").hide();
-            i = startFrame;
-            var anim,
-                total = loadedData.allCars.length,
-                dist = Math.abs(startFrame - endFrame),
-                outerDist = total - dist,
-                isForward = endFrame < startFrame ^ dist < outerDist; //finding to rotate player in forward or backward direction where 1 is forward and 0 is backward
-                anim = setInterval(function () {
-                window.ondeviceorientation = null;
-                _s.runAnim = true;
-                changeSpinIndicator(i);
-                draw(i, ctx, _s.playerWidth, _s.playerHeight);
-                _s.runAnim = false;
-
-                if (i === endFrame) {
-                    clearInterval(anim);
-                    _s.currentFrame = i;
-                    var hotspot = loadedData.allCars[_s.currentFrame].hotSpot;
-                    if (hotspot.length) {
-                        $.each(hotspot, function (index, hs) {
-                            if (hs.mainId === featureId) {
-                                setTimeout(function () {
-
-                                    var pos = getCoordinates(hs.left, hs.top);
-                                    /*=== added for the change of T476 ====*/
-                                    var desc = getFeatureDesc(hs.spotName);
-                                    if (desc.thumb) {
-                                        var $img = $('<img/>');
-                                        $img.attr('src', desc.thumb);
-                                        displayModalImg($img);
-                                        displayInfoBox(hs, false);
-                                    } else {
-                                        displayInfoBox(hs, false);
-                                        if(_s.isThumbsPlayer && !_s.isThumbsOut){
-                                            $('#feature-thumbs-container').fadeOut(100);
-                                        }
-                                        //zoomLevel += 2;
-                                        //zoomImg(_s.currentFrame, ctx, "zoomin", {left: pos.x, top: pos.y});
-                                        //_s.zoomIn = true;
-
-                                    }
-                                    /*=== added for the change of T476 ====*/
-                                    var data = {}; //360 stats.
-                                    data.hid = hs.mainId; //360 stats.
-                                    data.featureName = hs.featureName;
-                                    data.source = menu; //360 stats.
-                                    data.timeStart = getCurDateTime();
-                                    data.timeEnd = getCurDateTime();
-
-                                    _s.stats.highlights[0] = data;
-                                    //_s.zoomIn = true;
-                                    //zoomLevel += 2;
-                                    //zoomImg(_s.currentFrame, ctx, "zoomin", {left: pos.x, top: pos.y});
-                                }, 500);
-                            }
-                        });
-                    } else {
-                        //console.log("no hotspot");
-                    }
-                }
-                if (isForward) {
-                    if (++i === total) {
-                        i = 0;
-                    }
-                } else {
-                    if (--i === -1) {
-                        i = (total - 1);
-                    }
-                }
-            }, 40);
         }
 
-        function zoomImg(frame, ctx, action, pos) {
-            closeShareList();
-            //alert('done');
-            var img = loadedZoomImages[frame];
-            if (!img) {
-                img = loadedImages[frame];
-                if (!loadedZoomImages[frame] && loadedData.allCars[frame].highResSrc) {
-                    loadedZoomImages[frame] = new Image();
-                    loadedZoomImages[frame].onload = function () {
-                        /*var styles = $('#zoom-div img')[0].style;
-                        $('#zoom-div').empty().append(this).show();
-                        $('#zoom-div img')[0].style = styles;*/
-                        $('#zoom-div img').attr("src", this.src);
-                    };
-                    loadedZoomImages[frame].src = loadedData.allCars[frame].highResSrc;
-                }
-            }
-            if (img) {
-                if (zoomLevel === 12 && action === 'zoomin') {
-                    $('#zoom-div').empty();
-                    $('#zoom-div').append(img).show();
-                    $('#zoom-div img').addClass('item');
-                }
-                switch (action) {
-                    case 'zoomin':
-                        $('#zoom-in-icon').addClass('active');
-                        $('#zoom-out-icon').removeClass('active');
-                        break;
-                    case 'zoomstepout':
-                        $('#zoom-out-icon').addClass('active');
-                        $('#zoom-in-icon').removeClass('active');
-                        break;
-                    case 'zoomout':
-                        $('#zoom-out-icon').removeClass('active');
-                        break;
-                }
-                if ((action === 'zoomin' || action === 'zoomstepout') && zoomLevel >= 10 && zoomLevel <= _s.maxZoomLevel) {
-                    window.ondeviceorientation = null;
-                    $('#circle-indicator').fadeOut();
-                    var e = $('#zoom-div');
-                    var eimg = $(".item");
-                    var center = _s.playerWidth / 2;
-                    var middle = _s.playerHeight / 2;
-
-                    var zoomedImgWidth = _s.playerWidth * zoomLevel / 10;
-                    var zoomedImgHeight = _s.playerHeight * zoomLevel / 10;
-                    var zoomSize = zoomedImgWidth / _s.playerWidth;
-                    var aHeight = zoomedImgHeight - _s.playerHeight;
-                    var aWidth = zoomedImgWidth - _s.playerWidth;
-                    var left = -aWidth / 2 + 'px';
-                    var top = -aHeight / 2 + 'px';
-                    if (typeof pos !== "undefined") {
-                        left = center - (pos.left * zoomSize);
-                        if (left < 0) {
-                            if (Math.abs(left) > aWidth) {
-                                left = -Math.abs(aWidth);
-                            }
-                        } else if (left > 0) {
-                            left = 0;
-                        }
-                    }
-
-                    if (typeof pos !== "undefined") {
-                        top = middle - (pos.top * zoomSize);
-                        if (top < 0) {
-                            if (Math.abs(top) > aHeight) {
-                                top = -Math.abs(aHeight);
-                            }
-                        } else if (top > 0) {
-                            top = 0;
-                        }
-                    }
-                    if ($('#features-list ul li').length) {
-                        $('#features-list').fadeOut();
-                    }
-                    $("#zoom-div img").stop();
-                    $("#zoom-div img").animate({width: zoomLevel * 10 + '%', left: left, top: top});
-                    $('#zoom-out-icon').removeClass('disable');
-                    $('#zoom-in-icon').removeClass('disable');
-                    if (zoomLevel === _s.maxZoomLevel) {
-                        $('#zoom-in-icon').addClass('disable');
-                    } else if (zoomLevel === 10) {
-                        $('#zoom-out-icon').addClass('disable');
-                    }
-                    var imgId = $("#zoom-div img").attr('id');
-
-                } else if (action === "zoomout") {
-                    window.ondeviceorientation = drawPlayer;
-                    $('#circle-indicator').fadeIn();
-                    if ($('#features-list ul li').length) {
-                        $('#features-list').fadeIn();
-                    }
-                    $('#info-box').fadeOut();
-                    $("#zoom-div img").animate({width: '100%', left: '0', top: '0'}, function () {
-                        $(this).parent().hide();
-                    });
-                    $('#zoom-out-icon').addClass('disable');
-                    $('#zoom-in-icon').removeClass('active').removeClass('disable');
-                    zoomLevel = 10;
-                    _s.zoomIn = false;
-                }
-            }
-        }
-
-        var isDragging = false;
-        var zIndexTop = 1;
-        var prevX = 0;
-        var prevY = 0;
-        $("#zoom-div").on("mousedown touchstart", ".item", function (e) {
-            var $this = $(e.target);
-            if (typeof e.pageX !== "undefined" && e.pageX > 0) {
-                prevX = e.pageX;
-                prevY = e.pageY;
-            } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
-                prevX = e.originalEvent.touches[0].pageX;
-                prevY = e.originalEvent.touches[0].pageY;
-            }
-            isDragging = true;
-            if (e.cancelable) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-            }
-            $this.addClass('is-dragging');
-            $this.css('z-index', ++zIndexTop)
-        }).on("mouseup touchend", ".item", function (e) {
-            e.stopPropagation();
-            var $this = $(this);
-            isDragging = false;
-            $this.removeClass('is-dragging');
-        });
-
-        $("#zoom-div").on("mousemove touchmove", ".item", function (e) {
-            var touch = false;
-            if (typeof e.pageX !== "undefined" && e.pageX > 0) {
-                if (prevX === e.pageX) {
-                    return;
-                }
-            } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
-                if (prevX === e.originalEvent.touches[0].pageX) {
-                    return;
-                }
-            }
-
-            if (!isDragging) {
-                return;
-            }
-            var pageX = 0, pageY = 0;
-
-            if (typeof e.pageX !== "undefined" && e.pageX > 0) {
-                pageX = e.pageX;
-                pageY = e.pageY;
-            } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
-                pageX = e.originalEvent.touches[0].pageX;
-                pageY = e.originalEvent.touches[0].pageY;
-                touch = true;
-            }
-            var $this = $(this);
-            var allowedHeight = $this.outerHeight() - _s.playerHeight;
-            var allowedWidth = $this.outerWidth() - _s.playerWidth;
-
-            var top = $this.position().top + pageY - prevY;
-            var left = $this.position().left + pageX - prevX;
-
-            //console.log(top,left);
-            if (top > 0) {
-                top = 0;
-            }
-
-            if (Math.abs(top) > allowedHeight) {
-                top = -Math.abs(allowedHeight);
-            }
-
-            if (left > 0) {
-                left = 0;
-            }
-            if (Math.abs(left) > allowedWidth) {
-                left = -Math.abs(allowedWidth);
-            }
-
-            // Stop propagation.
-            e.stopPropagation();
-
-
-            // Update position.
-            $this
-                .css('left', left + 'px')
-                .css('top', top + 'px');
-            prevX = pageX;
-            prevY = pageY;
-        });
-
-        $("#zoom-div .item").on("mouseout touchend touchleave", function (e) {
-            e.stopPropagation();
-            var $this = $(this);
-            isDragging = false;
-            $this.removeClass('is-dragging');
-        });
-
-        function adjustPositionOnZoomLeft(imageSizeWidth, spotPositionLeft) {
-            if (spotPositionLeft > 500) {
-                return true;
-            }
-            if (spotPositionLeft < 200) {
-                var actualLeft = 0;
+        if (hs) {
+            var desc = getFeatureDesc(hs.spotName);
+            if (desc.thumb) {
+                var $img = $('<img/>');
+                $img.attr('src', desc.thumb);
+                displayModalImg($img);
+                displayInfoBox(hs);
             } else {
-                //var r_Width = 150/640;
-                var r_Width = 60 / 258;
-                var actualLeft = r_Width * parseInt(imageSizeWidth);
-            }
-            return actualLeft;
-        }// adjust left position when zoom in images related to hotspots
-
-        function adjustPositionOnZoomTop(imageSizeHeight) {
-            var r_Height = 4 / 145;
-            var actualTop = r_Height * parseInt(imageSizeHeight);
-            return actualTop;
-        }// adjust top position when zoom in images related to hotspots
-
-        var reloadPlayer = function () {
-            var iOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g);
-            //alert(screen.width);
-            /*explicit ipad condition is used because while orientation change ipad innerwidth is not updateding, this condition can be removed if ipad functionality changes*/
-            if (isMobile()) {
-                if (iOS && iOS[0] === "iPad") {
-                    $("#wrapper").css('width', window.outerWidth);
-                    _s.playerWidth = window.outerWidth;
-                    _s.playerHeight = _s.playerWidth * _s.aspectRatio;
-                } else {
-                    $("#wrapper").css('width', $(window).innerWidth());
-                    _s.playerWidth = $(window).innerWidth();
-                    _s.playerHeight = _s.playerWidth * _s.aspectRatio;
-                }
-
-            } else {
-                $("#wrapper").css('width', '100%');
-                _s.playerWidth = $("#wrapper").width();
-                _s.playerHeight = _s.playerWidth * _s.aspectRatio;
-            }
-            if(_s.isThumbsOut) {
-                if (window.innerHeight < _s.playerHeight*1.3) {
-                    _s.playerWidth = window.innerHeight / (_s.aspectRatio*1.3);
-                    _s.playerHeight = _s.playerWidth * _s.aspectRatio;
-                    $("#wrapper").width(_s.playerWidth);
-                }
-            }else{
-                if (window.innerHeight < _s.playerHeight) {
-                    _s.playerWidth = window.innerHeight / _s.aspectRatio;
-                    _s.playerHeight = _s.playerWidth * _s.aspectRatio;
-                    $("#wrapper").width(_s.playerWidth);
-                }
-            }
-            $("#wrapper").height(_s.playerHeight);
-            if ($('#features-list ul li').length) {
-                $('#features-list').fadeIn();
-            }
-            $('#circle-indicator').fadeIn();
-            /*if(_s.zoomIn){
-                zoomImg(_s.currentFrame, ctx, 'zoomout');
-            }*/
-            $("#zoom-div img").animate(
-                {width: '100%', left: '0', top: '0'}, function () {
-                    $(this).parent().hide();
-                });
-            $('#zoom-out-icon').removeClass('active').addClass('disable');
-            $('#zoom-in-icon').removeClass('active').removeClass('disable');
-            zoomLevel = 10;
-            _s.zoomIn = false;
-            $('#features-list ul').hide();
-
-            ctx.canvas.width = _s.playerWidth;
-            ctx.canvas.height = _s.playerHeight;
-            _s.redrawImgCount = getSpeed(_s.totalImages);
-            setSpinIndicator();
-            changeSpinIndicator();
-            if (thumbsSlider) {
-                thumbsSlider.update();
-            }
-            draw(_s.currentFrame, ctx, _s.playerWidth, _s.playerHeight, true);
-        };
-        if (window.globalVar.playerType === 'exterior' || window.globalVar.playerType === 'interior') {
-            window.addEventListener('resize', reloadPlayer);
-        }
-
-        function hideNavbar() {
-            $('.ctrls').slideUp(100);
-            if ($('#features-list ul li').length) {
-                $('#features-list').slideUp(100);
-            }
-            if(_s.isThumbsPlayer ){
-                if(_s.isThumbsOut){
-                    $('.feature-thumbs-wrapper .toggle-button').slideUp(100)
-                }else {
+                displayInfoBox(hs);
+                //zoomLevel += 2;
+                //zoomImg(_s.currentFrame, "zoomin", {left: pos.x, top: pos.y});
+                //_s.zoomIn = true;
+                if (_s.isThumbsPlayer && !_s.isThumbsOut) {
                     $('#feature-thumbs-container').fadeOut(100);
                 }
             }
-            parent.postMessage(JSON.stringify({"action": "removeCross"}), "*");
-        }
-
-        function unhideNavbar() {
-            $('.ctrls').slideDown(100);
-            if ($('#features-list ul li').length) {
-                $('#features-list').slideDown(100);
+            if (thumbsSlider) {
+                thumbsSlider.gotoSlide(_s.hotspotsData.findIndex(function (hotspot) {
+                    return hotspot.id == hs.mainId
+                }));
             }
-            if(_s.isThumbsPlayer ){
-                if(_s.isThumbsOut){
-                    $('.feature-thumbs-wrapper .toggle-button').slideDown(100)
-                }else {
-                    $('#feature-thumbs-container').fadeIn(100);
-                }
-            }
-            parent.postMessage(JSON.stringify({"action": "addCross"}), "*");
+        } else {
+            $("#info-box").removeClass('displayed');
+            $("#info-box").hide();
         }
-
-        //360 stats enhancement - 29th jan 2018.
     }
 
+    /**
+     * @method buildInfoBox
+     * @summary Building HTML description box for the opened hotspot with the details of hotspot
+     * @param {Object} desc - Object containing the details of the hotspot needs to build an Info box
+     * @param {Boolean} showImg - If set true an thumbnail of the feature image is displayed inside the info box
+     * @return {String} - HTML String of the info box which will be appended to the parent from invoked function
+     * */
+    function buildInfoBox(desc, showImg) {
+        var box = '<h3>' + desc.name + '</h3>';
+        box += '<img class="fa-times info-close-icon" id="info-close-icon" src="./img/times-solid.svg" alt="..."/>';
+
+
+        if (desc.thumb && showImg) {
+            box += '<p class="featureThumb"><img id="thumb-img" src="' + desc.thumb + '" alt="feature thumbnail" title="click to view large image."></p>';
+        }
+
+        if (desc.desc) {
+            box += '<p>' + desc.desc + '</p>';
+        }
+        box += '<p class="arrows"><img src="/img/arrow-circle-left-solid.svg" alt="..." class="fa-arrow-circle-left nav-prev" data-feature-id="' + desc.id + '"><img src="/img/arrow-circle-right-solid.svg" alt="..." class="fa-arrow-circle-right nav-next" data-feature-id="' + desc.id + '"></p>';
+        return box;
+    }
+
+    /**
+     * @method displayInfoBox
+     * @summary Display the info box with description of the hotspot opened and also with the controls to navigate through the next and previous features
+     * @param {Object} hs - Hotspot Object with all the properties needed for the hotspot */
+    function displayInfoBox(hs) {
+        var $infoBox = $("#info-box");
+        var desc = getFeatureDesc(hs.spotName);
+        var info = buildInfoBox(desc, false);
+        $infoBox.html(info);
+        $infoBox.addClass('displayed');
+        $infoBox.show();
+    }
+
+    /** @method getFeatureDesc
+     * @summary Get particular hotspot description, thumbnail and id based on the name of hotpsot given
+     * @param {string} spotName - Name of the hotspot whose description needs to be found*/
+    function getFeatureDesc(spotName) {
+        var desc;
+        var thumb;
+        var name, id;
+        if (_s.hotspotsData.length) {
+            $.each(_s.hotspotsData, function (i, d) {
+                if (d.spotName === spotName) {
+                    desc = d.description;
+                    thumb = d.src;
+                    name = d.featureName;
+                    id = d.id;
+                }
+            });
+        }
+        return {
+            desc: desc,
+            thumb: thumb,
+            name: name,
+            id: id
+        };
+    }
+
+    /**
+     * @method drawHotspot
+     * @summary Drawing particular hotspot on the frame given, by calculating the correct position of hotspot respective to the player
+     * @param {Object} hs - Hotspot Object with all the properties needed for the hotspot
+     * @param {number} left - left position of hotspot
+     * @param {number} top - top position of hotspot
+     * */
+    function drawHotspot(hs, left, top) {
+        var hotspot = $("<div/>");
+        hotspot.addClass('hotspot');
+        hotspot.attr("data-mainId", hs.mainId);
+
+        hotspot.css({'left': +left - 12.5, 'top': +top - 12.5});
+
+        //var hsicon = "<i title='"+hs.featureName+"' class='fa "+hs.iconName+"'></i>";
+        var hsicon = "<img src='/img/" + hs.iconName + ".svg'><span class='hover-title'>" + hs.featureName + "</span>";
+
+        hotspot.append(hsicon);
+        $("#hotspots-div").append(hotspot).fadeIn();
+        toggleHotspot();
+    }
+
+    /**
+     * @method getCoordinates
+     * @summary Scaling the coordinates of hotspot given to the current size of player
+     * @param {number} x - x-coordinate or left position of the hotspot given
+     * @param {number} y - y-coordinate or top position of the hotspot given
+     * @return {Object} Object of scaled position of hotspot respect to the rendered player in {x : scaled-left-position, y: scaled-top-position}*/
+    function getCoordinates(x, y) {
+        if (isEmpty(_s.baseImgWidth)) {
+            var p_width = x / 258;
+            if (_s.aspectRatio === 0.75) {
+                var p_height = y / 194;
+            } else {
+                var p_height = y / 145;
+            }
+        } else {
+            var p_width = x / (_s.baseImgWidth);
+            if (_s.aspectRatio === 0.75) {
+                var p_height = y / (_s.baseImgHeight);
+            } else {
+                var p_height = y / (_s.baseImgHeight);
+            }
+        }
+        var positionX = p_width * _s.playerWidth;
+        var positionY = p_height * _s.playerHeight;
+        return {x: positionX, y: positionY};
+
+    }
+
+    /**
+     * @method findHotspot
+     * @param {string} mainId - Id string of the hotspot need to be found
+     * @param {number} currentFrame - frame index in which hotspot needs to be found (current frame)
+     * @summary Iterates through all the hotspots in current frame and returns the found hotspot or false if nothing found
+     * @returns {(Object | false)} Hotspot found on the currentframe or false if nothing found*/
+    function findHotspot(mainId, currentFrame) {
+        var hotspot;
+        var hotspots = loadedData.allCars[currentFrame].hotSpot;
+        $.each(hotspots, function (i, hs) {
+            if (mainId === hs.mainId) {
+                hotspot = hs;
+            }
+        });
+        if (typeof hotspot === "undefined") {
+            return false;
+        } else {
+            return hotspot;
+        }
+    }
+
+    /**
+     * @method runPlayer
+     * @param {number} startFrame - Frame to start roating from (Current frame)
+     * @param {number} endFrame - Frame till where the player should rotate
+     * @param {Object} ctx - context of the canvas to draw the frames of player while rotating
+     * @param {string} [featureId] - Id of the hotspot if any to be focused at the end of player
+     * @param {number} menu - source of the invoked variable for logging stats
+     * @summary Rotates the player from current frame to the required frame and zooms if any feature is specified */
+    function runPlayer(startFrame, endFrame, ctx, featureId, menu) {
+        $("#info-box").removeClass('displayed');
+        $("#info-box").hide();
+        i = startFrame;
+        var total = loadedData.allCars.length,
+            dist = Math.abs(startFrame - endFrame),
+            outerDist = total - dist,
+            isForward = endFrame < startFrame ^ dist < outerDist; //finding to rotate player in forward or backward direction where 1 is forward and 0 is backward
+        clearInterval(_s.playerAnimation);
+        _s.playerAnimation = setInterval(function () {
+            window.ondeviceorientation = null;
+            _s.runAnim = true;
+            changeSpinIndicator(i);
+            _s.currentFrame = i;
+            draw(i, ctx, _s.playerWidth, _s.playerHeight);
+            _s.runAnim = false;
+
+            if (i === endFrame) {
+                clearInterval(_s.playerAnimation);
+                _s.currentFrame = i;
+                var hotspot = loadedData.allCars[_s.currentFrame].hotSpot;
+                if (hotspot.length) {
+                    $.each(hotspot, function (index, hs) {
+                        if (hs.mainId === featureId) {
+                            var pos = getCoordinates(hs.left, hs.top);
+                            /*=== added for the change of T476 ====*/
+                            var desc = getFeatureDesc(hs.spotName);
+                            if (desc.thumb) {
+                                var $img = $('<img/>');
+                                $img.attr('src', desc.thumb);
+                                displayModalImg($img);
+                                displayInfoBox(hs);
+                            } else {
+                                displayInfoBox(hs);
+                                if (_s.isThumbsPlayer && !_s.isThumbsOut) {
+                                    $('#feature-thumbs-container').fadeOut(100);
+                                }
+                                //zoomLevel += 2;
+                                //zoomImg(_s.currentFrame, "zoomin", {left: pos.x, top: pos.y});
+                                //_s.zoomIn = true;
+
+                            }
+                            /*=== added for the change of T476 ====*/
+                            var data = {}; //360 stats.
+                            data.hid = hs.mainId; //360 stats.
+                            data.featureName = hs.featureName;
+                            data.source = menu; //360 stats.
+                            data.timeStart = getCurDateTime();
+                            data.timeEnd = getCurDateTime();
+
+                            _s.stats.highlights[0] = data;
+                            //_s.zoomIn = true;
+                            //zoomLevel += 2;
+                            //zoomImg(_s.currentFrame, "zoomin", {left: pos.x, top: pos.y});
+                        }
+                    });
+                } else {
+                    //console.log("no hotspot");
+                }
+            }
+            if (isForward) {
+                if (++i === total) {
+                    i = 0;
+                }
+            } else {
+                if (--i === -1) {
+                    i = (total - 1);
+                }
+            }
+        }, 40);
+    }
+
+    /** @typedef {string} zoomAction
+     * @property {string} zoomin - zooms in the frame by one level and where max is _s.maxZoomLevel and 2 units of increment or decrement is considered as one level
+     * @property {string} zoomstepout - zooms out the frame by one level
+     * @property {string} zoomout - zooms out completely
+     * @summary Action to be specified while zooming the image */
+    /**
+     * @method zoomImg
+     * @param {zoomAction} action - Zoom action to be performed
+     * @param {Object} pos - Position to be focused while zooming a frame. Should contain ({left: left-distance, top:top-distance})
+     * @param {number} frame - Index of the frame to be zoomed
+     * @summary zooms the current displaying frame upto 300% of visibility*/
+    function zoomImg(frame, action, pos) {
+        closeShareList();
+        //alert('done');
+        var img = loadedZoomImages[frame];
+        if (!img) {
+            img = loadedImages[frame];
+            if (!loadedZoomImages[frame] && loadedData.allCars[frame].highResSrc) {
+                loadedZoomImages[frame] = new Image();
+                loadedZoomImages[frame].onload = function () {
+                    $('#zoom-div img').attr("src", this.src);
+                };
+                loadedZoomImages[frame].src = loadedData.allCars[frame].highResSrc;
+            }
+        }
+        if (img) {
+            if (zoomLevel === 12 && action === 'zoomin') {
+                $('#zoom-div').empty();
+                $('#zoom-div').append(img).show();
+                $('#zoom-div img').addClass('item');
+            }
+            switch (action) {
+                case 'zoomin':
+                    $('#zoom-in-icon').addClass('active');
+                    $('#zoom-out-icon').removeClass('active');
+                    break;
+                case 'zoomstepout':
+                    $('#zoom-out-icon').addClass('active');
+                    $('#zoom-in-icon').removeClass('active');
+                    break;
+                case 'zoomout':
+                    $('#zoom-out-icon').removeClass('active');
+                    break;
+            }
+            if ((action === 'zoomin' || action === 'zoomstepout') && zoomLevel >= 10 && zoomLevel <= _s.maxZoomLevel) {
+                window.ondeviceorientation = null;
+                $('#circle-indicator').fadeOut();
+                var e = $('#zoom-div');
+                var eimg = $(".item");
+                var center = _s.playerWidth / 2;
+                var middle = _s.playerHeight / 2;
+
+                var zoomedImgWidth = _s.playerWidth * zoomLevel / 10;
+                var zoomedImgHeight = _s.playerHeight * zoomLevel / 10;
+                var zoomSize = zoomedImgWidth / _s.playerWidth;
+                var aHeight = zoomedImgHeight - _s.playerHeight;
+                var aWidth = zoomedImgWidth - _s.playerWidth;
+                var left = -aWidth / 2 + 'px';
+                var top = -aHeight / 2 + 'px';
+                if (typeof pos !== "undefined") {
+                    left = center - (pos.left * zoomSize);
+                    if (left < 0) {
+                        if (Math.abs(left) > aWidth) {
+                            left = -Math.abs(aWidth);
+                        }
+                    } else if (left > 0) {
+                        left = 0;
+                    }
+                }
+
+                if (typeof pos !== "undefined") {
+                    top = middle - (pos.top * zoomSize);
+                    if (top < 0) {
+                        if (Math.abs(top) > aHeight) {
+                            top = -Math.abs(aHeight);
+                        }
+                    } else if (top > 0) {
+                        top = 0;
+                    }
+                }
+                if ($('#features-list ul li').length) {
+                    $('#features-list').fadeOut();
+                }
+                $("#zoom-div img").stop();
+                $("#zoom-div img").animate({width: zoomLevel * 10 + '%', left: left, top: top});
+                $('#zoom-out-icon').removeClass('disable');
+                $('#zoom-in-icon').removeClass('disable');
+                if (zoomLevel === _s.maxZoomLevel) {
+                    $('#zoom-in-icon').addClass('disable');
+                } else if (zoomLevel === 10) {
+                    $('#zoom-out-icon').addClass('disable');
+                }
+                var imgId = $("#zoom-div img").attr('id');
+
+            } else if (action === "zoomout") {
+                window.ondeviceorientation = drawPlayer;
+                $('#circle-indicator').fadeIn();
+                if ($('#features-list ul li').length) {
+                    $('#features-list').fadeIn();
+                }
+                $('#info-box').fadeOut();
+                $("#zoom-div img").animate({width: '100%', left: '0', top: '0'}, function () {
+                    $(this).parent().hide();
+                });
+                $('#zoom-out-icon').addClass('disable');
+                $('#zoom-in-icon').removeClass('active').removeClass('disable');
+                zoomLevel = 10;
+                _s.zoomIn = false;
+            }
+        }
+    }
+
+    /**
+     * @memberof EventListeners
+     * @summary Adding eventlisteners for panning functionality of zoomed frame
+     * @name Zoome Image Panning*/
+    var isDragging = false;
+    var zIndexTop = 1;
+    var prevX = 0;
+    var prevY = 0;
+    $("#zoom-div").on("mousedown touchstart", ".item", function (e) {
+        var $this = $(e.target);
+        if (typeof e.pageX !== "undefined" && e.pageX > 0) {
+            prevX = e.pageX;
+            prevY = e.pageY;
+        } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
+            prevX = e.originalEvent.touches[0].pageX;
+            prevY = e.originalEvent.touches[0].pageY;
+        }
+        isDragging = true;
+        if (e.cancelable) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+        }
+        $this.addClass('is-dragging');
+        $this.css('z-index', ++zIndexTop)
+    }).on("mouseup touchend", ".item", function (e) {
+        e.stopPropagation();
+        var $this = $(this);
+        isDragging = false;
+        $this.removeClass('is-dragging');
+    });
+
+    $("#zoom-div").on("mousemove touchmove", ".item", function (e) {
+        var touch = false;
+        if (typeof e.pageX !== "undefined" && e.pageX > 0) {
+            if (prevX === e.pageX) {
+                return;
+            }
+        } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
+            if (prevX === e.originalEvent.touches[0].pageX) {
+                return;
+            }
+        }
+
+        if (!isDragging) {
+            return;
+        }
+        var pageX = 0, pageY = 0;
+
+        if (typeof e.pageX !== "undefined" && e.pageX > 0) {
+            pageX = e.pageX;
+            pageY = e.pageY;
+        } else if (typeof e.originalEvent.touches[0].pageX !== "undefined") {
+            pageX = e.originalEvent.touches[0].pageX;
+            pageY = e.originalEvent.touches[0].pageY;
+            touch = true;
+        }
+        var $this = $(this);
+        var allowedHeight = $this.outerHeight() - _s.playerHeight;
+        var allowedWidth = $this.outerWidth() - _s.playerWidth;
+
+        var top = $this.position().top + pageY - prevY;
+        var left = $this.position().left + pageX - prevX;
+
+        //console.log(top,left);
+        if (top > 0) {
+            top = 0;
+        }
+
+        if (Math.abs(top) > allowedHeight) {
+            top = -Math.abs(allowedHeight);
+        }
+
+        if (left > 0) {
+            left = 0;
+        }
+        if (Math.abs(left) > allowedWidth) {
+            left = -Math.abs(allowedWidth);
+        }
+
+        // Stop propagation.
+        e.stopPropagation();
+
+
+        // Update position.
+        $this
+            .css('left', left + 'px')
+            .css('top', top + 'px');
+        prevX = pageX;
+        prevY = pageY;
+    });
+
+    $("#zoom-div .item").on("mouseout touchend touchleave", function (e) {
+        e.stopPropagation();
+        var $this = $(this);
+        isDragging = false;
+        $this.removeClass('is-dragging');
+    });
+
+    /**
+     * @method redrawPlayer
+     * @summary This method is invoked whenever we need to redraw the player i.e. while resizing the window or changing the orientation of phone e.t.c,
+     * This method calculates the playerWidth and playerHeight based on the available window size and max dimensions allowed and following the aspect ratio
+     * @example window.addEventListener('resize', redrawPlayer);*/
+    var redrawPlayer = function () {
+        var iOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g);
+        /*explicit ipad condition is used because while orientation change ipad innerwidth is not updateding, this condition can be removed if ipad functionality changes*/
+        if (isMobile()) {
+            if (iOS && iOS[0] === "iPad") {
+                $("#wrapper").css('width', window.outerWidth);
+                _s.playerWidth = window.outerWidth;
+                _s.playerHeight = _s.playerWidth * _s.aspectRatio;
+            } else {
+                $("#wrapper").css('width', $(window).innerWidth());
+                _s.playerWidth = $(window).innerWidth();
+                _s.playerHeight = _s.playerWidth * _s.aspectRatio;
+            }
+
+        } else {
+            $("#wrapper").css('width', '100%');
+            _s.playerWidth = $("#wrapper").width();
+            _s.playerHeight = _s.playerWidth * _s.aspectRatio;
+        }
+        if (_s.isThumbsOut) {
+            if (window.innerHeight < _s.playerHeight * 1.3) {
+                _s.playerWidth = window.innerHeight / (_s.aspectRatio * 1.3);
+                _s.playerHeight = _s.playerWidth * _s.aspectRatio;
+                $("#wrapper").width(_s.playerWidth);
+            }
+        } else {
+            if (window.innerHeight < _s.playerHeight) {
+                _s.playerWidth = window.innerHeight / _s.aspectRatio;
+                _s.playerHeight = _s.playerWidth * _s.aspectRatio;
+                $("#wrapper").width(_s.playerWidth);
+            }
+        }
+        $("#wrapper").height(_s.playerHeight);
+        if ($('#features-list ul li').length) {
+            $('#features-list').fadeIn();
+        }
+        $('#circle-indicator').fadeIn();
+        /*if(_s.zoomIn){
+            zoomImg(_s.currentFrame, 'zoomout');
+        }*/
+        $("#zoom-div img").animate(
+            {width: '100%', left: '0', top: '0'}, function () {
+                $(this).parent().hide();
+            });
+        $('#zoom-out-icon').removeClass('active').addClass('disable');
+        $('#zoom-in-icon').removeClass('active').removeClass('disable');
+        zoomLevel = 10;
+        _s.zoomIn = false;
+        $('#features-list ul').hide();
+
+        ctx.canvas.width = _s.playerWidth;
+        ctx.canvas.height = _s.playerHeight;
+        _s.redrawImgCount = getSpeed(_s.totalImages);
+        setSpinIndicator();
+        changeSpinIndicator();
+        if (thumbsSlider) {
+            thumbsSlider.update();
+        }
+        draw(_s.currentFrame, ctx, _s.playerWidth, _s.playerHeight, true);
+    };
+    window.addEventListener('resize', redrawPlayer);
+
+    /**
+     * @method hideNavbar
+     * @summary This method hides all the elements on player excluding spinner to enhance the visibility of player. This method also sends a post message to parent to remove any elements place on the player */
+    function hideNavbar() {
+        $('.ctrls').slideUp(100);
+        if ($('#features-list ul li').length) {
+            $('#features-list').slideUp(100);
+        }
+        if (_s.isThumbsPlayer) {
+            if (_s.isThumbsOut) {
+                $('.feature-thumbs-wrapper .toggle-button').slideUp(100)
+            } else {
+                $('#feature-thumbs-container').fadeOut(100);
+            }
+        }
+        parent.postMessage(JSON.stringify({"action": "removeCross"}), "*");
+    }
+
+    /**
+     * @method unhideNavbar
+     * @summary This method unhides all the elements on player to revert back the full functionality of the player and also sends a post message to parent to place back any hidden elements on player*/
+    function unhideNavbar() {
+        $('.ctrls').slideDown(100);
+        if ($('#features-list ul li').length) {
+            $('#features-list').slideDown(100);
+        }
+        if (_s.isThumbsPlayer) {
+            if (_s.isThumbsOut) {
+                $('.feature-thumbs-wrapper .toggle-button').slideDown(100)
+            } else {
+                $('#feature-thumbs-container').fadeIn(100);
+            }
+        }
+        parent.postMessage(JSON.stringify({"action": "addCross"}), "*");
+    }
+
+    //360 stats enhancement - 29th jan 2018.
+
+    /** @method toggleHotspot
+     * @summary This function toggles the hotspots visibility based on a flag _s.showHighlights */
     function toggleHotspot() {
         if (_s.showHighlights) {
             $('.hotspot').show();
@@ -1615,6 +1735,10 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
         }
     }
 
+    /**
+     * @method logStats
+     * @param {Object} data - Object of data needed for logging stats of player
+     * @summary This function is invoked when ever we need to log a stat*/
     function logStats(data) {
         var form_data = {
             opens: data.opens || 0,
@@ -1653,6 +1777,10 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
         });*/
     }
 
+    /**
+     * @method getCurDateTime
+     * @summary This function is used to convert date object to local string similat to toLocalString() method
+     * @return {string} date in yyyy-mm-dd hh:mm:ss format*/
     function getCurDateTime() {
         var d = new Date();
         var dd = d.getDate();
@@ -1685,13 +1813,25 @@ Object.defineProperty(Object.prototype, 'forEveryElement', {
         return yyyy + "-" + mn + "-" + dd + " " + hh + ":" + mm + ":" + ss;
     }
 
+    /**
+     * @method getAspectRatio
+     * @param {int} [imgwidth] - Width of the image whose aspect ratio needs to be found
+     * @param {int} [imgheight] - Height of the image whose aspect ratio needs to be found
+     * @return {float} Returns aspect ratio height/width
+     * @summary Aspect ratio of image/player is calculated at very beginning of execution and maintained through out the player*/
     function getAspectRatio(imgwidth, imgheight) {
         var width = imgwidth || Number(window.globalVar.maxWidth);
         var height = imgheight || Number(window.globalVar.maxHeight);
         return height / width;
     }
+
+    /**
+     * @method isEmpty
+     * @param {string} val - value needs to be verified for empty
+     * @summary Use this function to check availability of any query parameter
+     * @return {boolean} This function returns true if any value is not present or undefined or 0 or negative mostly used to verify query parameter*/
     function isEmpty(val) {
-        return (val === undefined || val == null || val == 0 || val.length <= 0) ? true : false;
+        return (val === undefined || val == null || val == 0 || val.length <= 0);
     }
 }(window));
 /* ==== code for image slider starts here ==== */
@@ -1887,7 +2027,6 @@ Player360.prototype.clone = function (src) {
 };
 Player360.prototype.deepmerge = function (target, src) {
     var first = src;
-
     return (function merge(target, src) {
         if (Array.isArray(src)) {
             if (!target || !Array.isArray(target)) {
@@ -1937,9 +2076,7 @@ Player360.prototype.elements = function () {
 };
 Player360.prototype.DEFAULTS = function () {
     return {
-        carImgs: [],
-        carsData: [],
-        hsData: [],
+        hotspotsData: [],
         lastX: 0,
         direction: "",
         currentFrame: 0,
@@ -1953,7 +2090,6 @@ Player360.prototype.DEFAULTS = function () {
         maxImageHeight: this.maxImageWidth * this.aspectRatio,
         redrawImgCount: 3,
         resetRedrawCount: 0,
-        requiredImgCount: 216,
         zoomIn: false,
         spinCompleted: 0,
         stats: {

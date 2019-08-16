@@ -326,18 +326,31 @@ canvas {
 .thumbs-inline-player .ctrls,
 .thumbs-out-player .ctrls{
     bottom: auto;
-    top: 8px;
+    top: 4px;
 }
-
+.ctrls.bottom-right{
+    top: auto;
+    bottom: 4px;
+}
+.ctrls.bottom-left{
+    top: auto;
+    bottom: 4px;
+    right: 4px;
+    left: auto;
+}
 .ctrls {
     position: absolute;
-    bottom: 8px;
+    bottom: 4px;
     left: 4px;
     z-index: 12;
 }
 .ctrls.position-bottom-right{
     right: 4px;
     left: auto;
+}
+.ctrls.bottom-right ul,
+.ctrls.bottom-left ul{
+    flex-direction: column;
 }
 .ctrls ul {
     display: flex;
@@ -348,7 +361,7 @@ canvas {
 
 .ctrls ul li {
     background: #000;
-    margin: 0 4px;
+    margin: 4px;
     padding: 10px;
     color: white;
     user-select: none;
@@ -910,7 +923,7 @@ canvas {
 /*==== styles for 360 spin indicator ====*/
 .thumbs-inline-player #circle-indicator,
 .thumbs-out-player #circle-indicator{
-    top: 8px;
+    top: 4px;
     bottom: auto;
 }
 /*#circle-indicator.mobile{
