@@ -47,7 +47,13 @@ var renderMarker = function() {
         data.markers = getMarkers(data.markers);
         //console.log(window.innerHeight, window.innerWidth);
         var navBarData = [
-
+            {
+                id : 'exterior',
+                title : 'Exteriror player',
+                className: 'psv-button--hover-scale',
+                content : carIcon,
+                onClick : openExteriroPlayer
+            }
         ];
         if(data.markers.length){
             navBarData.push(
@@ -374,6 +380,9 @@ var renderMarker = function() {
             data.markers.forEach(function (marker) {
                 viewer.toggleMarker(marker);
             })
+        }
+        function openExteriroPlayer() {
+            window.location = '/thumbs/360_player_v2.html?thumbs_player=1&thumbs_out=1'
         }
         function toggleFullScreen() {
             var elem = document.body;
