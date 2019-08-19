@@ -37,7 +37,7 @@
     <div class="interior-button exterior-components">
         <a href="/pano/360_player_v2.html?playerType=interior-pano&thumbs_player=1&thumbs_out=1">See Inside</a>
     </div>
-    <div class="ctrls exterior-components">
+    <div class="ctrls exterior-components" style="display: none;">
         <!--<ul id="ctrls-toggle-button">
             <li>
                 <img id="arrow-down" src="&lt;!&ndash;ROOT_PATH&ndash;&gt;/apps/360playerV4./img/chevron-down-solid.svg" alt="..." style="display: block;">
@@ -176,6 +176,8 @@ window.firstLoadImg = "https:\/\/gcsimages.storage.googleapis.com\/clients\/224\
         window.globalVar.initLoad = false;
         window.globalVar.maxWidth = 960;
         window.globalVar.maxHeight = 540;
+        window.globalVar.hideNavBar = window.query.hide_buttons || "";
+        window.globalVar.isGyroscope = window.query.gyroscope_spin || null;
 
         if(query.initLoad!="" && (query.initLoad=='true' || query.initLoad=='1'))
             window.globalVar.initLoad = true;
@@ -241,7 +243,7 @@ window.firstLoadImg = "https:\/\/gcsimages.storage.googleapis.com\/clients\/224\
     }
     /* ============= End of IE Polyfill for object.find  ============ */
     /* ============= Full screen polyfill for vendor prefix browsers ============ */
-    const spec = [
+    var spec = [
         'fullscreen',
         'fullscreenEnabled',
         'fullscreenElement',
@@ -251,7 +253,7 @@ window.firstLoadImg = "https:\/\/gcsimages.storage.googleapis.com\/clients\/224\
         'requestFullscreen'
     ];
 
-    const webkit = [
+    var webkit = [
         'webkitIsFullScreen',
         'webkitFullscreenEnabled',
         'webkitFullscreenElement',
@@ -261,7 +263,7 @@ window.firstLoadImg = "https:\/\/gcsimages.storage.googleapis.com\/clients\/224\
         'webkitRequestFullscreen'
     ];
 
-    const moz = [
+    var moz = [
         'mozFullScreen',
         'mozFullScreenEnabled',
         'mozFullScreenElement',
@@ -271,7 +273,7 @@ window.firstLoadImg = "https:\/\/gcsimages.storage.googleapis.com\/clients\/224\
         'mozRequestFullScreen'
     ];
 
-    const ms = [
+    var ms = [
         '',
         'msFullscreenEnabled',
         'msFullscreenElement',
@@ -285,8 +287,8 @@ window.firstLoadImg = "https:\/\/gcsimages.storage.googleapis.com\/clients\/224\
     document ? document : (document = {})
 
     // Get the vendor fullscreen prefixed api
-    const fsVendorKeywords = (function getFullscreenApi () {
-        const fullscreenEnabled = [spec[1], webkit[1], moz[1], ms[1]].find(function(prefix){return document[prefix]})
+    var fsVendorKeywords = (function getFullscreenApi () {
+        var fullscreenEnabled = [spec[1], webkit[1], moz[1], ms[1]].find(function(prefix){return document[prefix]})
         return [spec, webkit, moz, ms].find(function(vendor) {
             return vendor.find(function(prefix) {return prefix === fullscreenEnabled})
         }) || []

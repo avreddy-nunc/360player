@@ -1,5 +1,7 @@
 /** @namespace 360 Player */
 /** @namespace EventListeners */
+/** @namespace URL Parameters
+ *  @description URL Parameters are  used to extend the features and functionality of the player and are not mandatory, any parameter can be used only to activate respective feature otherwise defaults will be considered*/
 /**
  * @summary We are adding forEveryElement property to existing element object to use it even for multiple elements select
  * @example document.querySelectorAll('.className').forEveryElement(function(elem){
@@ -79,8 +81,20 @@ Array.prototype.tweenLoad = function (callback) {
     _s.aspectRatio = getAspectRatio();
     _s.playerWidth = parseFloat($('#wrapper').width());
     _s.playerHeight = _s.playerWidth * _s.aspectRatio;
+    /**
+     * @memberOf URL Parameters
+     * @name player_width
+     * @summary Maximum width of the player allowed. Current default value is 1200 and can be modified in player_360_settings.php
+     * @example <-- 360 player url -->?player_width=1200 //specify the maximum needed width of the player*/
     _s.maxImageWidth = Number(window.globalVar.maxWidth);
     _s.maxImageHeight = _s.maxImageWidth * _s.aspectRatio;
+    /**
+     * @memberOf URL Parameters
+     * @name hide_buttons
+     * @summary Toggle the display of controls and buttons on player for maximum player visibility. This feature is implemented for emebedding the 360 player in android and ios applications without feature buttons on it
+     * @example <-- 360 player url -->?hide_buttons=1 // 1 for enabling the feature i.e. Hiding the buttons on player
+     * <-- 360 player url -->?hide_buttons=0 // 0 or no parameter disables the feature i.e. Unhides the buttons on player*/
+    _s.hideNavBar = !isEmpty(window.globalVar.hideNavBar);
     _s.maxZoomLevel = 40;
     _s.redrawImgCount = 3;
     _s.resetRedrawCount = 0;
@@ -100,8 +114,29 @@ Array.prototype.tweenLoad = function (callback) {
     _s.swipeTotalImages = (window.globalVar.totalImages && !isNaN(Number(window.globalVar.totalImages)) && Number(window.globalVar.totalImages)) ? Number(window.globalVar.totalImages) : 0;
     _s.baseImgWidth = window.globalVar.baseImgWidth;
     _s.baseImgHeight = window.globalVar.baseImgHeight;
+
+    /** @memberOf URL Parameters
+     * @summary Toggle the functionality of Feature thumbnails slider on 360 Player, Allowed values are 0 and 1
+     * @name thumbs_player
+     * @example <-- 360 player url -->?thumbs_player=1 // 1 for enabling the feature i.e. Generating and displaying the thumbnails slider on the player
+     * <-- 360 player url -->?thumbs_player=0 // 0 or no parameter disables the feature i.e. No feathure thumbnails slider is displayed on the player. Default feature button will be displayed*/
     _s.isThumbsPlayer = !isEmpty(window.globalVar.isThumbsPlayer);
+
+    /** @memberOf URL Parameters
+     * @summary Toggles the position of feature thumbnails to below the player and on the player.<br>
+     * <b>Note:</b> This feature is ignored without {@linkcode #thumbs_player thumbs_player} feature enabled and this feature also effects the aspect ratio of the player
+     * @name thumbs_out
+     * @example <-- 360 player url -->?thumbs_player=1&thumbs_out=1 // 1 enables the feature i.e Pushes the thumbnail slider to the below the player.
+     * <-- 360 player url -->?thumbs_player=1&thumbs_out=0 // 0 or no parameter disables the feature i.e. Feature thumbnail slider will be displayed on the player */
     _s.isThumbsOut = !isEmpty(window.globalVar.isThumbsOut);
+
+    /** @memberOf URL Parameters
+     * @summary Toggles the automatic spinning of player using mobile device gyroscope data<br>
+     * <b>Note</b> This feature is completely subjected to the availability of gyroscope api in mobile devices
+     * @name gyroscope_spin
+     * @example <-- 360 player url -->?gyroscope_spin=1 // 1 enables the feature i.e. Spins the player according to gyroscope data
+     * <-- 360 player url -->?gyroscope_spin=0 // 0 or no param disables the feature i.e. Gyroscope data of device is ignored */
+    _s.isGyroscope = !isEmpty(window.globalVar.isGyroscope);
 
     $('#wrapper').height(_s.playerHeight);
 
@@ -180,29 +215,6 @@ Array.prototype.tweenLoad = function (callback) {
     document.addEventListener("webkitfullscreenchange", fullscreenChanged, false);
     document.addEventListener("webkitfullscreenchange", fullscreenChanged, false);
 
-    if(_s.isThumbsPlayer && _s.isThumbsOut){
-        var ctrlsLeft = $('<ul>')[0];
-        ctrlsLeft.appendChild($('#ext-player-icon').clone(true)[0]);
-        ctrlsLeft.appendChild($('#int-player-icon').clone(true)[0]);
-        ctrlsLeft.appendChild($('#pano-player-icon').clone(true)[0]);
-        ctrlsLeft.appendChild($('#zoom-in-icon').clone(true)[0]);
-        ctrlsLeft.appendChild($('#zoom-out-icon').clone(true)[0]);
-        ctrlsLeft.appendChild($('#hotspots-icon').clone(true)[0]);
-        var ctrlsRight = $('<ul>')[0];
-        ctrlsRight.appendChild($('#facebook-icon').clone(true)[0]);
-        ctrlsRight.appendChild($('#twitter-icon').clone(true)[0]);
-        ctrlsRight.appendChild($('#fullscreen-icon').clone(true)[0]);
-        $('.ctrls').remove();
-        var leftContainerDiv = $('<div>')[0],
-            rightContainerDiv = $('<div>')[0];
-        leftContainerDiv.classList.add('ctrls');
-        leftContainerDiv.classList.add('bottom-right');
-        leftContainerDiv.appendChild(ctrlsLeft);
-        rightContainerDiv.classList.add('ctrls');
-        rightContainerDiv.classList.add('bottom-left');
-        rightContainerDiv.appendChild(ctrlsRight);
-        $('#wrapper').append(leftContainerDiv).append(rightContainerDiv);
-    }
     /**
      * @method closeShareList
      * @summary Closing the sharing icons expanded list */
@@ -383,15 +395,10 @@ Array.prototype.tweenLoad = function (callback) {
         setSpinIndicator(loadedCount);
     }
 
-    var speed = window.query.speed;
-
-    if ($.isNumeric(speed)) {
-        _s.redrawImgCount = parseInt(speed);
-    }
-
     $('#loading-div').fadeIn();
 
     /*=== function to get spee dof rotation based on images loaded ===*/
+    
     function getSpeed(totalCount) {
         var speed = 3;
         //var speed = 0;
@@ -413,11 +420,11 @@ Array.prototype.tweenLoad = function (callback) {
 
     if (isMobile() && _s.isThumbsPlayer) {
         window.addEventListener('orientationchange', function () {
-            initThumbsPlaye();
+            initThumbsPlayer();
         })
     }
 
-    function initThumbsPlaye() {
+    function initThumbsPlayer() {
         if (isMobile() && !isEmpty(window.globalVar.isThumbsOut)) {
             _s.isThumbsOut = (window.orientation == '0' || window.orientation == '180');
         }
@@ -434,6 +441,47 @@ Array.prototype.tweenLoad = function (callback) {
         if (_s.hotspotsData.length) {
             document.getElementById('feature-thumbs-container').style.display = "block"
         }
+        if(_s.isThumbsOut){
+            var ctrlsLeft = $('<ul>')[0];
+            ctrlsLeft.appendChild($('#ext-player-icon').clone(true)[0]);
+            ctrlsLeft.appendChild($('#int-player-icon').clone(true)[0]);
+            ctrlsLeft.appendChild($('#pano-player-icon').clone(true)[0]);
+            ctrlsLeft.appendChild($('#zoom-in-icon').clone(true)[0]);
+            ctrlsLeft.appendChild($('#zoom-out-icon').clone(true)[0]);
+            ctrlsLeft.appendChild($('#hotspots-icon').clone(true)[0]);
+            var ctrlsRight = $('<ul>')[0];
+            ctrlsRight.appendChild($('#facebook-icon').clone(true)[0]);
+            ctrlsRight.appendChild($('#twitter-icon').clone(true)[0]);
+            ctrlsRight.appendChild($('#fullscreen-icon').clone(true)[0]);
+            $('.ctrls').remove();
+            var leftContainerDiv = $('<div>')[0],
+                rightContainerDiv = $('<div>')[0];
+            leftContainerDiv.classList.add('ctrls');
+            leftContainerDiv.classList.add('bottom-right');
+            leftContainerDiv.appendChild(ctrlsLeft);
+            rightContainerDiv.classList.add('ctrls');
+            rightContainerDiv.classList.add('bottom-left');
+            rightContainerDiv.appendChild(ctrlsRight);
+            $('#wrapper').append(leftContainerDiv).append(rightContainerDiv);
+            $('.interior-button').removeClass('v-center')
+        }else{
+            var controlsDiv = $('<div>')[0];
+            controlsDiv.classList.add('ctrls');
+            var ctrls = $('<ul>')[0];
+            ctrls.appendChild($('#ext-player-icon').clone(true)[0]);
+            ctrls.appendChild($('#int-player-icon').clone(true)[0]);
+            ctrls.appendChild($('#pano-player-icon').clone(true)[0]);
+            ctrls.appendChild($('#zoom-in-icon').clone(true)[0]);
+            ctrls.appendChild($('#zoom-out-icon').clone(true)[0]);
+            ctrls.appendChild($('#hotspots-icon').clone(true)[0]);
+            ctrls.appendChild($('#facebook-icon').clone(true)[0]);
+            ctrls.appendChild($('#twitter-icon').clone(true)[0]);
+            ctrls.appendChild($('#fullscreen-icon').clone(true)[0]);
+            $('.ctrls').remove();
+            controlsDiv.appendChild(ctrls);
+            $('#wrapper').append(controlsDiv);
+            $('.interior-button').addClass('v-center')
+        }
     }
 
     function setPlayerSize(imgWidth, imgHeight) {
@@ -449,12 +497,6 @@ Array.prototype.tweenLoad = function (callback) {
         } else if (_s.aspectRatio === 0.75) {
             $("#ar").addClass('ar-4-3');
         } else {
-            if (imgWidth > _s.maxImageWidth) {
-                otherWidth = _s.maxImageWidth;
-            } else {
-                otherWidth = imgWidth;
-            }
-            $wrapper.css('max-width', otherWidth + 'px');
             $("#ar").css('padding-bottom', _s.aspectRatio * 100 + '%');
         }
         var iOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g);
@@ -547,7 +589,7 @@ Array.prototype.tweenLoad = function (callback) {
                         "<div class='slide-title'>" + feature.featureName + "</div></div>"
                 });
                 document.getElementById('feature-thumbs').innerHTML = features;
-                initThumbsPlaye();
+                initThumbsPlayer();
                 thumbsSlider = new imageSlider(
                     {
                         "sliderId": 'feature-thumbs',
@@ -579,12 +621,14 @@ Array.prototype.tweenLoad = function (callback) {
                     features += "<li data-fid='" + f.id + "'>" + f.featureName + "</li>";
                 });
                 $("#features-list ul").append(features);
+            if (!_s.hideNavBar) {
                 $("#features-list").show();
                 $('#hotspots-icon').show();
             }
+            }
         } else {
             if (_s.isThumbsPlayer) {
-                initThumbsPlaye();
+                initThumbsPlayer();
             }
             $("#features-list").hide();
             $('#hotspots-icon').hide();
@@ -613,6 +657,11 @@ Array.prototype.tweenLoad = function (callback) {
             //alert(window.globalVar.rotationReverse);
             loadedData.allCars.reverse();
             loadedImages.reverse();
+        }
+        if (_s.hideNavBar) {
+            hideNavbar();
+        }else {
+            unhideNavbar();
         }
         registerEvents(ctx);
         if (_s.isThumbsPlayer && loadedData.allCars.length >= 4) {
@@ -677,7 +726,7 @@ Array.prototype.tweenLoad = function (callback) {
         $("#loading-div").fadeOut();
         if (window.DeviceMotionEvent) {
             _s.lastAlpha = 0;
-            window.ondeviceorientation = drawPlayer;
+            startGyroscopeActivity();
         }
         var wrapper = document.getElementById('wrapper');
         wrapper.style.backgroundImage = "none";
@@ -820,7 +869,7 @@ Array.prototype.tweenLoad = function (callback) {
         /**
          * @summary Evenet Listeners to detect the swipe on player to rotate it
          * @memberOf EventListeners
-         * @name */
+         * @name Swipe detection on player*/
         $("body").on("mousedown touchstart", "#hotspots-div", function (e) {
             $("#hotspots-div").removeClass("touch_mode_grab")
                 .addClass("touch_mode_grabbing");
@@ -856,7 +905,7 @@ Array.prototype.tweenLoad = function (callback) {
                 unhideNavbar();
                 return;
             }
-            window.ondeviceorientation = null;
+            stopGyroscopeActivity()
             hideNavbar();
             closeShareList();
             var pageX = 0;
@@ -898,7 +947,7 @@ Array.prototype.tweenLoad = function (callback) {
             if (_s.runAnim) {
                 _s.runAnim = false;
                 unhideNavbar();
-                window.ondeviceorientation = drawPlayer;
+                startGyroscopeActivity();
             }
         });
 
@@ -1062,6 +1111,16 @@ Array.prototype.tweenLoad = function (callback) {
 
     /*=========== end of functions for 360 spin indicators ====*/
 
+    /* ======= gyroscope toggling functions ==== */
+    function stopGyroscopeActivity() {
+        window.ondeviceorientation = null;
+    }
+    function startGyroscopeActivity() {
+        if(isMobile() && _s.isGyroscope){
+            window.ondeviceorientation = drawPlayer;
+        }
+    }
+    /* ======= end of gyroscope toggling functions ==== */
     /**
      * @method goToFeature
      * @summary To run the player till the desired feature is visible, Invoked when you click the hotspot or feature thumbnail
@@ -1455,7 +1514,7 @@ Array.prototype.tweenLoad = function (callback) {
                     break;
             }
             if ((action === 'zoomin' || action === 'zoomstepout') && zoomLevel >= 10 && zoomLevel <= _s.maxZoomLevel) {
-                window.ondeviceorientation = null;
+                stopGyroscopeActivity();
                 $('#circle-indicator').fadeOut();
                 var e = $('#zoom-div');
                 var eimg = $(".item");
@@ -1505,9 +1564,9 @@ Array.prototype.tweenLoad = function (callback) {
                 var imgId = $("#zoom-div img").attr('id');
 
             } else if (action === "zoomout") {
-                window.ondeviceorientation = drawPlayer;
+                startGyroscopeActivity();
                 $('#circle-indicator').fadeIn();
-                if ($('#features-list ul li').length) {
+                if ($('#features-list ul li').length && !_s.hideNavBar) {
                     $('#features-list').fadeIn();
                 }
                 $('#info-box').fadeOut();
@@ -1710,16 +1769,18 @@ Array.prototype.tweenLoad = function (callback) {
      * @method unhideNavbar
      * @summary This method unhides all the elements on player to revert back the full functionality of the player and also sends a post message to parent to place back any hidden elements on player*/
     function unhideNavbar() {
-        $('.ctrls').slideDown(100);
-        $('.interior-button').slideDown(100);
-        if ($('#features-list ul li').length) {
-            $('#features-list').slideDown(100);
-        }
-        if (_s.isThumbsPlayer) {
-            if (_s.isThumbsOut) {
-                $('.feature-thumbs-wrapper .toggle-button').slideDown(100)
-            } else {
-                $('#feature-thumbs-container').fadeIn(100);
+        if(!_s.hideNavBar) {
+            $('.ctrls').slideDown(100);
+            $('.interior-button').slideDown(100);
+            if ($('#features-list ul li').length) {
+                $('#features-list').slideDown(100);
+            }
+            if (_s.isThumbsPlayer) {
+                if (_s.isThumbsOut) {
+                    $('.feature-thumbs-wrapper .toggle-button').slideDown(100)
+                } else {
+                    $('#feature-thumbs-container').fadeIn(100);
+                }
             }
         }
         parent.postMessage(JSON.stringify({"action": "addCross"}), "*");
