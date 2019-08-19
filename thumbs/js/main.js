@@ -118,6 +118,7 @@ Array.prototype.tweenLoad = function (callback) {
     /** @memberOf URL Parameters
      * @summary Toggle the functionality of Feature thumbnails slider on 360 Player, Allowed values are 0 and 1
      * @name thumbs_player
+     * @see initThumbsPlayer
      * @example <-- 360 player url -->?thumbs_player=1 // 1 for enabling the feature i.e. Generating and displaying the thumbnails slider on the player
      * <-- 360 player url -->?thumbs_player=0 // 0 or no parameter disables the feature i.e. No feathure thumbnails slider is displayed on the player. Default feature button will be displayed*/
     _s.isThumbsPlayer = !isEmpty(window.globalVar.isThumbsPlayer);
@@ -424,6 +425,8 @@ Array.prototype.tweenLoad = function (callback) {
         })
     }
 
+    /** @method initThumbsPlayer
+     * @summary This method modifies the player controls and dimensions corresponds to feature thumbnail slider*/
     function initThumbsPlayer() {
         if (isMobile() && !isEmpty(window.globalVar.isThumbsOut)) {
             _s.isThumbsOut = (window.orientation == '0' || window.orientation == '180');
@@ -484,6 +487,10 @@ Array.prototype.tweenLoad = function (callback) {
         }
     }
 
+    /** @method setPlayerSize
+     * @param imgWidth {number} - Width of the images loaded
+     * @param imgHeight {number} - Height of the images loaded
+     * @summary This function is called when first image of the player is loaded with its dimensions, loaded image dimensions are used to build player of same size*/
     function setPlayerSize(imgWidth, imgHeight) {
 
         var $wrapper = $('#wrapper');
@@ -547,6 +554,9 @@ Array.prototype.tweenLoad = function (callback) {
         }
     }
 
+    /** @method drawPlayer
+     * @param e {Event} - Gyroscope event obtained from the deviceorientation api
+     * @summary To rotate the player based on the gyroscope data provided by the device. This function is executed only when gyroscopic spin is enabled from URL Parameters*/
     function drawPlayer(e) {
         //console.log(e.alpha);
         if (e.alpha) {

@@ -27,7 +27,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="EventListeners.html">EventListeners</a></li><li><a href="360%2520Player.html">360 Player</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_s">_s</a></li><li><a href="global.html#buildInfoBox">buildInfoBox</a></li><li><a href="global.html#changeSpinIndicator">changeSpinIndicator</a></li><li><a href="global.html#closeFullscreen">closeFullscreen</a></li><li><a href="global.html#closeShareList">closeShareList</a></li><li><a href="global.html#displayInfoBox">displayInfoBox</a></li><li><a href="global.html#displayModalImg">displayModalImg</a></li><li><a href="global.html#drawHotspot">drawHotspot</a></li><li><a href="global.html#findHotspot">findHotspot</a></li><li><a href="global.html#forEveryElement">forEveryElement</a></li><li><a href="global.html#fullscreenChanged">fullscreenChanged</a></li><li><a href="global.html#getAspectRatio">getAspectRatio</a></li><li><a href="global.html#getCoordinates">getCoordinates</a></li><li><a href="global.html#getCurDateTime">getCurDateTime</a></li><li><a href="global.html#getFeatureDesc">getFeatureDesc</a></li><li><a href="global.html#getGoToFrame">getGoToFrame</a></li><li><a href="global.html#goToFeature">goToFeature</a></li><li><a href="global.html#hideNavbar">hideNavbar</a></li><li><a href="global.html#isEmpty">isEmpty</a></li><li><a href="global.html#isMobile">isMobile</a></li><li><a href="global.html#logStats">logStats</a></li><li><a href="global.html#redrawPlayer">redrawPlayer</a></li><li><a href="global.html#registerEvents">registerEvents</a></li><li><a href="global.html#runPlayer">runPlayer</a></li><li><a href="global.html#setSpinIndicator">setSpinIndicator</a></li><li><a href="global.html#showHotspot">showHotspot</a></li><li><a href="global.html#toggleHotspot">toggleHotspot</a></li><li><a href="global.html#tweenLoad">tweenLoad</a></li><li><a href="global.html#unhideNavbar">unhideNavbar</a></li><li><a href="global.html#zoomImg">zoomImg</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="EventListeners.html">EventListeners</a></li><li><a href="URL%2520Parameters.html">URL Parameters</a></li><li><a href="360%2520Player.html">360 Player</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_s">_s</a></li><li><a href="global.html#buildInfoBox">buildInfoBox</a></li><li><a href="global.html#changeSpinIndicator">changeSpinIndicator</a></li><li><a href="global.html#closeFullscreen">closeFullscreen</a></li><li><a href="global.html#closeShareList">closeShareList</a></li><li><a href="global.html#displayInfoBox">displayInfoBox</a></li><li><a href="global.html#displayModalImg">displayModalImg</a></li><li><a href="global.html#drawHotspot">drawHotspot</a></li><li><a href="global.html#drawPlayer">drawPlayer</a></li><li><a href="global.html#findHotspot">findHotspot</a></li><li><a href="global.html#forEveryElement">forEveryElement</a></li><li><a href="global.html#fullscreenChanged">fullscreenChanged</a></li><li><a href="global.html#getAspectRatio">getAspectRatio</a></li><li><a href="global.html#getCoordinates">getCoordinates</a></li><li><a href="global.html#getCurDateTime">getCurDateTime</a></li><li><a href="global.html#getFeatureDesc">getFeatureDesc</a></li><li><a href="global.html#getGoToFrame">getGoToFrame</a></li><li><a href="global.html#goToFeature">goToFeature</a></li><li><a href="global.html#hideNavbar">hideNavbar</a></li><li><a href="global.html#initThumbsPlayer">initThumbsPlayer</a></li><li><a href="global.html#isEmpty">isEmpty</a></li><li><a href="global.html#isMobile">isMobile</a></li><li><a href="global.html#logStats">logStats</a></li><li><a href="global.html#redrawPlayer">redrawPlayer</a></li><li><a href="global.html#registerEvents">registerEvents</a></li><li><a href="global.html#runPlayer">runPlayer</a></li><li><a href="global.html#setPlayerSize">setPlayerSize</a></li><li><a href="global.html#setSpinIndicator">setSpinIndicator</a></li><li><a href="global.html#showHotspot">showHotspot</a></li><li><a href="global.html#toggleHotspot">toggleHotspot</a></li><li><a href="global.html#tweenLoad">tweenLoad</a></li><li><a href="global.html#unhideNavbar">unhideNavbar</a></li><li><a href="global.html#zoomImg">zoomImg</a></li></ul>
 </nav>
 
 <div id="main">
@@ -44,6 +44,8 @@
         <article>
             <pre class="prettyprint source linenums"><code>/** @namespace 360 Player */
 /** @namespace EventListeners */
+/** @namespace URL Parameters
+ *  @description URL Parameters are  used to extend the features and functionality of the player and are not mandatory, any parameter can be used only to activate respective feature otherwise defaults will be considered*/
 /**
  * @summary We are adding forEveryElement property to existing element object to use it even for multiple elements select
  * @example document.querySelectorAll('.className').forEveryElement(function(elem){
@@ -123,8 +125,20 @@ Array.prototype.tweenLoad = function (callback) {
     _s.aspectRatio = getAspectRatio();
     _s.playerWidth = parseFloat($('#wrapper').width());
     _s.playerHeight = _s.playerWidth * _s.aspectRatio;
+    /**
+     * @memberOf URL Parameters
+     * @name player_width
+     * @summary Maximum width of the player allowed. Current default value is 1200 and can be modified in player_360_settings.php
+     * @example &lt;-- 360 player url -->?player_width=1200 //specify the maximum needed width of the player*/
     _s.maxImageWidth = Number(window.globalVar.maxWidth);
     _s.maxImageHeight = _s.maxImageWidth * _s.aspectRatio;
+    /**
+     * @memberOf URL Parameters
+     * @name hide_buttons
+     * @summary Toggle the display of controls and buttons on player for maximum player visibility. This feature is implemented for emebedding the 360 player in android and ios applications without feature buttons on it
+     * @example &lt;-- 360 player url -->?hide_buttons=1 // 1 for enabling the feature i.e. Hiding the buttons on player
+     * &lt;-- 360 player url -->?hide_buttons=0 // 0 or no parameter disables the feature i.e. Unhides the buttons on player*/
+    _s.hideNavBar = !isEmpty(window.globalVar.hideNavBar);
     _s.maxZoomLevel = 40;
     _s.redrawImgCount = 3;
     _s.resetRedrawCount = 0;
@@ -138,13 +152,36 @@ Array.prototype.tweenLoad = function (callback) {
     _s.stats.seenImages = [];
     _s.stats.count = 0;
     _s.stats.prevImg;
+    _s.playerAnimation = null;
     _s.showHighlights = true;
     _s.swipeThreshold = (window.globalVar.swipeThreshold &amp;&amp; !isNaN(Number(window.globalVar.swipeThreshold)) &amp;&amp; Number(window.globalVar.swipeThreshold)) ? Number(window.globalVar.swipeThreshold) : 0.6;
     _s.swipeTotalImages = (window.globalVar.totalImages &amp;&amp; !isNaN(Number(window.globalVar.totalImages)) &amp;&amp; Number(window.globalVar.totalImages)) ? Number(window.globalVar.totalImages) : 0;
     _s.baseImgWidth = window.globalVar.baseImgWidth;
     _s.baseImgHeight = window.globalVar.baseImgHeight;
+
+    /** @memberOf URL Parameters
+     * @summary Toggle the functionality of Feature thumbnails slider on 360 Player, Allowed values are 0 and 1
+     * @name thumbs_player
+     * @see initThumbsPlayer
+     * @example &lt;-- 360 player url -->?thumbs_player=1 // 1 for enabling the feature i.e. Generating and displaying the thumbnails slider on the player
+     * &lt;-- 360 player url -->?thumbs_player=0 // 0 or no parameter disables the feature i.e. No feathure thumbnails slider is displayed on the player. Default feature button will be displayed*/
     _s.isThumbsPlayer = !isEmpty(window.globalVar.isThumbsPlayer);
+
+    /** @memberOf URL Parameters
+     * @summary Toggles the position of feature thumbnails to below the player and on the player.&lt;br>
+     * &lt;b>Note:&lt;/b> This feature is ignored without {@linkcode #thumbs_player thumbs_player} feature enabled and this feature also effects the aspect ratio of the player
+     * @name thumbs_out
+     * @example &lt;-- 360 player url -->?thumbs_player=1&amp;thumbs_out=1 // 1 enables the feature i.e Pushes the thumbnail slider to the below the player.
+     * &lt;-- 360 player url -->?thumbs_player=1&amp;thumbs_out=0 // 0 or no parameter disables the feature i.e. Feature thumbnail slider will be displayed on the player */
     _s.isThumbsOut = !isEmpty(window.globalVar.isThumbsOut);
+
+    /** @memberOf URL Parameters
+     * @summary Toggles the automatic spinning of player using mobile device gyroscope data&lt;br>
+     * &lt;b>Note&lt;/b> This feature is completely subjected to the availability of gyroscope api in mobile devices
+     * @name gyroscope_spin
+     * @example &lt;-- 360 player url -->?gyroscope_spin=1 // 1 enables the feature i.e. Spins the player according to gyroscope data
+     * &lt;-- 360 player url -->?gyroscope_spin=0 // 0 or no param disables the feature i.e. Gyroscope data of device is ignored */
+    _s.isGyroscope = !isEmpty(window.globalVar.isGyroscope);
 
     $('#wrapper').height(_s.playerHeight);
 
@@ -403,15 +440,10 @@ Array.prototype.tweenLoad = function (callback) {
         setSpinIndicator(loadedCount);
     }
 
-    var speed = window.query.speed;
-
-    if ($.isNumeric(speed)) {
-        _s.redrawImgCount = parseInt(speed);
-    }
-
     $('#loading-div').fadeIn();
 
     /*=== function to get spee dof rotation based on images loaded ===*/
+    
     function getSpeed(totalCount) {
         var speed = 3;
         //var speed = 0;
@@ -433,11 +465,13 @@ Array.prototype.tweenLoad = function (callback) {
 
     if (isMobile() &amp;&amp; _s.isThumbsPlayer) {
         window.addEventListener('orientationchange', function () {
-            initThumbsPlaye();
+            initThumbsPlayer();
         })
     }
 
-    function initThumbsPlaye() {
+    /** @method initThumbsPlayer
+     * @summary This method modifies the player controls and dimensions corresponds to feature thumbnail slider*/
+    function initThumbsPlayer() {
         if (isMobile() &amp;&amp; !isEmpty(window.globalVar.isThumbsOut)) {
             _s.isThumbsOut = (window.orientation == '0' || window.orientation == '180');
         }
@@ -454,8 +488,53 @@ Array.prototype.tweenLoad = function (callback) {
         if (_s.hotspotsData.length) {
             document.getElementById('feature-thumbs-container').style.display = "block"
         }
+        if(_s.isThumbsOut){
+            var ctrlsLeft = $('&lt;ul>')[0];
+            ctrlsLeft.appendChild($('#ext-player-icon').clone(true)[0]);
+            ctrlsLeft.appendChild($('#int-player-icon').clone(true)[0]);
+            ctrlsLeft.appendChild($('#pano-player-icon').clone(true)[0]);
+            ctrlsLeft.appendChild($('#zoom-in-icon').clone(true)[0]);
+            ctrlsLeft.appendChild($('#zoom-out-icon').clone(true)[0]);
+            ctrlsLeft.appendChild($('#hotspots-icon').clone(true)[0]);
+            var ctrlsRight = $('&lt;ul>')[0];
+            ctrlsRight.appendChild($('#facebook-icon').clone(true)[0]);
+            ctrlsRight.appendChild($('#twitter-icon').clone(true)[0]);
+            ctrlsRight.appendChild($('#fullscreen-icon').clone(true)[0]);
+            $('.ctrls').remove();
+            var leftContainerDiv = $('&lt;div>')[0],
+                rightContainerDiv = $('&lt;div>')[0];
+            leftContainerDiv.classList.add('ctrls');
+            leftContainerDiv.classList.add('bottom-right');
+            leftContainerDiv.appendChild(ctrlsLeft);
+            rightContainerDiv.classList.add('ctrls');
+            rightContainerDiv.classList.add('bottom-left');
+            rightContainerDiv.appendChild(ctrlsRight);
+            $('#wrapper').append(leftContainerDiv).append(rightContainerDiv);
+            $('.interior-button').removeClass('v-center')
+        }else{
+            var controlsDiv = $('&lt;div>')[0];
+            controlsDiv.classList.add('ctrls');
+            var ctrls = $('&lt;ul>')[0];
+            ctrls.appendChild($('#ext-player-icon').clone(true)[0]);
+            ctrls.appendChild($('#int-player-icon').clone(true)[0]);
+            ctrls.appendChild($('#pano-player-icon').clone(true)[0]);
+            ctrls.appendChild($('#zoom-in-icon').clone(true)[0]);
+            ctrls.appendChild($('#zoom-out-icon').clone(true)[0]);
+            ctrls.appendChild($('#hotspots-icon').clone(true)[0]);
+            ctrls.appendChild($('#facebook-icon').clone(true)[0]);
+            ctrls.appendChild($('#twitter-icon').clone(true)[0]);
+            ctrls.appendChild($('#fullscreen-icon').clone(true)[0]);
+            $('.ctrls').remove();
+            controlsDiv.appendChild(ctrls);
+            $('#wrapper').append(controlsDiv);
+            $('.interior-button').addClass('v-center')
+        }
     }
 
+    /** @method setPlayerSize
+     * @param imgWidth {number} - Width of the images loaded
+     * @param imgHeight {number} - Height of the images loaded
+     * @summary This function is called when first image of the player is loaded with its dimensions, loaded image dimensions are used to build player of same size*/
     function setPlayerSize(imgWidth, imgHeight) {
 
         var $wrapper = $('#wrapper');
@@ -469,12 +548,6 @@ Array.prototype.tweenLoad = function (callback) {
         } else if (_s.aspectRatio === 0.75) {
             $("#ar").addClass('ar-4-3');
         } else {
-            if (imgWidth > _s.maxImageWidth) {
-                otherWidth = _s.maxImageWidth;
-            } else {
-                otherWidth = imgWidth;
-            }
-            $wrapper.css('max-width', otherWidth + 'px');
             $("#ar").css('padding-bottom', _s.aspectRatio * 100 + '%');
         }
         var iOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g);
@@ -525,6 +598,9 @@ Array.prototype.tweenLoad = function (callback) {
         }
     }
 
+    /** @method drawPlayer
+     * @param e {Event} - Gyroscope event obtained from the deviceorientation api
+     * @summary To rotate the player based on the gyroscope data provided by the device. This function is executed only when gyroscopic spin is enabled from URL Parameters*/
     function drawPlayer(e) {
         //console.log(e.alpha);
         if (e.alpha) {
@@ -567,7 +643,7 @@ Array.prototype.tweenLoad = function (callback) {
                         "&lt;div class='slide-title'>" + feature.featureName + "&lt;/div>&lt;/div>"
                 });
                 document.getElementById('feature-thumbs').innerHTML = features;
-                initThumbsPlaye();
+                initThumbsPlayer();
                 thumbsSlider = new imageSlider(
                     {
                         "sliderId": 'feature-thumbs',
@@ -599,12 +675,14 @@ Array.prototype.tweenLoad = function (callback) {
                     features += "&lt;li data-fid='" + f.id + "'>" + f.featureName + "&lt;/li>";
                 });
                 $("#features-list ul").append(features);
+            if (!_s.hideNavBar) {
                 $("#features-list").show();
                 $('#hotspots-icon').show();
             }
+            }
         } else {
             if (_s.isThumbsPlayer) {
-                initThumbsPlaye();
+                initThumbsPlayer();
             }
             $("#features-list").hide();
             $('#hotspots-icon').hide();
@@ -633,6 +711,11 @@ Array.prototype.tweenLoad = function (callback) {
             //alert(window.globalVar.rotationReverse);
             loadedData.allCars.reverse();
             loadedImages.reverse();
+        }
+        if (_s.hideNavBar) {
+            hideNavbar();
+        }else {
+            unhideNavbar();
         }
         registerEvents(ctx);
         if (_s.isThumbsPlayer &amp;&amp; loadedData.allCars.length >= 4) {
@@ -697,7 +780,7 @@ Array.prototype.tweenLoad = function (callback) {
         $("#loading-div").fadeOut();
         if (window.DeviceMotionEvent) {
             _s.lastAlpha = 0;
-            window.ondeviceorientation = drawPlayer;
+            startGyroscopeActivity();
         }
         var wrapper = document.getElementById('wrapper');
         wrapper.style.backgroundImage = "none";
@@ -839,7 +922,8 @@ Array.prototype.tweenLoad = function (callback) {
 
         /**
          * @summary Evenet Listeners to detect the swipe on player to rotate it
-         * @memberOf EventListeners*/
+         * @memberOf EventListeners
+         * @name Swipe detection on player*/
         $("body").on("mousedown touchstart", "#hotspots-div", function (e) {
             $("#hotspots-div").removeClass("touch_mode_grab")
                 .addClass("touch_mode_grabbing");
@@ -875,7 +959,7 @@ Array.prototype.tweenLoad = function (callback) {
                 unhideNavbar();
                 return;
             }
-            window.ondeviceorientation = null;
+            stopGyroscopeActivity()
             hideNavbar();
             closeShareList();
             var pageX = 0;
@@ -917,7 +1001,7 @@ Array.prototype.tweenLoad = function (callback) {
             if (_s.runAnim) {
                 _s.runAnim = false;
                 unhideNavbar();
-                window.ondeviceorientation = drawPlayer;
+                startGyroscopeActivity();
             }
         });
 
@@ -925,7 +1009,7 @@ Array.prototype.tweenLoad = function (callback) {
 
             $(this).parent().fadeOut();
             $(this).parent().removeClass('displayed');
-            //zoomImg(_s.currentFrame, ctx, "zoomout");
+            //zoomImg(_s.currentFrame, "zoomout");
             //_s.zoomIn = false;
             if (_s.stats.highlights.length) {
                 _s.stats.highlights[0].timeEnd = getCurDateTime();
@@ -945,7 +1029,7 @@ Array.prototype.tweenLoad = function (callback) {
 
         $("#close-modal").on('click touch', function (e) {
             if (_s.zoomIn) {
-                zoomImg(_s.currentFrame, ctx, "zoomout");
+                zoomImg(_s.currentFrame, "zoomout");
                 _s.zoomIn = false;
             }
             $("#info-close-icon").trigger('click');
@@ -962,7 +1046,7 @@ Array.prototype.tweenLoad = function (callback) {
             e.stopImmediatePropagation();
             var featureId = $(this).attr('data-feature-id');
             goToFeature(e, featureId, 'nav-next');
-            //zoomImg(_s.currentFrame, ctx, "zoomout");
+            //zoomImg(_s.currentFrame, "zoomout");
             //_s.zoomIn = false;
             $("#close-modal").trigger('click');
 
@@ -977,7 +1061,7 @@ Array.prototype.tweenLoad = function (callback) {
             e.stopImmediatePropagation();
             var featureId = $(this).attr('data-feature-id');
             goToFeature(e, featureId, 'nav-prev');
-            //zoomImg(_s.currentFrame, ctx, "zoomout");
+            //zoomImg(_s.currentFrame, "zoomout");
             //_s.zoomIn = false;
             $("#close-modal").trigger('click');
 
@@ -986,7 +1070,7 @@ Array.prototype.tweenLoad = function (callback) {
         $('#zoom-in-icon').on("click touch", function (e) {
             if (zoomLevel &lt; _s.maxZoomLevel) {
                 zoomLevel += 2;
-                zoomImg(_s.currentFrame, ctx, "zoomin");
+                zoomImg(_s.currentFrame, "zoomin");
                 _s.zoomIn = true;
                 if (thumbsSlider &amp;&amp; thumbsSlider.config.sliderActive &amp;&amp; !_s.isThumbsOut) {
                     thumbsSlider.toggleSlider();
@@ -998,14 +1082,14 @@ Array.prototype.tweenLoad = function (callback) {
             if (zoomLevel > 10) {
                 zoomLevel -= 2;
                 if (zoomLevel === 10) {
-                    zoomImg(_s.currentFrame, ctx, "zoomout");
+                    zoomImg(_s.currentFrame, "zoomout");
                     _s.zoomIn = false;
                     if (_s.stats.highlights.length) {
                         _s.stats.highlights[0].timeEnd = getCurDateTime();
                         logStats(_s.stats.highlights[0]);
                     }
                 } else {
-                    zoomImg(_s.currentFrame, ctx, "zoomstepout");
+                    zoomImg(_s.currentFrame, "zoomstepout");
                 }
             }
         });
@@ -1015,7 +1099,7 @@ Array.prototype.tweenLoad = function (callback) {
                 if (zoomLevel &lt; _s.maxZoomLevel) {
                     e.preventDefault();
                     zoomLevel += 2;
-                    zoomImg(_s.currentFrame, ctx, "zoomin");
+                    zoomImg(_s.currentFrame, "zoomin");
                     _s.zoomIn = true;
                     if (thumbsSlider &amp;&amp; thumbsSlider.config.sliderActive &amp;&amp; !_s.isThumbsOut) {
                         thumbsSlider.toggleSlider();
@@ -1026,14 +1110,14 @@ Array.prototype.tweenLoad = function (callback) {
                     e.preventDefault();
                     zoomLevel -= 2;
                     if (zoomLevel === 10) {
-                        zoomImg(_s.currentFrame, ctx, "zoomout");
+                        zoomImg(_s.currentFrame, "zoomout");
                         if (_s.stats.highlights.length) {
                             _s.stats.highlights[0].timeEnd = getCurDateTime();
                             logStats(_s.stats.highlights[0]);
                         }
 
                     } else {
-                        zoomImg(_s.currentFrame, ctx, "zoomstepout");
+                        zoomImg(_s.currentFrame, "zoomstepout");
                     }
                 }
             }
@@ -1081,6 +1165,16 @@ Array.prototype.tweenLoad = function (callback) {
 
     /*=========== end of functions for 360 spin indicators ====*/
 
+    /* ======= gyroscope toggling functions ==== */
+    function stopGyroscopeActivity() {
+        window.ondeviceorientation = null;
+    }
+    function startGyroscopeActivity() {
+        if(isMobile() &amp;&amp; _s.isGyroscope){
+            window.ondeviceorientation = drawPlayer;
+        }
+    }
+    /* ======= end of gyroscope toggling functions ==== */
     /**
      * @method goToFeature
      * @summary To run the player till the desired feature is visible, Invoked when you click the hotspot or feature thumbnail
@@ -1200,7 +1294,7 @@ Array.prototype.tweenLoad = function (callback) {
             } else {
                 displayInfoBox(hs);
                 //zoomLevel += 2;
-                //zoomImg(_s.currentFrame, ctx, "zoomin", {left: pos.x, top: pos.y});
+                //zoomImg(_s.currentFrame, "zoomin", {left: pos.x, top: pos.y});
                 //_s.zoomIn = true;
                 if (_s.isThumbsPlayer &amp;&amp; !_s.isThumbsOut) {
                     $('#feature-thumbs-container').fadeOut(100);
@@ -1361,58 +1455,56 @@ Array.prototype.tweenLoad = function (callback) {
         $("#info-box").removeClass('displayed');
         $("#info-box").hide();
         i = startFrame;
-        var anim,
-            total = loadedData.allCars.length,
+        var total = loadedData.allCars.length,
             dist = Math.abs(startFrame - endFrame),
             outerDist = total - dist,
             isForward = endFrame &lt; startFrame ^ dist &lt; outerDist; //finding to rotate player in forward or backward direction where 1 is forward and 0 is backward
-        anim = setInterval(function () {
+        clearInterval(_s.playerAnimation);
+        _s.playerAnimation = setInterval(function () {
             window.ondeviceorientation = null;
             _s.runAnim = true;
             changeSpinIndicator(i);
+            _s.currentFrame = i;
             draw(i, ctx, _s.playerWidth, _s.playerHeight);
             _s.runAnim = false;
 
             if (i === endFrame) {
-                clearInterval(anim);
+                clearInterval(_s.playerAnimation);
                 _s.currentFrame = i;
                 var hotspot = loadedData.allCars[_s.currentFrame].hotSpot;
                 if (hotspot.length) {
                     $.each(hotspot, function (index, hs) {
                         if (hs.mainId === featureId) {
-                            setTimeout(function () {
-
-                                var pos = getCoordinates(hs.left, hs.top);
-                                /*=== added for the change of T476 ====*/
-                                var desc = getFeatureDesc(hs.spotName);
-                                if (desc.thumb) {
-                                    var $img = $('&lt;img/>');
-                                    $img.attr('src', desc.thumb);
-                                    displayModalImg($img);
-                                    displayInfoBox(hs);
-                                } else {
-                                    displayInfoBox(hs);
-                                    if (_s.isThumbsPlayer &amp;&amp; !_s.isThumbsOut) {
-                                        $('#feature-thumbs-container').fadeOut(100);
-                                    }
-                                    //zoomLevel += 2;
-                                    //zoomImg(_s.currentFrame, ctx, "zoomin", {left: pos.x, top: pos.y});
-                                    //_s.zoomIn = true;
-
+                            var pos = getCoordinates(hs.left, hs.top);
+                            /*=== added for the change of T476 ====*/
+                            var desc = getFeatureDesc(hs.spotName);
+                            if (desc.thumb) {
+                                var $img = $('&lt;img/>');
+                                $img.attr('src', desc.thumb);
+                                displayModalImg($img);
+                                displayInfoBox(hs);
+                            } else {
+                                displayInfoBox(hs);
+                                if (_s.isThumbsPlayer &amp;&amp; !_s.isThumbsOut) {
+                                    $('#feature-thumbs-container').fadeOut(100);
                                 }
-                                /*=== added for the change of T476 ====*/
-                                var data = {}; //360 stats.
-                                data.hid = hs.mainId; //360 stats.
-                                data.featureName = hs.featureName;
-                                data.source = menu; //360 stats.
-                                data.timeStart = getCurDateTime();
-                                data.timeEnd = getCurDateTime();
-
-                                _s.stats.highlights[0] = data;
-                                //_s.zoomIn = true;
                                 //zoomLevel += 2;
-                                //zoomImg(_s.currentFrame, ctx, "zoomin", {left: pos.x, top: pos.y});
-                            }, 500);
+                                //zoomImg(_s.currentFrame, "zoomin", {left: pos.x, top: pos.y});
+                                //_s.zoomIn = true;
+
+                            }
+                            /*=== added for the change of T476 ====*/
+                            var data = {}; //360 stats.
+                            data.hid = hs.mainId; //360 stats.
+                            data.featureName = hs.featureName;
+                            data.source = menu; //360 stats.
+                            data.timeStart = getCurDateTime();
+                            data.timeEnd = getCurDateTime();
+
+                            _s.stats.highlights[0] = data;
+                            //_s.zoomIn = true;
+                            //zoomLevel += 2;
+                            //zoomImg(_s.currentFrame, "zoomin", {left: pos.x, top: pos.y});
                         }
                     });
                 } else {
@@ -1476,7 +1568,7 @@ Array.prototype.tweenLoad = function (callback) {
                     break;
             }
             if ((action === 'zoomin' || action === 'zoomstepout') &amp;&amp; zoomLevel >= 10 &amp;&amp; zoomLevel &lt;= _s.maxZoomLevel) {
-                window.ondeviceorientation = null;
+                stopGyroscopeActivity();
                 $('#circle-indicator').fadeOut();
                 var e = $('#zoom-div');
                 var eimg = $(".item");
@@ -1526,9 +1618,9 @@ Array.prototype.tweenLoad = function (callback) {
                 var imgId = $("#zoom-div img").attr('id');
 
             } else if (action === "zoomout") {
-                window.ondeviceorientation = drawPlayer;
+                startGyroscopeActivity();
                 $('#circle-indicator').fadeIn();
-                if ($('#features-list ul li').length) {
+                if ($('#features-list ul li').length &amp;&amp; !_s.hideNavBar) {
                     $('#features-list').fadeIn();
                 }
                 $('#info-box').fadeOut();
@@ -1684,7 +1776,7 @@ Array.prototype.tweenLoad = function (callback) {
         }
         $('#circle-indicator').fadeIn();
         /*if(_s.zoomIn){
-            zoomImg(_s.currentFrame, ctx, 'zoomout');
+            zoomImg(_s.currentFrame, 'zoomout');
         }*/
         $("#zoom-div img").animate(
             {width: '100%', left: '0', top: '0'}, function () {
@@ -1713,6 +1805,7 @@ Array.prototype.tweenLoad = function (callback) {
      * @summary This method hides all the elements on player excluding spinner to enhance the visibility of player. This method also sends a post message to parent to remove any elements place on the player */
     function hideNavbar() {
         $('.ctrls').slideUp(100);
+        $('.interior-button').slideUp(100);
         if ($('#features-list ul li').length) {
             $('#features-list').slideUp(100);
         }
@@ -1730,15 +1823,18 @@ Array.prototype.tweenLoad = function (callback) {
      * @method unhideNavbar
      * @summary This method unhides all the elements on player to revert back the full functionality of the player and also sends a post message to parent to place back any hidden elements on player*/
     function unhideNavbar() {
-        $('.ctrls').slideDown(100);
-        if ($('#features-list ul li').length) {
-            $('#features-list').slideDown(100);
-        }
-        if (_s.isThumbsPlayer) {
-            if (_s.isThumbsOut) {
-                $('.feature-thumbs-wrapper .toggle-button').slideDown(100)
-            } else {
-                $('#feature-thumbs-container').fadeIn(100);
+        if(!_s.hideNavBar) {
+            $('.ctrls').slideDown(100);
+            $('.interior-button').slideDown(100);
+            if ($('#features-list ul li').length) {
+                $('#features-list').slideDown(100);
+            }
+            if (_s.isThumbsPlayer) {
+                if (_s.isThumbsOut) {
+                    $('.feature-thumbs-wrapper .toggle-button').slideDown(100)
+                } else {
+                    $('#feature-thumbs-container').fadeIn(100);
+                }
             }
         }
         parent.postMessage(JSON.stringify({"action": "addCross"}), "*");
@@ -2163,7 +2259,7 @@ Player360.prototype.isPlainObject = function (obj) {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Fri Aug 09 2019 18:49:17 GMT+0530 (India Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Mon Aug 19 2019 20:47:32 GMT+0530 (India Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

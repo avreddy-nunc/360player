@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>EventListeners - Documentation</title>
+    <title>URL Parameters - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">EventListeners</h1>
+    <h1 class="page-title">URL Parameters</h1>
     
 
     
@@ -45,7 +45,7 @@
 <header>
     
         <h2>
-        EventListeners
+        URL Parameters
         </h2>
         
     
@@ -62,7 +62,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="main.js.html">main.js</a>, <a href="main.js.html#line2">line 2</a>
+        <a href="main.js.html">main.js</a>, <a href="main.js.html#line3">line 3</a>
     </li></ul></dd>
     
 
@@ -100,6 +100,8 @@
 
 
 
+            
+                <div class="description">URL Parameters are  used to extend the features and functionality of the player and are not mandatory, any parameter can be used only to activate respective feature otherwise defaults will be considered</div>
             
 
             
@@ -124,10 +126,10 @@
 
         
             
-<h4 class="name" id=".Controlbuttonseventlisteners"><span class="type-signature">(static) </span>Control buttons event listeners<span class="type-signature"></span></h4>
+<h4 class="name" id=".gyroscope_spin"><span class="type-signature">(static) </span>gyroscope_spin<span class="type-signature"></span></h4>
 
 
-<p class="summary">Adding event listeners to control buttons of player</p>
+<p class="summary">Toggles the automatic spinning of player using mobile device gyroscope data<br><b>Note</b> This feature is completely subjected to the availability of gyroscope api in mobile devices</p>
 
 
 
@@ -137,7 +139,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="main.js.html">main.js</a>, <a href="main.js.html#line145">line 145</a>
+        <a href="main.js.html">main.js</a>, <a href="main.js.html#line134">line 134</a>
     </li></ul></dd>
     
 
@@ -180,15 +182,20 @@
 
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>&lt;-- 360 player url -->?gyroscope_spin=1 // 1 enables the feature i.e. Spins the player according to gyroscope data&lt;-- 360 player url -->?gyroscope_spin=0 // 0 or no param disables the feature i.e. Gyroscope data of device is ignored</code></pre>
 
 
 
         
             
-<h4 class="name" id=".Swipedetectiononplayer"><span class="type-signature">(static) </span>Swipe detection on player<span class="type-signature"></span></h4>
+<h4 class="name" id=".hide_buttons"><span class="type-signature">(static) </span>hide_buttons<span class="type-signature"></span></h4>
 
 
-<p class="summary">Evenet Listeners to detect the swipe on player to rotate it</p>
+<p class="summary">Toggle the display of controls and buttons on player for maximum player visibility. This feature is implemented for emebedding the 360 player in android and ios applications without feature buttons on it</p>
 
 
 
@@ -198,7 +205,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="main.js.html">main.js</a>, <a href="main.js.html#line879">line 879</a>
+        <a href="main.js.html">main.js</a>, <a href="main.js.html#line91">line 91</a>
     </li></ul></dd>
     
 
@@ -241,15 +248,20 @@
 
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>&lt;-- 360 player url -->?hide_buttons=1 // 1 for enabling the feature i.e. Hiding the buttons on player&lt;-- 360 player url -->?hide_buttons=0 // 0 or no parameter disables the feature i.e. Unhides the buttons on player</code></pre>
 
 
 
         
             
-<h4 class="name" id=".ZoomeImagePanning"><span class="type-signature">(static) </span>Zoome Image Panning<span class="type-signature"></span></h4>
+<h4 class="name" id=".player_width"><span class="type-signature">(static) </span>player_width<span class="type-signature"></span></h4>
 
 
-<p class="summary">Adding eventlisteners for panning functionality of zoomed frame</p>
+<p class="summary">Maximum width of the player allowed. Current default value is 1200 and can be modified in player_360_settings.php</p>
 
 
 
@@ -259,7 +271,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="main.js.html">main.js</a>, <a href="main.js.html#line1594">line 1594</a>
+        <a href="main.js.html">main.js</a>, <a href="main.js.html#line84">line 84</a>
     </li></ul></dd>
     
 
@@ -302,6 +314,150 @@
 
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>&lt;-- 360 player url -->?player_width=1200 //specify the maximum needed width of the player</code></pre>
+
+
+
+        
+            
+<h4 class="name" id=".thumbs_out"><span class="type-signature">(static) </span>thumbs_out<span class="type-signature"></span></h4>
+
+
+<p class="summary">Toggles the position of feature thumbnails to below the player and on the player.<br><b>Note:</b> This feature is ignored without <code>thumbs_player</code> feature enabled and this feature also effects the aspect ratio of the player</p>
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="main.js.html">main.js</a>, <a href="main.js.html#line126">line 126</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>&lt;-- 360 player url -->?thumbs_player=1&amp;thumbs_out=1 // 1 enables the feature i.e Pushes the thumbnail slider to the below the player.&lt;-- 360 player url -->?thumbs_player=1&amp;thumbs_out=0 // 0 or no parameter disables the feature i.e. Feature thumbnail slider will be displayed on the player</code></pre>
+
+
+
+        
+            
+<h4 class="name" id=".thumbs_player"><span class="type-signature">(static) </span>thumbs_player<span class="type-signature"></span></h4>
+
+
+<p class="summary">Toggle the functionality of Feature thumbnails slider on 360 Player, Allowed values are 0 and 1</p>
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="main.js.html">main.js</a>, <a href="main.js.html#line118">line 118</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#initThumbsPlayer">initThumbsPlayer</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>&lt;-- 360 player url -->?thumbs_player=1 // 1 for enabling the feature i.e. Generating and displaying the thumbnails slider on the player&lt;-- 360 player url -->?thumbs_player=0 // 0 or no parameter disables the feature i.e. No feathure thumbnails slider is displayed on the player. Default feature button will be displayed</code></pre>
 
 
 
